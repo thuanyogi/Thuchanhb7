@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Lead Scoring & Automation - Bất Động Sản</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- SheetJS CDN (For Excel Export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header class="animate-fade-in">
+      <div class="brand-section">
+        <div class="logo-icon">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div class="brand-title">
+          <h1>AI Real Estate Lead Scoring</h1>
+          <p>Hệ thống phân loại & tự động hóa chấm điểm khách hàng tiềm năng</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btnSettings" class="btn btn-secondary">
+          <i class="fa-solid fa-gear"></i> Cấu hình AI
+        </button>
+        <button id="btnExportExcel" class="btn btn-success">
+          <i class="fa-solid fa-file-excel"></i> Xuất Excel bàn giao
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI SUMMARY METRICS -->
+    <section class="kpi-container animate-fade-in" style="animation-delay: 0.1s;">
+      <div class="glass-card kpi-card">
+        <div class="glow-effect"></div>
+        <div class="kpi-label">Tổng khách hàng</div>
+        <div id="kpiTotal" class="kpi-value">0</div>
+        <div class="kpi-sub">Đã lấy từ Google Sheets</div>
+      </div>
+      
+      <div class="glass-card kpi-card vip">
+        <div class="glow-effect"></div>
+        <div class="kpi-label">Khách hàng VIP</div>
+        <div id="kpiVIP" class="kpi-value" style="color: var(--status-vip);">0</div>
+        <div class="kpi-sub">Số điểm: 100 | Ưu tiên gọi ngay</div>
+      </div>
+      
+      <div class="glass-card kpi-card standard">
+        <div class="glow-effect"></div>
+        <div class="kpi-label">Khách hàng Tiềm năng</div>
+        <div id="kpiStandard" class="kpi-value" style="color: var(--status-standard);">0</div>
+        <div class="kpi-sub">Số điểm: 50 | Cần tư vấn thêm</div>
+      </div>
+      
+      <div class="glass-card kpi-card junk">
+        <div class="glow-effect"></div>
+        <div class="kpi-label">Khách hàng Rác/Spam</div>
+        <div id="kpiJunk" class="kpi-value" style="color: var(--status-junk);">0</div>
+        <div class="kpi-sub">Số điểm: 0 | Tự động loại bỏ</div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD CONTENT -->
+    <main class="dashboard-grid animate-fade-in" style="animation-delay: 0.2s;">
+      
+      <!-- LEFT COLUMN: SHEETS CONNECTOR & ENGINE SELECTION -->
+      <aside class="glass-card" style="height: fit-content;">
+        <h2 class="card-title">
+          <i class="fa-solid fa-link"></i> Kết nối dữ liệu
+        </h2>
+        
+        <div class="tab-container">
+          <button class="tab-btn active" onclick="switchTab('tab-sheet')">
+            <i class="fa-solid fa-table-cells"></i> Google Sheet
+          </button>
+          <button class="tab-btn" onclick="switchTab('tab-csv')">
+            <i class="fa-solid fa-file-csv"></i> Paste CSV/Raw
+          </button>
+        </div>
+
+        <!-- Tab 1: Google Sheet URL Fetcher -->
+        <div id="tab-sheet" class="tab-content active">
+          <div class="form-group">
+            <label class="form-label" for="sheetUrl">Link Google Sheets (Đã công khai)</label>
+            <input type="text" id="sheetUrl" class="input-control" placeholder="https://docs.google.com/spreadsheets/d/.../edit" value="https://docs.google.com/spreadsheets/d/1hRvHE6RXm1peVG07avfApPEHocOcPld9IA94hE3vUGE/edit?gid=0#gid=0">
+            <small style="display:block; margin-top: 5px; color: var(--text-muted); font-size: 0.75rem;">
+              * Lưu ý: Chia sẻ Google Sheet ở chế độ <strong>"Bất kỳ ai có đường liên kết đều có thể xem"</strong>.
+            </small>
+          </div>
+          <button id="btnFetchSheet" class="btn btn-primary" style="width: 100%;">
+            <i class="fa-solid fa-cloud-arrow-down"></i> Đồng bộ & Chấm điểm
+          </button>
+        </div>
+
+        <!-- Tab 2: Paste Raw Data -->
+        <div id="tab-csv" class="tab-content">
+          <div class="form-group">
+            <label class="form-label" for="csvPaste">Nhập dữ liệu CSV hoặc Tab-Separated (Copy từ Excel)</label>
+            <textarea id="csvPaste" class="input-control textarea-control" placeholder="Tên&#9;SĐT&#9;Nhu Cầu&#10;Nguyễn Văn A&#9;0901234567&#9;Cần mua biệt thự đơn lập Quận 1 tầm 30 tỷ sổ riêng..."></textarea>
+          </div>
+          <button id="btnProcessCSV" class="btn btn-primary" style="width: 100%;">
+            <i class="fa-solid fa-square-poll-vertical"></i> Xử lý & Chấm điểm
+          </button>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-glass);">
+          <div class="form-group">
+            <label class="form-label">Chế độ Chấm điểm AI</label>
+            <div style="display:flex; justify-content: space-between; align-items:center; background: hsla(222, 47%, 6%, 0.6); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-glass);">
+              <span id="scoringEngineLabel" style="font-size: 0.85rem; font-weight:600;">Quy tắc nội bộ (Offline)</span>
+              <label class="switch" style="position: relative; display: inline-block; width: 44px; height: 24px;">
+                <input type="checkbox" id="toggleAIEngine" style="opacity: 0; width: 0; height: 0;">
+                <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: hsla(217, 30%, 60%, 0.3); transition: .4s; border-radius: 24px;"></span>
+              </label>
+            </div>
+            <small style="display:block; margin-top: 5px; color: var(--text-muted); font-size: 0.75rem;">
+              Chuyển đổi sang <strong>Semantic AI (Gemini)</strong> để phân tích ngữ cảnh nâng cao thay vì so khớp từ khóa.
+            </small>
+          </div>
+          <button id="btnInjectMock" class="btn btn-secondary" style="width: 100%; border-color: hsla(142, 76%, 36%, 0.3);">
+            <i class="fa-solid fa-database"></i> Nạp dữ liệu mẫu chấm thử
+          </button>
+        </div>
+      </aside>
+
+      <!-- RIGHT COLUMN: LEADS LIST (Human-in-the-loop control) -->
+      <section class="glass-card">
+        <div class="card-title" style="justify-content: space-between;">
+          <span><i class="fa-solid fa-list-check"></i> Danh sách khách hàng & Phê duyệt</span>
+          <div style="display:flex; gap: 0.5rem;">
+            <select id="filterCategory" class="input-control" style="width: auto; padding: 0.3rem 1.5rem 0.3rem 0.75rem; font-size: 0.8rem;">
+              <option value="all">Tất cả Phân loại</option>
+              <option value="VIP">VIP (100đ)</option>
+              <option value="STANDARD">Tiềm năng (50đ)</option>
+              <option value="JUNK">Rác / Loại bỏ (0đ)</option>
+            </select>
+            <select id="filterStatus" class="input-control" style="width: auto; padding: 0.3rem 1.5rem 0.3rem 0.75rem; font-size: 0.8rem;">
+              <option value="all">Tất cả Trạng thái</option>
+              <option value="pending">Chờ duyệt</option>
+              <option value="approved">Đã duyệt (Lưu)</option>
+              <option value="rejected">Đã loại</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="lead-table">
+            <thead>
+              <tr>
+                <th width="5%">STT</th>
+                <th width="20%">Khách hàng</th>
+                <th width="35%">Mô tả nhu cầu</th>
+                <th width="12%">Điểm & Phân loại</th>
+                <th width="13%">Trạng thái</th>
+                <th width="15%">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="leadTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                  <i class="fa-solid fa-cloud-arrow-down" style="font-size: 2.5rem; margin-bottom: 1rem; display:block; color: hsla(217, 30%, 60%, 0.3);"></i>
+                  Chưa có dữ liệu. Hãy đồng bộ Google Sheets, dán CSV hoặc bấm "Nạp dữ liệu mẫu" để bắt đầu.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: HUMAN-IN-THE-LOOP EDIT & AUDIT -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-content animate-fade-in">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-user-pen"></i> Phê duyệt & Hiệu chỉnh Khách hàng</h3>
+        <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editLeadIndex">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="editName">Tên Khách Hàng</label>
+            <input type="text" id="editName" class="input-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editPhone">Số Điện Thoại</label>
+            <input type="text" id="editPhone" class="input-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="editRequirement">Mô Tả Nhu Cầu Gốc</label>
+          <textarea id="editRequirement" class="input-control textarea-control" readonly style="background: hsla(222, 47%, 4%, 0.4); border-color: hsla(217, 30%, 60%, 0.08); color: var(--text-muted); cursor: not-allowed;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; background: hsla(222, 47%, 6%, 0.6); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-glass);">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Điểm số AI đánh giá</label>
+            <div style="display:flex; align-items:center; gap: 0.5rem; margin-top: 0.25rem;">
+              <span id="editAIScore" class="score-number" style="font-size:1.5rem; color: var(--accent-primary);">0</span>
+              <span id="editAICategory" class="badge">PENDING</span>
+            </div>
+            <small id="editAIMatchedDetails" style="display:block; margin-top: 0.25rem; color: var(--text-muted); font-size: 0.75rem;"></small>
+          </div>
+          
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="editManualScore">Điều chỉnh điểm thủ công</label>
+            <select id="editManualScore" class="input-control" style="margin-top: 0.25rem;">
+              <option value="100">100 - Khách hàng VIP</option>
+              <option value="50">50 - Khách hàng Tiềm năng</option>
+              <option value="0">0 - Khách hàng Rác</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1.25rem;">
+          <label class="form-label" for="editNotes">Ý kiến kiểm duyệt & Ghi chú nghiệp vụ</label>
+          <textarea id="editNotes" class="input-control textarea-control" placeholder="Nhập ghi chú phê duyệt, lý do tăng/giảm điểm nếu có..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="editStatus">Quyết định trạng thái phê duyệt</label>
+          <select id="editStatus" class="input-control">
+            <option value="approved">Duyệt & Lưu trữ (Đã xác minh)</option>
+            <option value="rejected">Loại bỏ (Rác/Không chính xác)</option>
+            <option value="pending">Chờ xem xét (Cần kiểm tra thêm)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('editModal')">Hủy</button>
+        <button id="btnSaveLead" class="btn btn-primary">
+          <i class="fa-solid fa-circle-check"></i> Lưu & Chốt kết quả
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GEMINI AI CONFIGURATION -->
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-content animate-fade-in" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-robot"></i> Cấu hình Engine Trí tuệ Nhân tạo</h3>
+        <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="geminiKey">Gemini API Key</label>
+          <input type="password" id="geminiKey" class="input-control" placeholder="Nhập API Key từ Google AI Studio">
+          <small style="display:block; margin-top:5px; color: var(--text-muted); font-size: 0.75rem;">
+            * Nhận khóa miễn phí tại <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-primary);">Google AI Studio</a>. Khóa được lưu cục bộ trên trình duyệt của bạn (localStorage).
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="geminiModel">Model AI</label>
+          <select id="geminiModel" class="input-control">
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Khuyên dùng - Nhanh, Tiết kiệm)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Thông minh nhất - Phù hợp tiếng Việt phức tạp)</option>
+            <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Thử nghiệm - Tốc độ cực cao)</option>
+          </select>
+        </div>
+
+        <div style="background: hsla(142, 76%, 36%, 0.1); border: 1px dashed var(--status-vip); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: hsl(142, 80%, 45%); margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-circle-check"></i> Chế độ Semantic AI đem lại lợi ích gì?
+          </h4>
+          <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+            Hệ thống sẽ không chỉ so khớp từ khóa đơn thuần. AI sẽ phân tích ngữ cảnh, phát hiện các yêu cầu phi thực tế (VD: biệt thự giá vài trăm triệu), phân biệt sắc thái thái độ bất hợp tác, hoặc nhận diện nội dung spam bảo hiểm nhạy bén bằng tiếng Việt bản địa.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Hủy</button>
+        <button id="btnSaveSettings" class="btn btn-primary">Lưu cấu hình</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Inline Switch Styles for CSS compatibility -->
+  <style>
+    /* Custom CSS Switch Toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: hsla(217, 30%, 60%, 0.3);
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-main);
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary-glow);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  </style>
+
+  <script src="app.js"></script>
+</body>
+</html>

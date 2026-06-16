@@ -1,0 +1,22 @@
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit configurations
+.streamlit/
+
+# Output Excel files
+*.xlsx
+
+# Logs
+*.log
