@@ -1,0 +1,47 @@
+/* Animations — Light theme */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered fade-in for card grids */
+.stagger-fade > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+}
+
+.stagger-fade > *.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-fade > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-fade > *:nth-child(2) { transition-delay: 60ms; }
+.stagger-fade > *:nth-child(3) { transition-delay: 120ms; }
+.stagger-fade > *:nth-child(4) { transition-delay: 180ms; }
+.stagger-fade > *:nth-child(5) { transition-delay: 240ms; }
+.stagger-fade > *:nth-child(6) { transition-delay: 300ms; }
+.stagger-fade > *:nth-child(7) { transition-delay: 360ms; }
+.stagger-fade > *:nth-child(8) { transition-delay: 420ms; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .stagger-fade > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

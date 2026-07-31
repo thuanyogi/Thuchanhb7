@@ -1,0 +1,619 @@
+SOURCE: AI4A01_Slide buổi 1.pdf
+PAGES: 51
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 1
+TỔNG QUAN HỆ THỐNG
+
+=== PAGE 2 ===
+TỔNG
+QUAN
+KHÓA
+HỌC
+Sử dụng các công cụ AI rời rạc bộc lộ nhiều hạn chế khi xử lý chuỗi công việc phức tạp do người dùng
+phải liên tục khai báo lại bối cảnh và mục tiêu, dẫn đến dữ liệu thiếu liên kết và kết quả dễ bị sai lệch. 
+Để giải quyết bài toán này, khóa học tập trung vào giải pháp tối ưu mang tên "Văn phòng AI" (Agentic
+Workspace).
+Thông qua nền tảng Google Antigravity, chương trình đi sâu vào phương pháp thiết lập một không gian
+làm việc tự động hóa. Khóa học được phân chia thành 3 giai đoạn:
+Giai đoạn 1: Vận hành Giai đoạn 2: Mở rộng
+& Tối ưu
+Giai đoạn 3: Thiết kế
+giải pháp mớiLàm quen kiến
+trúc  Vận hành hệ
+thống hoàn chỉnh
+Thiết kế luồng
+công việc
+Thiết lập nhân sự
+& tri thức
+Phân quyền kiểm
+duyệt 
+Kiểm toán & gỡ lỗi
+Phân tích bài toán
+cá nhân
+Lắp ráp hệ thống
+mới và kiểm thử
+Demo thực tế
+
+=== PAGE 3 ===
+KỶ LUẬT LỚP HỌC
+3 nguyên tắc để đạt hiệu quả tối đa
+🖐  THỰC HÀNH 100%
+Khóa học mang tính thực chiến. Mọi
+học viên bắt buộc mở máy, thao tác
+trực tiếp trên hệ thống.
+❓  HỎI ĐÁP TỨC THỜI
+Nêu câu hỏi ngay khi gặp vướng
+mắc. Sự chủ động của anh/chị giúp
+tối ưu hóa thời gian của cả lớp.
+📤  CHIA SẺ KẾT QUẢ
+Hoàn thành mỗi bài, vui lòng chụp
+ảnh/chia sẻ file lên Group Zalo để
+nhận feedback từ mentor
+
+=== PAGE 4 ===
+Buổi học này,
+bạn cần nắm rõ: Nắm bắt được hệ thống và kiến trúc với 7 cấu phần để xây dựng một phòng
+ban AI đa tác nhân hoàn chỉnh.
+MỤC TIÊU
+HỌC TẬP
+Nhận diện chính xác 3 Cấp độ ứng dụng AI — Đánh giá đúng hiện trạng ứng
+dụng AI của cá nhân/doanh nghiệp.
+Điều phối các AI Agent chạy thử một quy trình công việc thực tế
+
+=== PAGE 5 ===
+Phần 1:
+3 cấp độ khai thác AI
+
+=== PAGE 6 ===
+KHẢO SÁT NHANH
+Hiện Trạng Sử Dụng AI Của Anh/Chị Là Gì?
+Gõ nhanh vào Chat Box lựa chọn: A, B hoặc C
+[A] Cấp độ Cơ bản
+Dùng ChatGPT / Gemini để hỏi đáp
+1:1. Thỉnh thoảng AI mất bối cảnh,
+cung cấp thông tin sai lệch.
+[B] Cấp độ Trung cấp
+Đã biết tạo Custom GPT / Claude
+Project, có tải tài liệu tham khảo và
+xây dựng Skill để thực hiện các
+nghiệp vụ cụ thể
+[C] Cấp độ Nâng cao
+Đã cấu hình thành công và đang
+vận hành Workflow Đa tác nhân
+(Multi-Agent) tự động phân vai, tự
+động xuất file.
+
+=== PAGE 7 ===
+CÁC CẤP ĐỘ ỨNG DỤNG AI HIỆN NAY
+Cấp 1: Custom Chatbot
+ Cấp 2: Custom GPT / Claude project
+tích hợp Skill 
+Cấp 3: Phòng ban AI với Google
+Antigravity
+
+=== PAGE 8 ===
+CÁC CẤP ĐỘ ỨNG DỤNG AI HIỆN NAY
+Cấp 1: Custom Chatbot
+Làm việc trên cloud 
+Có Knowledge base lưu trữ và đọc hiểu tài liệu nội bộ
+System instruction giúp thiết lập sẵn "Phạm vi công
+việc, quy trình thực hiện,Tone giọng, quy tắc ràng
+buộc, chuẩn đầu ra" chuẩn mực
+Rào cản:
+Mất bối cảnh: AI quên các chỉ thị ban đầu
+Ảo giác dữ liệu: AI tự tạo thông tin không có thật
+Dữ liệu bị cô lập: Tốn thời gian sao chép, dán thủ
+công, tải vể rồi upload
+Đứt gãy quy trình: Không thể chạy chuỗi công
+việc liên hoàn
+Rủi ro bảo mật: Lọt lộ dữ liệu nội bộ lên cloud
+
+=== PAGE 9 ===
+CÁC CẤP ĐỘ ỨNG DỤNG AI HIỆN NAY
+Cấp 2: Custom GPT / Claude project
+tích hợp Skill 
+Ưu điểm:
+Chỉ kích hoạt kỹ năng chuyên môn
+liên quan khi cần để tránh AI quá tải
+bộ nhớ.
+Mỗi dự án có bộ nhớ riêng, giúp thông
+tin tập trung và không bị nhiễu.
+Đóng gói nghiệp vụ thành các kỹ
+năng (Skills) để AI xử lý chuẩn xác tác
+vụ lặp lại.
+Rào cản:
+Dữ liệu vẫn lưu trữ trên Cloud bên thứ
+ba
+Đứt gãy thông tin giữa các project
+khác nhau
+Chi phí cao kèm hạn mức sử dụng
+(quota) với Claude Pro và ChatGPT
+Business
+Không tối ưu khi đọc tài liệu nặng
+Khó mở rộng thành nhiều Agent
+
+=== PAGE 10 ===
+CÁC CẤP ĐỘ ỨNG DỤNG AI HIỆN NAY
+Cấp 3:  Phòng ban AI với Google Antigravity
+Ưu điểm:
+IDE Agentic: môi trường vận hành AI tập
+trung, đóng vai trò như 1 hệ diều hành
+cho phòng ban AI
+Cấu hình file văn bản đơn thuần
+(markdown)
+Vận hành local trên máy tính cá nhân
+của người dùng
+Nhược điểm:
+Giao diện phức tạp hơn các AI Tool
+thông thường
+Cần phải cài đặt và thử nghiệm phức tạp
+hơn để đảm bảo các Agent làm việc
+phối hợp với nhau chính xác và đầy đủ
+
+=== PAGE 11 ===
+SO SÁNH NỀN TẢNG
+Phá Bỏ Rào Cản Kỹ Thuật: Tối Ưu Hóa Cho Doanh Nghiệp
+Nền tảng Phương thức giao tiếp Phù hợp Non-tech? Khả năng chạy Multi-
+Agent
+Đối tượng mục tiêu
+Claude Code Gõ lệnh trên Terminal ❌  Yêu cầu kỹ năng lập
+trình chuyên sâu.
+✅  Có hỗ trợ (Agent
+Teams)
+Kỹ sư phần mềm
+Cursor 3 Giao diện VS Code phức
+tạp
+⚠  Đòi hỏi tư duy logic
+của Developer.
+✅  Chạy nhiều AI cục bộ Lập trình viên
+Antigravity Chọn File + Cấu hình
+văn bản
+✅  Thao tác trực quan,
+dễ tiếp cận.
+✅  Tổ hợp chuyên viên
+AI liên hoàn
+Nhân sự & Quản lý
+Doanh nghiệp
+
+=== PAGE 12 ===
+Vai Trò Của Bạn Trong Kỷ Nguyên Số
+T i ê u  c h í
+A I  C ấ p  1
+A I  C ấ p  2
+P h â n  c ấ p  3  ( A n t i g r a v i t y )
+V ị  t r í
+N g ư ờ i  t h a o  t á c  ( O p e r a t o r )
+Q u ả n  l ý  d ự  á n  đ ộ c  l ậ p
+N h à  Đ i ề u  p h ố i  H ệ  t h ố n g
+( O r c h e s t r a t o r )
+H à n h  v i
+H ỏ i  đ á p  1 : 1 ,  s ử a  l ỗ i  t h ủ  c ô n g
+T h i ế t  l ậ p  c ấ u  t r ú c  P r o j e c t  v à
+x â y  d ự n g  S k i l l s
+T h i ế t  k ế  l u ồ n g  g i á  t r ị ,  ủ y  q u y ề n  t ự
+đ ộ n g
+H i ệ u  s u ấ t
+T ă n g  k h o ả n g  1 0 - 2 0 %
+T ă n g  k h o ả n g  4 0  -  6 0 %
+T ự  đ ộ n g  h ó a  7 0 - 9 0 %  c á c  t á c  v ụ  l ặ p
+l ạ i
+
+=== PAGE 13 ===
+Phần 2: Tìm hiểu hệ thống & 
+kiến trúc 7 cấu phần
+
+=== PAGE 14 ===
+Tại sao cần kiến trúc 7 cấu phần?
+Bạn không thể cấp cho nhân sự một thiết bị trống rỗng mà không có quy
+trình, rồi kỳ vọng họ tự hoàn thành xuất sắc công việc. AI cũng tuân theo
+nguyên lý này.
+Antigravity giúp kiến tạo một "Phòng ban số" hoàn chỉnh chứ không chỉ là
+một công cụ đơn lẻ. Để AI thực thi mệnh lệnh chuyên nghiệp và chính xác, hệ
+thống cần được thiết kế bài bản qua 7 thành phần từ tổng quan đến chi tiết.
+
+=== PAGE 15 ===
+Một phòng ban AI cần có kiến trúc:
+1 Tầng 1: CƠ CẤU TỔ CHỨC PHÒNG BAN AI
+Sơ đồ tổ chức và chức năng từng vị trí (Agent) trong tổ chức
+2 Tầng 2: LUẬT LỆ VÀ TRI THỨC CỦA TỔ CHỨC
+Rules, Knowledge Base (Quy tắc - quy định, Tri thức nội bộ)
+3 Tầng 3: QUY TRÌNH VẬN HÀNH VÀ NGHIỆP VỤ CHUYÊN MÔN
+Workflow, Skills mà Agent sử dụng để thực hiện các chức năng của phòng ban
+4 Tầng 4: HẠ TẦNG
+Máy tính cá nhân với RAM (8 →  16GB) để chạy đa nhiệm
+
+=== PAGE 16 ===
+TẦNG 1
+Kiến Trúc Điều Phối (Cơ Chế Ủy Quyền Tự Động)
+Nguyên tắc: Phân tách quyền hạn rõ ràng để tránh chồng chéo trách nhiệm. Tuyệt đối không để 1 AI đảm nhiệm toàn bộ quy
+trình nhằm giảm thiểu rủi ro sai lệch.
+
+=== PAGE 18 ===
+TẦNG 1 — AI AGENT (NHÂN SỰ SỐ)
+Giới hạn quyền hạn tạo nên sự hoàn hảo
+Mỗi Agent (Tác tử AI) bị giới hạn quyền truy cập, không được phép can thiệp vào bộ nhớ của dự án khác. Được định hình bằng 1 file
+Markdown, khai báo rõ Sứ mệnh (Mission) và Năng lực cốt lõi.
+Ví dụ thực tế
+Một Agent chuyên dịch thuật tuyệt đối không được phép tự ý vẽ
+biểu đồ tài chính.
+Tác dụng
+Sự chuyên biệt hóa này bảo vệ tính Nhất Quán và Chính Xác của
+toàn hệ thống.
+Thư mục quản lý: .agent/agents/xyz.md
+
+=== PAGE 20 ===
+Tác tử nào đảm nhiệm công việc tương ứng trong sơ đồ?
+1
+Nhiệm vụ 1
+Tiếp nhận yêu cầu gốc, phân rã
+thành các nhiệm vụ nhỏ cho cấp
+dưới.
+2
+Nhiệm vụ 2
+Lên ý tưởng, soạn thảo Email giới
+thiệu sản phẩm.
+3
+Nhiệm vụ 3
+Rà soát lỗi chính tả, cảnh báo nếu vi
+phạm quy tắc văn phong công ty.
+QUIZ
+
+=== PAGE 21 ===
+Agent nào đảm nhiệm công việc tương ứng trong sơ đồ?
+1
+Nhiệm vụ 1
+Tiếp nhận yêu cầu gốc, phân rã
+thành các nhiệm vụ nhỏ cho cấp
+dưới.
+2
+Nhiệm vụ 2
+Lên ý tưởng, soạn thảo Email giới
+thiệu sản phẩm.
+3
+Nhiệm vụ 3
+Rà soát lỗi chính tả, cảnh báo nếu vi
+phạm quy tắc văn phong công ty.
+QUIZ
+Đáp án: [1] Coordinator (Điều phối) — [2] AI Content (Chuyên viên) — [3] AI Kiểm duyệt (Kiểm toán).
+
+=== PAGE 22 ===
+TẦNG 2 - LUẬT LỆ (RULES)
+"Quy tắc 1: Bạn là AI Kế toán. Nếu thiếu dữ liệu đầu vào, BẮT BUỘC DỪNG HOẠT ĐỘNG VÀ CẢNH BÁO"
+Kỷ luật hệ thống quan trọng hơn
+Kỹ năng
+Rules là những mệnh lệnh tối cao
+được thiết lập vào Hiến pháp của AI
+(Constitutional AI).
+Hậu quả khi thiếu Rules
+Nếu thiếu Rules, AI sẽ tự suy diễn để
+cố gắng trả lời, dẫn đến rủi ro báo
+cáo sai lệch.
+Cốt lõi vận hành an toàn
+Thiết lập Rules chặt chẽ là cốt lõi để
+Antigravity vận hành an toàn.
+
+=== PAGE 24 ===
+TẦNG 2 - KHO TRI THỨC (KNOWLEDGE BASE)
+Giải quyết triệt để tình trạng mất bối cảnh:
+Vấn đề trên nền tảng Chat thông thường
+Dữ liệu sẽ biến mất khi đóng trình duyệt hoặc bị giới hạn bởi
+bộ nhớ ngắn hạn.
+Giải pháp Antigravity Local KB
+Doanh nghiệp lưu trữ trực tiếp các quy trình chuẩn (SOP), tài
+liệu (.md, .pdf) vào thư mục hệ thống. Agent luôn có khả
+năng truy xuất (RAG) chính xác tri thức này. Tài sản trí tuệ
+của công ty được bảo tồn và kế thừa xuyên suốt qua các thế
+hệ nhân sự.
+
+=== PAGE 25 ===
+TẦNG 3 - LUỒNG VẬN HÀNH (WORKFLOW)
+Chuỗi giá trị cốt lõi của hệ thống:
+Xuất báo cáoLên dàn ýPhân tíchYêu cầu
+Kỷ luật quy trình
+Đảm bảo tính liên tục, tuyệt đối không
+bỏ qua các bước kiểm duyệt trung
+gian.
+Tự động hóa toàn trình
+Người quản lý chỉ cần khởi chạy, các
+Tác tử AI (A, B, C) sẽ tuần tự làm việc,
+kiểm tra chéo lẫn nhau cho đến khi
+xuất ra tệp tài liệu hoàn chỉnh.
+Thư mục quản lý
+.agent/workflows/
+
+=== PAGE 27 ===
+TẦNG 3 - KỸ NĂNG CHUYÊN MÔN (SKILLS)
+Số hóa chuyên môn nghiệp vụ: Các nghiệp vụ, kỹ năng chuyên môn của doanh nghiệp được số hóa thành các file cấu hình
+riêng biệt.
+01
+Gọi Skill
+Khi Agent gọi một Skill (VD: /slide-
+designer), Agent lập tức sẽ triển khai
+chuyên môn thiết kế để trực quan hóa
+từng nội dung thuyết trình tối ưu lên
+slide
+02
+Xuất chuẩn
+Buộc AI xuất ra dàn ý chuẩn mực quy
+định trong template của Skill thay vì viết
+tự do.
+03
+Tiết kiệm thời gian
+Loại bỏ hoàn toàn việc phải gõ giải thích
+dài dòng mỗi lần ra lệnh. Mọi kỹ năng đã
+được lưu trữ sẵn ở .agent/skills/.
+
+=== PAGE 29 ===
+TẦNG 4 - HẠ TẦNG
+Hạ Tầng Dữ Liệu Local:
+Không gian làm việc (Workspace) bảo mật tuyệt đối:
+📁  outputs/
+Thư mục đầu ra. Khi Workflow hoàn tất, hệ thống tự động
+lưu file thành phẩm (PPTX, Markdown) vào đây.
+Quy trình khép kín 100% tại ổ cứng máy tính, đảm bảo an toàn thông tin cấp độ cao nhất cho doanh nghiệp.
+📁  inputs/
+Thư mục đầu vào. Nơi chứa dữ liệu thô, báo cáo tài chính.
+Không cần tải lên bất kỳ nền tảng đám mây nào.
+📁  artifacts/
+Thư mục vận hành. Nơi chứa file để các agent làm việc với
+nhau và báo cáo, ghi nhận kết quả làm việc (report, log...)
+
+=== PAGE 31 ===
+Quá tải dữ liệu (Bỏ sót)
+➜  Giải pháp: Phân cấp Tác tử AI để kiểm tra chéo.
+Nút thắt trong bối Cảnh & Đứt gãy
+➜  Giải pháp: Workflow kết nối liên hoàn tự động (End-
+to-end).
+Chi phí Cloud đắt đỏ
+➜  Giải pháp: Hạ tầng Local Antigravity kết hợp Gemini
+Account.
+Rào cản lập trình phức tạp
+➜  Giải pháp: Cấu hình hệ thống bằng File Markdown
+thuần túy.
+Hệ thống với kiến trúc 7 phần giúp tối ưu hóa vận hành:
+
+=== PAGE 32 ===
+Phần 3: Thực hành
+
+=== PAGE 33 ===
+Sau phần lý thuyết nền tảng, đây là lúc bạn tự tay điều phối các AI Agent chạy một quy trình công việc thực tế hoàn chỉnh.
+1
+Thiết lập môi trường
+Cấu hình Antigravity trên máy tính cá nhân theo hướng
+dẫn.
+2
+Hiểu rõ tổ chức phòng ban AI 
+Tìm hiểu chức năng của Coordinator và các Chuyên viên AI
+bằng file Markdown.
+3
+Chạy Workflow
+Khởi động chuỗi tự động và quan sát các AI phối hợp làm
+việc.
+4
+Xuất file thành phẩm
+Nhận kết quả tự động lưu vào thư mục artifacts/ trên máy
+tính.
+
+=== PAGE 34 ===
+Bước 1: Quan sát giáo viên xử lý
+hệ thống 
+Bước 2: Thảo luận về khả năng
+ứng dụng vào doanh nghiệp
+Bước 3: Học viên thao tác chạy
+quy trình
+THỰC HÀNH
+01. Chọn Folder Workspace
+Khởi động Manager.
+02. Nhập lệnh chuẩn xác
+/start-session và đưa yêu cầu công
+việc
+03. Hệ thống AI bắt đầu xử lý ngầm
+Toàn bộ quá trình diễn ra tự động,
+loại bỏ hoàn toàn thao tác copy-
+paste thủ công trên trình duyệt.
+04. Quan sát kết quả
+Hiệu suất, thành phẩm
+Thảo luận:
+Nếu những công việc lặp đi lặp lại
+của anh/chị được tích hợp vào
+Workflow này, anh/chị sẽ ưu tiên tự
+động hóa quy trình nào vào ngày
+mai?
+Gợi ý: Sàng lọc hàng trăm CV nhân
+sự, Trích xuất Báo cáo Doanh thu
+tuần, hay Tự động hóa quy trình
+soạn thảo nội dung đa kênh?
+1.Thao tác với vai trò
+Orchestration
+Nhập chính xác cú pháp sau vào
+Input Box: /onboard-new-user
+2.Cung cấp bối cảnh và trả lời
+những câu hỏi khai thác từ hệ
+thống
+3. Kiểm tra kết quả tại thư mục
+Artifacts
+
+=== PAGE 35 ===
+XỬ LÝ SỰ CỐ
+XỬ LÝ SỰ CỐ: KHI HỆ THỐNG TẠM DỪNG HOẶC BÁO LỖI
+Các lỗi phổ biến trong giai đoạn làm quen & Cách khắc phục:
+Gián đoạn kết nối mạng
+(khi gọi API) ➜  Thử Start Session
+để kết nối lại.
+Sai cú pháp lệnh
+(VD: gõ /onb-oard...) ➜  Đảm bảo
+nhập chuẩn xác định dạng /skill
+name.
+Độ trễ giao diện
+(không hiện thông báo) ➜  Chờ
+vài giây, kiểm tra trực tiếp thư
+mục artifacts xem hệ thống đã
+xử lý ngầm xong chưa.
+
+=== PAGE 36 ===
+BÀI TẬP
+Yêu cầu: Soạn thảo các Bộ Quy tắc (Rules) và đưa Dữ liệu nội bộ (Data) của doanh nghiệp vào hệ thống để giải quyết
+bài toán đặc thù.
+Kiểm tra tính ứng dụng thực tiễn:
+01
+Đưa tài liệu nội bộ vào Materials
+VD: SOP, Quy định nội bộ, Template
+02
+Khởi chạy lệnh
+Yêu cầu hệ thống convert ra dạng
+markdown và quy hoạch lưu trữ về
+đúng folder, và ghi sổ vào danh mục
+lưu trữ để truy xuất tra cứu trong
+tương lai
+03
+Đánh giá kết quả
+Hỏi đáp thông tin để Agent tự truy vấn
+trong hệ thống lưu trữ và đưa ra nội
+dung chính xác
+
+=== PAGE 37 ===
+KẾT THÚC BUỔI 01
+Buổi học hôm nay đã trang bị cho bạn nền tảng tư duy và kiến trúc để bắt
+đầu hành trình xây dựng Phòng Ban AI Cá Nhân của mình.
+🧠  Đã HIỂU
+3 Cấp độ ứng dụng AI & 10 rào
+cản cốt lõi.
+📐  Đã BIẾT
+Kiến trúc 7 Cấu phần Top-Down
+của hệ thống Antigravity.
+⚡  Đã LÀM
+Vận hành thực tế Multi-Agent Workflow ngay tại lớp.
+📤  Vui lòng chụp ảnh kết quả thực hành và chia sẻ lên Group Zalo
+để học hỏi chéo từ cộng đồng. Hẹn gặp lại tại Buổi 02: Vận hành
+Workspace qua vòng lặp cải tiến liên tục (PDCA)
+
+=== PAGE 38 ===
+PHỤ LỤC
+
+=== PAGE 39 ===
+CẤP 1 — RÀO CẢN
+5 Rào Cản Cốt Lõi Kéo Lùi Năng Suất Tại Cấp 1
+Vì sao việc dùng AI đôi khi làm chậm tiến độ công việc của bạn?
+Mất bối cảnh (Context Loss)
+AI quên các chỉ thị ban đầu.
+Ảo giác dữ liệu (Hallucination)
+AI tự tạo ra thông tin không có thật.
+Dữ liệu bị cô lập
+Mất thời gian sao chép, dán thủ công hoặc tài
+về rồi upload
+Đứt gãy quy trình
+Không thể chạy chuỗi công việc liên hoàn
+(A → B → C).
+Rủi ro bảo mật
+Nguy cơ lộ lọt dữ liệu nội bộ lên nền tảng đám
+mây.
+
+=== PAGE 40 ===
+RÀO CẢN 1
+1⃣ Mất Bối Cảnh (Hạn Chế Trí Nhớ Ngắn Hạn)
+Sự đứt gãy trong luồng giao tiếp
+Khi đoạn hội thoại kéo dài, các chỉ thị và định dạng bạn yêu cầu ở đầu cuộc trò chuyện sẽ bị AI "quên" mất do giới hạn bộ nhớ (Context
+Window). AI bắt đầu mất định hướng, trả lời lan man, không đúng trọng tâm.
+Hệ quả: Bạn tốn thời gian liên tục phải nhắc lại lệnh: "Hãy nhớ lại định dạng tôi đã yêu cầu ở trên", làm giảm hiệu suất làm việc.
+
+=== PAGE 41 ===
+RÀO CẢN 2
+2⃣ Ảo Giác Dữ Liệu (Hallucination)
+Rủi ro từ việc AI cố gắng "làm hài lòng" người dùng
+Khi thiếu dữ liệu đầu vào chính xác, AI có xu hướng tự suy diễn và tạo ra các con số doanh thu, tên khách hàng, hoặc tính năng sản phẩm
+không có thật để hoàn thành câu trả lời.
+Hệ quả: Bạn buộc phải đóng vai trò Kiểm định chất lượng (QA), rà soát từng câu chữ vô cùng áp lực. Việc dùng AI thay vì tiết kiệm thời
+gian lại mang thêm rủi ro sai lệch báo cáo.
+
+=== PAGE 42 ===
+RÀO CẢN 3
+3⃣ Dữ Liệu Bị Cô Lập (Thiếu Đầu Ra Tự Động)
+Thông tin bị kẹt trong giao diện Chat
+Mọi kết quả AI tạo ra đều nằm trong khung chat của trình duyệt. Khó khăn để sử dụng kết quả đầu ra liên thông giữa các đoạn hội thoại
+Hệ quả: Bạn phải tự bôi đen, sao chép (copy), dán (paste) hoặc tải về Word/Excel, rồi upload vào đoạn hội thoại hoặc tool khác. Thao tác
+thủ công này dễ gây sai sót, mất thời gian và khó lưu trữ
+
+=== PAGE 43 ===
+RÀO CẢN 4
+4⃣ Không Thể Thực Thi Chuỗi Công Việc
+Hạn chế xử lý đơn nhiệm
+Chatbot Cấp 1 thất bại hoàn toàn trước một quy trình dài. Ví dụ: Viết bài ➔  Đọc soát lỗi ➔  Xuất file báo cáo. Nó là một cá thể đơn lẻ, không có
+khả năng tự động chuyển giao công việc qua các bước chuyên môn khác nhau.
+Hệ quả: Bạn bắt buộc phải đứng giữa làm trạm trung chuyển lệnh thủ công cho từng bước.
+
+=== PAGE 44 ===
+RÀO CẢN 5
+5⃣ Rủi Ro Bảo Mật Trên Nền Tảng Đám Mây
+Thách thức lớn về An ninh thông tin Doanh nghiệp
+Mỗi lần bạn nhập liệu, bạn có thể đang vô tình cung cấp dữ liệu để huấn luyện AI của bên thứ ba.
+Hệ quả: Việc đưa tên khách hàng, chiến lược kinh doanh, số liệu tài chính nội bộ lên Server Cloud công cộng là một rủi ro an ninh mạng
+nghiêm trọng, vi phạm các tiêu chuẩn bảo mật của doanh nghiệp.
+
+=== PAGE 45 ===
+CẤP 2 
+Giới hạn Hệ Thống Của Cấp 2
+Dù được nâng cấp, Cấp 2 vẫn tồn tại những giới hạn cốt lõi:
+Phụ thuộc nền tảng
+Dữ liệu vẫn lưu trữ trên Cloud bên thứ
+ba.
+Đứt gãy bối cảnh
+Sự đứt gãy thông tin giữa các Project
+khác nhau.
+Giới hạn tài nguyên
+Chi phí cao đi kèm hạn mức sử dụng
+(Quota) khắt khe từ Claude
+Quá tải thông tin
+Khi phải đọc file pdf, pptx nặng và
+không tối ưu cho AI để tra cứu thông
+tin
+Khó xây dựng phòng ban AI
+Project với 1 khu vực system
+instruction tối ưu xây chỉ dẫn hệ
+thống cho 1 AI Agent cụ thể
+
+=== PAGE 46 ===
+NHƯỢC ĐIỂM
+1⃣ 🔒  Phụ Thuộc Nền Tảng Bên Thứ Ba (Bảo Mật)
+Rủi ro từ không gian lưu trữ 
+Dù chia Project gọn gàng, toàn bộ hồ sơ thầu, quy trình, tài liệu nội bộ công ty vẫn được tải lên máy chủ của các hãng công nghệ nước ngoài
+(Anthropic, OpenAI). Doanh nghiệp hoàn toàn bị động.
+Hệ quả: Có nguy cơ gián đoạn công việc hoặc mất quyền truy cập dữ liệu nếu tài khoản bị khóa, hoặc máy chủ đối tác bảo trì.
+
+=== PAGE 47 ===
+ĐIỂM MÙ 2
+2⃣ ✂  Silo Bối Cảnh (Sự Đứt Gãy Thông Tin)
+Luồng dữ liệu bị cô lập cục bộ
+Project A chỉ chứa kiến thức của dự án A. Hệ thống không có cơ chế tự động chuyển giao số liệu từ Project A sang Project B.
+Hệ quả: Bạn lại phải đóng vai trò "trạm trung chuyển": Tải kết quả từ Project A, mở Project B, dán thủ công vào Project B. Tính tự động
+hóa toàn trình (End-to-End) bị phá vỡ.
+
+=== PAGE 48 ===
+ĐIỂM MÙ 3
+3⃣ 💸  Chi Phí Cao & Giới Hạn Sử Dụng Nghiêm Ngặt
+Bài toán chi phí của Dịch vụ Đám mây (Cloud Services)
+Mức phí trung bình $20/tháng nhưng đi kèm hạn mức (Quota) rất khắt khe (Ví dụ: Giới hạn số câu lệnh trong mỗi 5 giờ). Khi sử dụng các mô
+hình AI thông minh nhất để xử lý văn bản dài, hạn mức này cạn kiệt rất nhanh. Chi phí sử dụng theo lượng token qua API cũng rất đắt đỏ
+Hệ quả: Hệ thống sẽ buộc bạn phải dừng công việc để chờ hồi phục. Để vận hành quy mô doanh nghiệp liên tục, chi phí nâng cấp gói
+Max là rất lớn.
+
+=== PAGE 49 ===
+ĐIỂM MÙ 4
+4⃣ 📚  Quá Tải Thông Tin (Information Overload)
+Hạn chế của công nghệ trích xuất dữ liệu (RAG) cơ bản
+Khi bạn tải lên một tài liệu quá dài (VD: Báo cáo 500 trang), AI sẽ không đọc chi tiết từng từ. Hệ thống bắt đầu đọc lướt (skimming) và bỏ sót
+rất nhiều dữ liệu trọng yếu.
+Hệ quả: Nguyên lý GIGO (Garbage In, Garbage Out) xuất hiện. Dữ liệu đầu vào bị nhiễu hoặc xử lý hời hợt sẽ dẫn đến kết quả đầu ra thiếu
+chính xác, dù bạn dùng mô hình AI đắt tiền.
+
+=== PAGE 50 ===
+ĐIỂM MÙ 5
+5⃣ 💻  Rào Cản Kỹ Thuật Khi Xây Dựng Multi-Agent
+Bức tường ngăn cách nhân sự Non-Tech
+Các ứng dụng web hiện tại chỉ cho phép giao tiếp 1-1 (Bạn ra lệnh - AI phản hồi). Nếu bạn muốn thiết lập một chuỗi tự động: AI 1 viết nội dung
+➔  AI 2 kiểm duyệt ➔  AI 3 xuất file báo cáo? Ở Cấp 2, điều này không thể thao tác bằng giao diện thông thường.
+Hệ quả: Bạn bắt buộc phải cài đặt Python, sử dụng các framework phức tạp (CrewAI, LangChain) và viết mã lập trình (Code).
+
+=== PAGE 51 ===
+THANK YOU!

@@ -1,0 +1,289 @@
+---
+import type { VideoItem } from "../lib/session-guidance";
+
+interface Props {
+  videos: VideoItem[];
+}
+
+const { videos } = Astro.props;
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match?.[1]) return `https://www.youtube.com/embed/${match[1]}`;
+  }
+  return null;
+}
+
+function getYouTubeThumbnail(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match?.[1]) return `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg`;
+  }
+  return null;
+}
+
+function getVimeoEmbedUrl(url: string): string | null {
+  const match = url.match(/vimeo\.com\/(\d+)/);
+  return match?.[1] ? `https://player.vimeo.com/video/${match[1]}` : null;
+}
+
+function getEmbedUrl(url: string): string | null {
+  return getYouTubeEmbedUrl(url) ?? getVimeoEmbedUrl(url) ?? url;
+}
+---
+
+{videos.length > 0 ? (
+  <div class="video-grid">
+    {videos.map((video, index) => {
+      const embedUrl = getEmbedUrl(video.url);
+      const thumbnail = getYouTubeThumbnail(video.url);
+      return embedUrl ? (
+        <div class="video-card" data-video-url={embedUrl} data-video-index={index}>
+          <div class="video-thumbnail" data-embed-url={embedUrl}>
+            {thumbnail ? (
+              <img src={thumbnail} alt={video.title} loading="lazy" width="320" height="180" />
+            ) : (
+              <div class="video-thumb-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            )}
+            <button class="play-overlay" aria-label={`Xem: ${video.title}`}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            {video.duration && <span class="duration-badge">{video.duration}</span>}
+          </div>
+          <div class="video-info">
+            <span class="video-number">{(index + 1).toString().padStart(2, "0")}</span>
+            <div>
+              <h4 class="video-title">{video.title}</h4>
+              {video.description && <p class="video-desc">{video.description}</p>}
+            </div>
+          </div>
+        </div>
+      ) : null;
+    })}
+  </div>
+) : (
+  <div class="video-placeholder">
+    <div class="placeholder-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="23 7 16 12 23 17 23 7"/>
+        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+      </svg>
+    </div>
+    <div>
+      <p class="placeholder-title">Video sẽ được bổ sung</p>
+      <p class="placeholder-desc">Giảng viên sẽ thêm video hướng dẫn cho phần này.</p>
+    </div>
+  </div>
+)}
+
+<style>
+  /* Video grid — multiple videos in responsive 2-column layout */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .video-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-base);
+    overflow: hidden;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Thumbnail with play overlay */
+  .video-thumbnail {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-inset);
+    overflow: hidden;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .video-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .video-thumbnail:hover img {
+    transform: scale(1.03);
+  }
+
+  .video-thumb-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--text-muted);
+  }
+
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .play-overlay svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease;
+  }
+
+  .video-thumbnail:hover .play-overlay {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .video-thumbnail:hover .play-overlay svg {
+    transform: scale(1.1);
+  }
+
+  .duration-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+  }
+
+  /* Video info */
+  .video-info {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    flex-grow: 1;
+  }
+
+  .video-number {
+    flex-shrink: 0;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-top: 2px;
+  }
+
+  .video-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .video-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin: 2px 0 0;
+    line-height: 1.4;
+  }
+
+  /* Placeholder */
+  .video-placeholder {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-subtle);
+  }
+
+  .placeholder-icon {
+    flex-shrink: 0;
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    border-radius: var(--radius-md);
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+  }
+
+  .placeholder-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .placeholder-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin: 4px 0 0;
+  }
+
+  @media (max-width: 600px) {
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    /* Click thumbnail → load iframe inline */
+    document.querySelectorAll('.video-thumbnail').forEach(thumb => {
+      thumb.addEventListener('click', function onClick() {
+        const url = this.dataset.embedUrl;
+        if (url) {
+          const iframe = document.createElement('iframe');
+          iframe.src = url + '?autoplay=1&rel=0';
+          iframe.title = 'Video player';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.border = '0';
+          iframe.style.position = 'absolute';
+          iframe.style.inset = '0';
+          
+          this.innerHTML = '';
+          this.appendChild(iframe);
+          this.style.cursor = 'default';
+          
+          // Remove listener after execution
+          this.removeEventListener('click', onClick);
+        }
+      });
+    });
+  });
+</script>

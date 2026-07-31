@@ -1,0 +1,440 @@
+SOURCE: MindX_AG_Slide 6.pdf
+PAGES: 26
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 6
+Thiết lập tri thức nội bộ và
+quy tắc vận hành cho AI
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Khung CLEAR
+Áp dụng khung CLEAR để thiết kế câu lệnh, từ đó trích xuất các báo cáo đạt
+yêu cầu từ AI.
+MỤC TIÊU
+HỌC TẬP
+Về RAG:
+Giải thích được cơ chế hoạt động của RAG và chứng minh được vai trò của dữ
+liệu nội bộ trong việc đảm bảo độ chính xác khi AI xuất bản thông tin.
+BI Dashboard
+Xây dựng hoàn chỉnh Dashboard BI bằng các công cụ AI, thay thế cho quy
+trình trích xuất và xử lý dữ liệu thủ công.
+
+=== PAGE 3 ===
+Phần 1:
+RAG
+
+=== PAGE 4 ===
+Những tình huống quen thuộc mà hầu hết quản lý đều từng trải qua mỗi tuần:
+Vấn đề của quản lý
+Khủng hoảng phút chót Lãng phí nguồn lực Thiếu tính đồng bộ
+Sát giờ họp giao ban nhưng số liệu
+giữa các file Excel không khớp nhau,
+phải rà soát lại từng ô thủ công.
+Tiêu tốn 3-4 tiếng mỗi tuần chỉ để
+copy/paste, căn chỉnh lại biểu đồ và
+làm slide báo cáo từ đầu.
+Phân công cho nhân sự nhưng mỗi
+người nộp một định dạng, sai lệch
+màu sắc và tiêu chuẩn chuyên
+nghiệp.
+Hậu quả: Lãng phí thời gian, quyết định chậm trễ, khó kiểm soát chất lượng báo cáo.
+
+=== PAGE 5 ===
+Trợ lý BI (Business Intelligence): Bất kỳ quản lý nào cũng có thể tạo ra dashboard phân tích số liệu chuẩn xác mà
+không quá phụ thuộc vào dân IT hay kỹ sư dữ liệu.
+Vấn đề của quản lý - Giải pháp
+Đọc dữ liệu khổng lồ Phân tích chuẩn nghiệp vụ Tự động trực quan hóa
+Tự động đọc và tổng hợp dữ liệu từ
+đa nguồn (Excel, CSV) chỉ trong
+thười gian ngắn, đảm bảo sự chính
+xác.
+AI hiểu rõ logic kinh doanh của
+doanh nghiệp, tự động phân loại và
+tính toán theo đúng quy tắc thực tế
+của từng phòng ban.
+Tự động chuyển đổi số liệu thô
+thành các Web Dashboard chuyên
+nghiệp, trực quan.
+Khủng hoảng phút chót Lãng phí nguồn lực Thiếu tính đồng bộ
+
+=== PAGE 6 ===
+Sự khác biệt giữa cách làm báo cáo truyền thống và Dashboard AI:
+Báo cáo tĩnh vs Dashboard động (real-time)
+Báo cáo cũ (tĩnh) Dashboard AI (động)
+Xử lý thủ công: Khi có thay đổi về số liệu, nhân
+sự phải tiến hành trích xuất và thiết lập lại báo
+cáo từ đầu.
+Tiêu tốn nguồn lực: Yêu cầu nhiều thời gian và
+nhân sự cho các tác vụ thu thập, căn chỉnh
+mang tính lặp lại mỗi kỳ báo cáo.
+Hiển thị cố định: Dữ liệu được thể hiện ở dạng
+hình ảnh hoặc slide tĩnh.
+Thiếu tính đồng bộ: Hình thức phụ thuộc vào kỹ
+năng thiết kế thủ công của từng cá nhân, dễ dẫn
+đến sai lệch về nhận diện.
+Đồng bộ tự động: Khi số liệu gốc thay đổi, hệ
+thống sẽ ngay lập tức cập nhật trên toàn bộ biểu
+đồ mà không cần thao tác lặp lại.
+Tối ưu quy trình: Giải phóng thời gian làm thủ
+công, giúp cấp quản lý tập trung hoàn toàn vào
+việc phân tích và ra quyết định.
+Tương tác đa chiều: Quản lý có thể thao tác trực
+tiếp trên biểu đồ, tùy chỉnh bộ lọc để truy xuất
+chi tiết từng hạng mục ngay tại thời điểm họp.
+Giao diện chuyên nghiệp: Giao diện được tự
+động thiết kế theo chuẩn quản trị hiện đại, đảm
+bảo tính thẩm mỹ, đồng bộ và trực quan.
+
+=== PAGE 7 ===
+Nếu bạn chỉ nạp data và bảo AI: "Vẽ cho tôi cái biểu đồ" — điều gì sẽ xảy ra?
+Vấn đề khi sử dụng AI chung chung để tạo dashboard
+Giải pháp: RAG
+AI vẽ màu ngẫu nhiên
+Để AI hiểu và tuân thủ "luật" của công ty bạn, cần một kỹ thuật đặc biệt — đó chính là RAG
+(Retrieval-Augmented Generation)
+Xanh, đỏ, tím, vàng... không theo bất kỳ quy chuẩn
+nào của công ty bạn.
+Vi phạm Brand Guideline
+Thiếu chuyên nghiệp, vi phạm quy chuẩn thương
+hiệu của công ty.
+
+=== PAGE 8 ===
+RETRIEVAL-AUGMENTED GENERATION
+ĐỊNH NGHĨA RAG
+Là phương pháp trang bị "hệ thống tri thức nội bộ" cho AI.
+Thay vì để AI hoạt động dựa trên những kiến thức chung chung trên internet, công nghệ này cho phép AI truy
+cập trực tiếp vào kho tài liệu riêng của công ty (như quy trình, báo cáo, chính sách) để đọc hiểu và tổng hợp ra
+câu trả lời chuẩn xác nhất cho doanh nghiệp.
+Nạp tài liệu nội bộ AI rà soát và đối
+chiếu
+Xử lý và trả lời
+theo luật
+AI tự động tra cứu kho tài liệu nội bộ đã nạp để tổng hợp và đưa ra câu trả lời chính xác tuyệt đối theo đúng
+quy định của doanh nghiệp.
+
+=== PAGE 9 ===
+VÍ DỤ VỀ RAG TRONG THỰC TẾ
+Ví dụ 1: Brand Guideline
+Input: Cung cấp bộ quy chuẩn thương hiệu của
+công ty cho AI.
+Output: Khi bạn yêu cầu làm báo cáo, AI tự động
+vẽ biểu đồ với Doanh thu màu Xanh, Chi phí
+màu Đỏ mà không cần bạn phải nhắc đi nhắc lại
+mỗi lần.
+Ví dụ 2: Chính sách nhân sự
+Input: Cung cấp quy chế lương thưởng, sổ tay
+nhân sự cho AI.
+Output: Khi nhân viên hỏi về quy định nghỉ phép,
+AI trích xuất đúng luật hiện hành của công ty để
+trả lời, tuyệt đối không nhầm lẫn hay sai luật.
+
+=== PAGE 10 ===
+Phần 2:
+KHUNG CLEAR
+
+=== PAGE 11 ===
+Khung CLEAR
+RAG giúp AI có "Tri thức", nhưng để AI làm đúng, ta cần ra lệnh chuẩn theo khung CLEAR. Đây là bộ khung 5 bước
+giúp bạn giao tiếp với AI chuẩn xác:
+L
+- 
+Logic
+E
+- 
+Expectations
+A
+- 
+Action
+R
+- 
+Restrictions
+Luật xử lý: Dữ liệu
+tính toán theo luật
+nào?
+Chỉ rõ cách bạn
+muốn AI lọc, nhóm
+hoặc cộng trừ nhân
+chia số liệu.
+Hình thức đầu ra:
+Bạn muốn kết quả
+trông ra sao?
+Miêu tả chính xác
+"giao diện" và định
+dạng của câu trả lời
+để không phải sửa lại
+form.
+Nhiệm vụ chính: Việc
+cốt lõi AI phải làm là
+gì?
+Dùng động từ mạnh,
+trực diện để giao
+đúng một nhiệm vụ
+cụ thể.
+Ranh giới cấm: AI
+KHÔNG ĐƯỢC làm
+gì?
+Đặt ra các quy tắc
+cấm để chặn trước
+tình trạng AI tự suy
+diễn, lan man hoặc
+sai chuẩn công ty.
+C
+- 
+Context
+Bối cảnh: Bạn là ai?
+Gắn cho AI một chức
+danh chuyên gia và
+bối cảnh cụ thể để AI
+dùng đúng tông
+giọng.
+
+=== PAGE 12 ===
+Ví dụ Prompt chuẩn: kết hợp RAG & CLEAR
+Dưới đây là cấu trúc một Prompt mẫu kết hợp đầy đủ RAG và khung CLEAR — đây là công thức để tạo Dashboard
+chuyên nghiệp:
+[C - Context] Bạn là Fullstack AI Engineer và Data Analyst của Công ty TNHH Alpha.
+[L - Logic] Xây dựng một Web Dashboard (Single Page) đọc dữ liệu từ file sales_data.xlsx. Dashboard tự động
+lấy dữ liệu (polling) mỗi 2 giây để cập nhật biểu đồ và các KPI (Tổng doanh thu, Tổng chi phí, Lợi nhuận, Số
+đơn hàng). 
+[E - Expectation] Giao diện thiết kế phong cách Glassmorphism (hiệu ứng kính mờ), nền tối (Dark mode) sang
+trọng. Gồm: 4 thẻ KPI, 1 biểu đồ cột (Doanh thu vs Chi phí), 1 biểu đồ tròn (Khu vực), 1 biểu đồ đường (Lợi
+nhuận) và 1 bảng Top Danh mục. Toàn bộ nội dung hiển thị tiếng Việt có dấu.
+[A - Action] Viết code Python tạo local web server (port 9090) phục vụ API và file dashboard.html. Tự động
+thực thi và mở trình duyệt.
+[R - Restrictions] TUYỆT ĐỐI tuân thủ brand_guideline.txt: Doanh thu dùng màu Xanh Navy (#1E3A8A), Chi phí
+dùng màu Đỏ San hô (#EF4444).
+Prompt mẫu:
+
+=== PAGE 13 ===
+Nâng cấp dashboard với tính năng tương tác
+Chuyển đổi từ việc "xem" báo cáo tĩnh sang "phân tích" dữ liệu đa chiều ngay trên một màn hình.
+Thiết lập bộ lọc thời gian
+Bạn cần làm gì: Lệnh cho AI tạo
+thanh công cụ chọn khoảng thời
+gian (Tuần/Tháng/Quý) ở góc
+báo cáo.
+Trải nghiệm thực tế: Khi thao
+tác chọn "Quý 2", toàn bộ chỉ số
+KPI và biểu đồ sẽ tự động chạy
+lại số liệu và chỉ hiển thị kết quả
+kinh doanh của riêng Quý 2.
+Tạo bộ lọc phân quyền Tích hợp phân tích sâu
+Bạn cần làm gì: Yêu cầu AI
+thêm danh mục thả xuống
+(dropdown) để lọc theo Phòng
+ban, Chi nhánh hoặc Cá nhân.
+Trải nghiệm thực tế: Chọn
+"Phòng Kinh Doanh", hệ thống
+sẽ tự động lọc và hiển thị độc
+lập hiệu suất làm việc của riêng
+đơn vị này.
+Bạn cần làm gì: Yêu cầu AI gắn
+liên kết dữ liệu chi tiết ẩn đằng
+sau các khối biểu đồ tổng.
+Trải nghiệm thực tế: Khi nhấp
+chuột trực tiếp vào một cột
+doanh thu trên biểu đồ, hệ
+thống sẽ mở ra danh sách liệt
+kê chi tiết từng giao dịch, từng
+sản phẩm cấu thành nên con số
+đó.
+Quản lý có khả năng chủ động truy vấn các lớp thông tin, đưa ra quyết định ngay trong cuộc họp.
+
+=== PAGE 14 ===
+Bảo mật dữ liệu khi dùng AI
+Câu hỏi thường gặp: "Dữ liệu công ty rất nhạy cảm, đưa lên Dashboard web có bị lộ không?"
+Câu trả lời: Tùy cách bạn triển khai. Nếu chạy Local (trên máy tính cá nhân) — hoàn toàn an toàn, vì dữ liệu không
+tải lên mạng public.
+
+=== PAGE 15 ===
+3 cách chia sẻ dashboard
+Tùy vào mức độ bảo mật và sự tiện lợi, bạn có thể chọn một trong ba phương án sau:
+Cách 3 — Xuất File tĩnh (Khuyên dùng!)
+Đóng gói Dashboard thành 1 file HTML duy nhất. Nén ZIP có cài Mật khẩu. 
+Gửi qua Zalo/Email. Khuyên dùng cho văn phòng!
+Cách 2 — Ngrok / Cloud (Live Link)
+Tạo link public xem real-time. Có thể cài Mật khẩu hoặc đăng nhập Email công ty.
+Nhanh nhưng rủi ro nếu rò rỉ link.
+Cách 1 — Nội Bộ (Intranet / VPN)
+An toàn tuyệt đối, dùng chung mạng công ty mới xem được. 
+Dành cho Doanh nghiệp lớn có hạ tầng IT.
+
+=== PAGE 16 ===
+DEMO: ĐỀ BÀI
+Chủ đề: Xây dựng Dashboard bán hàng thời gian thực cho Công ty Alpha.
+Dữ liệu đầu vào: File sales_data.xlsx (dữ liệu bán hàng) - Link và brand_guideline.txt (quy định màu sắc
+thương hiệu) - Link
+Yêu cầu kỹ thuật:
+Xây dựng Web Dashboard (Single Page) phong cách Glassmorphism, nền tối (Dark mode).
+Hiển thị: 4 thẻ KPI (Doanh thu, Chi phí, Lợi nhuận, Đơn hàng), biểu đồ cột (Doanh thu vs Chi phí), biểu đồ
+tròn (Khu vực), biểu đồ đường (Lợi nhuận) và bảng Top Danh mục.
+Tính năng Real-time: Dashboard tự động cập nhật dữ liệu mỗi 2 giây từ file Excel mà không cần load lại
+trang.
+Ràng buộc: Phải dùng đúng mã màu Navy (#1E3A8A) cho Doanh thu và Đỏ San hô (#EF4444) cho Chi
+phí theo Guideline.
+Đầu ra: Một server Python (cổng 9090) chạy Dashboard và một file HTML tĩnh được nén đặt mật khẩu để
+chia sẻ.
+
+=== PAGE 17 ===
+1
+CÁC BƯỚC THỰC HIỆN DEMO
+Quy trình 5 bước được thiết kế để học viên thấy rõ từng giai đoạn xây dựng AI Dashboard chuyên nghiệp.
+2
+3
+4
+5
+Khởi Tạo Kỹ Năng (Skill - Design Mentor)
+Gửi prompt yêu cầu AI tạo file Design_Mentor_Skill.md — bộ tiêu chuẩn thiết kế Dashboard hiện đại: Glassmorphism, Dark
+Mode, KPI layout, phối màu tương phản và hiệu ứng nhảy số Real-time.
+Nạp Tri Thức (RAG) & Kỹ Năng (Skill)
+Mở phiên chat AI mới. Kéo thả 3 file vào khung chat: Design_Mentor_Skill.md, sales_data.xlsx, và brand_guideline.txt của
+Alpha Corp.
+Sử Dụng Prompt CLEAR
+Copy & Paste prompt chuẩn CLEAR (Context – Logic – Expectation – Action – Restrictions) để yêu cầu AI tạo Dashboard hoàn
+chỉnh với server Python port 9090.
+Trình Diễn "Phép Thuật" Auto-Update
+Chia đôi màn hình: Excel và trình duyệt. Thay đổi số liệu Doanh Thu →  Ctrl+S →  Sau 2 giây biểu đồ tự động vọt lên mà không
+cần 
+Đóng Gói & Chia Sẻ An Toàn
+Yêu cầu AI viết script export_dashboard.py xuất file HTML tĩnh. Nén bằng WinRAR/7-Zip, đặt mật khẩu, gửi qua Group lớp.
+
+=== PAGE 18 ===
+Prompt CLEAR — Tạo Dashboard Alpha Corp
+Đây là prompt chuẩn được thiết kế theo khung CLEAR để AI hiểu đúng yêu cầu và tạo ra Dashboard chuyên nghiệp nhất.
+L
+- 
+Logic
+E
+- 
+Expectations
+A
+- 
+Action
+R
+- 
+Restrictions
+Đọc
+sales_data.xlsx,
+polling mỗi 2 giây,
+cập nhật KPI và
+biểu đồ.
+Glassmorphism
+Dark Mode: 4 KPI,
+biểu đồ cột, tròn,
+đường, bảng Top
+Danh mục.
+Python server port
+9090, tự động mở
+trình duyệt, nội
+dung tiếng Việt có
+dấu.
+Tuân thủ
+brand_guideline.txt
+: Doanh thu
+#1E3A8A, Chi phí
+#EF4444.
+C
+- 
+Context
+Vai trò: Fullstack AI
+Engineer & Data
+Analyst của Công
+ty TNHH Alpha.
+
+=== PAGE 19 ===
+Prompt CLEAR — Tạo Dashboard Alpha Corp
+Dashboard Đầu Ra Mong Đợi
+4 Thẻ KPI
+Tổng doanh thu
+Tổng chi phí
+Lợi nhuận 
+Số đơn hàng
+Biểu Đồ Cột
+Doanh thu vs Chi phí theo
+thời gian
+Biểu Đồ Tròn
+Phân bổ theo Khu vực địa lý
+Biểu Đồ Đường
+Xu hướng Lợi nhuận theo thời gian
+Bảng Top Danh Mục
+Xếp hạng danh mục sản phẩm
+theo doanh thu
+Toàn bộ nội dung hiển thị tiếng Việt có dấu. 
+Giao diện Glassmorphism nền tối sang trọng, hiệu ứng kính mờ.
+
+=== PAGE 20 ===
+KẾT QUẢ
+
+=== PAGE 21 ===
+TỔNG KẾT
+Dữ Liệu + AI
+Tự động hóa báo cáo trong 5 phút. Không còn mất
+hàng giờ làm thủ công.
+RAG — Tri Thức Nội Bộ
+AI tuân thủ luật lệ và Guideline của riêng doanh
+nghiệp bạn. 
+Chống Hallucination.
+Khung CLEAR
+Cách giao tiếp không trượt phát nào với AI. 5 thành
+phần: Context, Logic, Expectation, Action,
+Restrictions.
+Bảo Mật Thông Minh
+Chọn phương án chia sẻ phù hợp: Chạy local, xuất
+file ZIP cài pass, hoặc Intranet/VPN.
+
+=== PAGE 22 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 23 ===
+BÀI THỰC HÀNH:
+Chủ đề: Xây dựng Dashboard Quản lý Ngân sách cho Công ty Beta Solutions.
+Vai trò: Trưởng phòng Tài chính kiêm Fullstack Developer.
+Dữ liệu đầu vào: File ngan_sach_phong_ban.xlsx Link  và brand_guideline_beta.txt. Link
+Yêu cầu làm bài: Trước khi làm bài thực hành hãy kiểm chứng Before-After để thấy sức mạnh RAG&Skill (xem Slide
+24)
+Yêu cầu kỹ thuật:
+Thiết kế Web Dashboard nền tối, chuyên nghiệp.
+Hiển thị: 3 thẻ KPI (Tổng ngân sách, Tổng chi tiêu, Giao dịch vượt NS), 1 biểu đồ cột ghép (Ngân sách vs Chi tiêu), 1
+biểu đồ tròn (Tỷ trọng phòng ban).
+Tính năng tương tác: Có các nút bấm Lọc theo Quý (Q1, Q2, Q3, Q4) và Lọc theo Phòng ban. Khi bấm lọc, các con
+số và biểu đồ phải cập nhật ngay lập tức.
+Tính năng Real-time: Tự động làm mới số liệu mỗi 2 giây khi file Excel gốc thay đổi.
+Ràng buộc màu sắc (Bắt buộc): Ngân sách dùng màu Tím Hoàng Gia (#7C3AED), Chi tiêu dùng Xanh Ngọc
+(#06B6D4), Vượt ngân sách dùng Hồng San Hô (#F43F5E).
+Sản phẩm nộp bài: Một file nén (RAR/ZIP) chứa file HTML Dashboard tĩnh, có đặt mật khẩu tùy ý
+
+=== PAGE 24 ===
+Kiểm Chứng Before & After - Sức mạnh của RAG & Skill
+Học viên thực hiện 2 bước so sánh để tự mình chứng kiến sự khác biệt khi có và không có tri thức nạp vào AI.
+❌  BEFORE — Không có tri thức
+Mở New Chat, KHÔNG nạp
+brand_guideline_beta.txt và file Skill
+Chỉ nạp file dữ liệu ngan_sach_phong_ban.xlsx
+AI tự thiết kế với màu sắc ngẫu nhiên hoặc mặc
+định
+Số tiền không được format chuẩn VNĐ
+Dashboard thiếu tính đồng bộ, không phản ánh
+thương hiệu Beta Solutions
+✅  AFTER — Có đầy đủ tri thức & kỹ năng
+Mở New Chat, nạp đầy đủ 3 file: dữ liệu + brand
+guideline + Skill
+AI đọc và tuân thủ file quy định một cách tuyệt
+đối
+Biểu đồ hiển thị chính xác Tím #7C3AED và Xanh
+Ngọc #06B6D4
+Format số tiền chuẩn xác theo đơn vị Triệu/Tỷ
+VNĐ
+Dashboard chuyên nghiệp, đồng bộ thương hiệu
+hoàn toàn
+Kết luận: Quá trình này chứng minh "Siêu trợ lý AI" có khả năng học và làm theo nội quy doanh nghiệp (RAG) cũng
+như áp dụng kỹ năng chuyên môn (Skill), tạo ra sản phẩm tùy biến cao thay vì một giao diện rập khuôn.
+
+=== PAGE 25 ===
+BÀI TẬP VỀ NHÀ
+Tạo 1 Dashboard liên quan công việc hàng ngày phải làm báo cáo của bạn
+
+=== PAGE 26 ===
+THANK YOU!

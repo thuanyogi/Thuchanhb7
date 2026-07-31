@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { resourceGroups } from "../lib/resources";
+---
+
+<BaseLayout title="Tài nguyên — Resource Library">
+  <section class="page-header">
+    <p class="eyebrow">Resource library</p>
+    <h1>Tài nguyên dùng được ngay trong lớp</h1>
+    <p>Trung tâm điều hướng cho học viên và giảng viên: lộ trình, thuật ngữ, template, rubric và tìm kiếm nhanh. Mỗi mục dẫn tới nơi cần đến — không link chết.</p>
+  </section>
+
+  <section class="resource-grid">
+    {resourceGroups.map((group) => (
+      <article class="resource-card" data-audience={group.audience}>
+        <span class="resource-audience-tag">{group.audience === "instructor" ? "Giảng viên" : "Học viên"}</span>
+        <h2>{group.title}</h2>
+        <p>{group.summary}</p>
+        <ul>
+          {group.items.map((item) => <li>{item}</li>)}
+        </ul>
+        {group.href === "#search" ? (
+          <button class="button" type="button" onclick="window.AACmdk && window.AACmdk.open()">{group.action}</button>
+        ) : (
+          <a class="button" href={group.href}>{group.action}</a>
+        )}
+      </article>
+    ))}
+  </section>
+
+  <section class="panel panel-warning">
+    <h2>Version-sensitive content</h2>
+    <p>
+      Trước mỗi cohort, kiểm tra lại setup, UI, quota, account switching, skills,
+      rules và project behavior theo tài liệu chính thức của Google Antigravity.
+    </p>
+    <a href="https://antigravity.google/docs/home" target="_blank" rel="noreferrer">
+      Mở tài liệu Antigravity chính thức
+    </a>
+  </section>
+</BaseLayout>
+
+<style>
+  .resource-audience-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: var(--space-sm);
+    background: var(--accent-primary-subtle);
+    color: var(--accent-primary);
+  }
+  .resource-card[data-audience="instructor"] .resource-audience-tag {
+    background: var(--accent-teal-subtle);
+    color: var(--accent-teal);
+  }
+  .resource-card .button { margin-top: var(--space-md); cursor: pointer; }
+</style>

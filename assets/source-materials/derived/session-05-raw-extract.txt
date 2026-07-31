@@ -1,0 +1,329 @@
+SOURCE: MindX_AG_Slide 5.pdf
+PAGES: 25
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 5
+Triển khai AI Agents như
+nhân sự chuyên trách
+trong hệ thống
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: MCP + API tích hợp AI Agent
+Tích hợp hiệu quả giao thức MCP và API để mở rộng không gian làm việc của
+AI Agent.
+MỤC TIÊU
+HỌC TẬP
+Thiết lập AI Agent đáp ứng tiêu chuẩn kỹ thuật nền tảng
+Xây dựng hoàn chỉnh AI Agent ứng dụng khung MICRO, đảm bảo tối ưu hóa
+từng yếu tố trong cấu trúc.
+FIN Agent
+Phát triển và tối ưu hóa các tính năng nâng cao của FIN Agent để giải quyết
+các bài toán thực tế phức tạp.
+
+=== PAGE 3 ===
+Phần 1:
+THIẾT LẬP AI AGENT CHUẨN
+
+=== PAGE 4 ===
+Công việc văn phòng hiện tại đang tiêu tốn nguồn lực khổng lồ vì những quy trình thủ công lặp đi lặp lại
+Bạn có gặp vấn đề này? 
+Tốn thời gian
+Hàng giờ mỗi ngày cho công việc lặp lại
+Không mở rộng được
+Tăng khối lượng →  phải tăng nhân sự
+Nhận dữ liệu từ nhiều nguồn khác nhau
+Quy trình hiện tại Hậu quả
+Sai sót cao
+Con người mệt mỏi →  lỗi không tránh khỏi
+Copy paste thủ công từng dòng dữ liệu
+Phân loại thủ công — dễ nhầm lẫn
+Làm report lặp lại mỗi ngày
+
+=== PAGE 5 ===
+AI Agent = Nhân sự AI
+Giống như một nhân viên thực thụ, một AI Agent cần được trang bị đầy đủ để hoạt động hiệu quả:
+1.JD Công Việc
+Mô tả rõ ràng nhiệm vụ và
+phạm vi trách nhiệm của Agent
+2. Quy Trình Làm Việc
+Các bước xử lý được định nghĩa
+rõ ràng từ đầu đến cuối
+3. Quy Tắc Xử Lý
+Constraints và điều kiện để
+Agent ra quyết định đúng đắn
+4. Input & Output Rõ Ràng
+Dữ liệu đầu vào và kết quả đầu
+ra được xác định cụ thể
+5. Công Cụ Hỗ Trợ
+Các tool và API mà Agent có thể
+gọi để thực hiện nhiệm vụ
+
+=== PAGE 6 ===
+M
+- 
+Mission
+Khung MICRO — Chuẩn Hóa AI Agent
+Năm thành phần cốt lõi để xây dựng một AI Agent hoạt động hiệu quả
+I
+- 
+Input
+C
+- 
+Constraints
+R
+- 
+Role
+Nhiệm vụ cụ thể
+của Agent là gì?
+O
+- 
+Output
+Dữ liệu đầu vào
+Agent nhận được
+Quy tắc và giới hạn
+xử lý
+Vai trò và danh
+tính của Agent
+Kết quả cụ thể
+Agent tạo ra
+
+=== PAGE 7 ===
+Ví dụ thực tế: Finance Agent
+Áp dụng khung MICRO vào một trường hợp quản lý tài chính doanh nghiệp:
+M
+- 
+Mission
+I
+- 
+Input
+C
+- 
+Constraints
+R
+- 
+Role
+Quản lý và phân loại
+chi phí doanh nghiệp
+O
+- 
+Output
+Dữ liệu chi tiêu từ các
+phòng ban
+>500k →  kiểm tra
+liên quan khách →
+cần chứng từ
+Finance Assistant
+chuyên trách
+JSON + Google Sheet
+cập nhật tự động
+Luồng xử lý:
+Nhận dữ liệu
+Phân loại
+Ghi vào sheet
+
+=== PAGE 8 ===
+Phần 2:
+MCP + API TÍCH HỢP AI AGENT
+
+=== PAGE 9 ===
+MCP là gì?
+MCP = Model Context Protocol
+Cách AI sử dụng các công cụ bên ngoài để thực hiện hành động thực tế trong thế giới số.
+MCP cho phép AI không chỉ "nghĩ" mà còn "làm" — thực thi hành động trong hệ thống thực tế.
+Trong buổi học này
+GG Anti gọi Python file
+Python thực thi logic xử lý
+Kết quả ghi vào hệ thống thật
+→  Đó chính là MCP hoạt động
+
+=== PAGE 10 ===
+API là gì?
+API = Application Programming Interface
+Cổng giao tiếp giữa các hệ thống, cho phép chúng "nói chuyện" với nhau một cách có cấu trúc.
+API: AI nói chuyện với hệ thống thật
+Gửi dữ liệu
+Python gửi dữ liệu JSON đã xử lý
+Xử lý trung gian
+Apps Script nhận và xử lý
+request
+Ghi vào hệ thống
+Dữ liệu được ghi vào Google
+Sheet
+
+=== PAGE 11 ===
+Ví dụ: Flow hoàn chỉnh MCP + API
+Pipeline từ AI Agent đến hệ thống thực tế
+AI Agent MCP gọi
+Python
+Python gọi
+Apps Script
+Ghi vào
+Google Sheet
+GG Anti xử lý và
+ra quyết định
+MCP →  Tool:
+Gọi Python để
+thực thi
+API Call:
+Python gọi Apps
+Script
+System:
+Ghi vào Google Sheet
+
+=== PAGE 12 ===
+Google Cloud & Apps Script
+Google Cloud Console
+Google Cloud là nơi quản lý backend và
+API cho toàn bộ hệ thống. 
+Trong case này, Apps Script đóng vai trò
+như một mini backend — một Web App
+nhỏ gọn nhưng đầy đủ chức năng.
+Apps Script
+Apps Script chính là một dạng Web App
+— mini backend được Google host sẵn,
+không cần server riêng.
+Apps Script Web App làm được gì?
+Nhận request (POST) từ bên ngoài
+Xử lý logic nghiệp vụ
+Ghi dữ liệu vào Google Sheet
+Trả về response JSON
+→ Chính là API endpoint
+
+=== PAGE 13 ===
+So sánh dễ hiểu
+Hệ thống AI Agent được ví như cơ thể con người — mỗi thành phần có vai trò riêng biệt
+Khi bốn thành phần này hoạt động cùng nhau, bạn có một nhân sự AI hoàn chỉnh,
+tự động từ đầu đến cuối.
+
+=== PAGE 14 ===
+DEMO buổi học:
+Toàn bộ pipeline từ input đến Google Sheet thực tế
+Input (Chi phí)
+Dữ liệu chi tiêu thô từ người dùng nhập vào
+GG Anti Agent
+Agent phân tích, phân loại và đánh giá chi phí
+JSON Output
+Dữ liệu có cấu trúc được xuất ra file data.json
+Python Script
+send_to_sheet.py gọi API endpoint
+Google Sheet Admin
+Dữ liệu được ghi vào Admin Expense Tracker
+
+=== PAGE 15 ===
+Date Employee Item Amount Category Status AI note
+2024-01-15 Nguyễn Văn A Tiếp khách 750,000 Entertainment Cần chứng từ Vượt 500k, cần
+kiểm tra
+2024-01-15 Trần Thị B Văn phòng phẩm 120,000 Office Approved Trong hạn mức
+DEMO buổi học: Finance Agent
+Bước 1: Tạo Google Sheet Admin — Admin Expense Tracker
+Header chuẩn: Date | Employee | Item | Amount | Category | Status | AI Note
+ 7 cột tương ứng với output của Finance Agent
+
+=== PAGE 16 ===
+Bước 2: Apps Script — Code Backend
+Vào Extensions →  Apps Script trong Google Sheet, dán đoạn code sau:
+Hàm doPost(e) nhận POST request, parse JSON, xóa sheet cũ và ghi dữ liệu mới vào
+ đây chính là API endpoint của bạn.
+D a t a   L i n k
+
+=== PAGE 17 ===
+Bước 3 & 4: Deploy API + Python Tool
+Nhớ thay DAN_LINK_EXEC bằng URL thật từ bước Deploy. URL có dạng:
+https://script.google.com/macros/s/XXX/exec
+Python Tool — send_to_sheet.py1. Deploy Web App
+2. Click Deploy →  New deployment
+3. Chọn type: Web App
+4. Execute as: Me
+5. Who has access: Anyone
+6. Copy link /exec →  dán vào Python
+
+=== PAGE 18 ===
+Bước 5 & 6: Chạy Agent & Xem Kết Quả
+Prompt Finance Agent: 
+Bạn là AI Finance Agent. Nhiệm vụ của bạn
+là đọc dữ liệu chi tiêu, phân loại từng khoản,
+đánh giá theo rule (>500k cần chứng từ), và
+xuất ra JSON chuẩn với các trường: Date,
+Employee, Item, Amount, Category, Status,
+AI Note.
+Chạy lệnh
+type data.json | python send_to_sheet.py
+Kết quả trả về:
+ {"success": true, "updatedRows": N}
+Kết quả thực tế
+Agent đọc và phân tích chi phí
+Xuất JSON vào data.json
+Python gọi API endpoint
+Google Sheet cập nhật ngay lập tức
+→  Agent + MCP + API chạy thật
+
+=== PAGE 19 ===
+Trên đây không chỉ là demo AI
+Đây là tạo ra một nhân sự AI với khả năng:
+Biết xử lý
+ Biết quyết định
+ Biết ghi vào hệ thống thật
+Agent phân tích dữ liệu và
+áp dụng business rules tự
+động
+Đánh giá từng trường hợp
+theo constraints đã định
+nghĩa
+Output thật — không phải
+text, mà là dữ liệu trong
+Google Sheet
+
+=== PAGE 20 ===
+TỔNG KẾT
+MCP
+AI gọi tool — AI có tay để
+làm việc
+API
+Hệ thống nhận dữ liệu — AI
+nói chuyện với thế giới thật
+Google Cloud
+Nơi chạy backend — Apps
+Script = mini API server
+💡  Insight quan trọng nhất: AI chỉ có giá trị thực sự khi →  đi vào workflow thật →  tạo ra output thật
+Bạn vừa xây dựng một hệ thống AI Agent hoàn chỉnh: từ khung MICRO →  MCP →  API →  Google Sheet. 
+Đây là nền tảng để scale lên bất kỳ workflow nào trong doanh nghiệp.
+
+=== PAGE 21 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 22 ===
+ĐỀ BÀI: TỰ ĐỘNG HÓA ĐỒNG BỘ DỮ LIỆU GOOGLE SHEETS BẰNG PYTHON
+1.Tình huống doanh nghiệp: 
+Tại công ty ABC, hàng ngày các nhân viên đi công tác phải nhập các khoản chi tiêu (ngày tháng, tên nhân viên, hạng mục,
+số tiền) vào một file Google Sheet chung mang tên Data_Nhan_Vien (Link)
+Bộ phận Kế toán (Admin) có một file tổng hợp riêng mang tên Admin Expense Tracker (Link) để lưu trữ dài hạn và làm báo
+cáo.
+2. Vấn đề hiện tại: 
+Cứ mỗi cuối ngày, nhân sự phòng kế toán phải vào file của nhân viên, copy bằng tay những dòng dữ liệu mới phát sinh trong
+ngày và paste nối tiếp xuống cuối file Admin. 
+Thao tác này thủ công, tốn thời gian, dễ copy sót hoặc copy trùng lặp dữ liệu của ngày hôm trước.
+
+=== PAGE 23 ===
+3. Yêu cầu dành cho Học viên: Đóng vai là một Chuyên gia Tự động hóa, bạn hãy viết một kịch bản lập trình (Script) bằng ngôn
+ngữ Python giải quyết triệt để bài toán này với các tiêu chí khắt khe sau, SỬ DỤNG GOOGEL ANTIGRAVITY ĐỂ HƯỚNG
+DẪN/THỰC HIỆN: 
+Kết nối an toàn: Phải sử dụng phương thức xác thực chuẩn của Google Cloud (OAuth 2.0 thông qua file credentials.json) để
+kết nối Python với Google Sheets. Không dùng các phương pháp kém bảo mật.
+Ghi dữ liệu thông minh (Không ghi đè): Chương trình phải tự động phát hiện được dòng trống dưới cùng của file Admin
+Expense Tracker và chèn nối tiếp (append) dữ liệu mới xuống phía dưới. Tuyệt đối không được làm xóa hay ghi đè lên dữ
+liệu cũ của Kế toán.
+Chống trùng lặp (Anti-duplication): Sau khi copy thành công dữ liệu mới sang file Admin, chương trình phải quay lại file
+Data_Nhan_Vien, tự động tạo/tìm cột trạng thái (SyncStatus) và đánh dấu "Done" cho các dòng vừa xử lý. Ở những lần chạy
+code tiếp theo, chương trình chỉ được bốc những dòng chưa có chữ "Done".
+Hướng dẫn các bước làm chi tiết: Tại đây
+ĐỀ BÀI: TỰ ĐỘNG HÓA ĐỒNG BỘ DỮ LIỆU GOOGLE SHEETS BẰNG PYTHON
+
+=== PAGE 24 ===
+BÀI TẬP VỀ NHÀ: 
+HOÀN THIỆN BÀI THỰC HÀNH VÀ NỘP LẠI CHO GIÁO VIÊN
+
+=== PAGE 25 ===
+THANK YOU!

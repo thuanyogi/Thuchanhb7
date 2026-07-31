@@ -1,0 +1,93 @@
+---
+import CopyPanel from "../../../components/CopyPanel.astro";
+import SectionPanel from "../../../components/SectionPanel.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { buildClassroomPlan } from "../../../lib/classroom-plan";
+import { getCourseSessions } from "../../../lib/course";
+import { classroomMarkdownToHtml } from "../../../lib/markdown";
+
+export function getStaticPaths() {
+  const sessions = getCourseSessions();
+  return sessions.map((session) => ({
+    params: { slug: session.slug },
+    props: { session }
+  }));
+}
+
+const { session } = Astro.props;
+const plan = buildClassroomPlan(session);
+const guidance = session.guidance;
+---
+
+<BaseLayout title={`Instructor · ${session.topic}`} description={guidance.bigIdea}>
+  <section class="lesson-hero instructor-hero">
+    <div>
+      <p class="eyebrow">Instructor Guide · Session {session.number.toString().padStart(2, "0")}</p>
+      <h1>{session.topic}</h1>
+      <p>{guidance.bigIdea}</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href={`/sessions/${session.slug}/`}>Mở student mission</a>
+        <a class="button" href="/review/">Review board</a>
+      </div>
+    </div>
+    <figure class="lesson-visual">
+      <img src={guidance.heroImage} alt={guidance.imageAlt} width="1400" height="787" />
+      <figcaption>{session.artifact || "Artifact thực hành"}</figcaption>
+    </figure>
+  </section>
+
+  <section class="lesson-layout">
+    <aside class="lesson-sidebar">
+      <section>
+        <h2>Timing 3 giờ</h2>
+        <ol class="timeline">
+          {plan.instructor.timing.map((block) => <li><span>{block.time}</span> {block.label}</li>)}
+        </ol>
+      </section>
+      <section>
+        <h2>Review nhanh</h2>
+        <ul class="checklist">
+          {plan.instructor.reviewRubric.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    </aside>
+
+    <div class="lesson-main">
+      <section class="learning-brief">
+        <article>
+          <span>1</span>
+          <h2>Mở lớp</h2>
+          <p>{plan.instructor.opening.join(" ")}</p>
+        </article>
+        <article>
+          <span>2</span>
+          <h2>Quan sát</h2>
+          <p>{plan.instructor.watchFor.join(" ")}</p>
+        </article>
+      </section>
+
+      <SectionPanel title="Demo script" html={classroomMarkdownToHtml(plan.demo)} />
+      <section class="mission-board">
+        <article class="panel panel-warning">
+          <h2>Lỗi cần soi trong lớp</h2>
+          <ul>
+            {plan.instructor.watchFor.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+        <article class="panel panel-success">
+          <h2>Rubric review artifact</h2>
+          <ul>
+            {plan.instructor.reviewRubric.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </section>
+      <SectionPanel title="Backup khi tool lỗi" html={classroomMarkdownToHtml(plan.backup)} tone="warning" />
+      <SectionPanel title="Sau buổi học" html={classroomMarkdownToHtml(plan.instructor.afterClass.map((item) => `- ${item}`).join("\n"))} />
+
+      <section class="copy-grid">
+        <CopyPanel id={`instructor-demo-${session.slug}`} title="Copy demo script" text={plan.demoCopy} />
+        <CopyPanel id={`instructor-review-${session.slug}`} title="Copy rubric review" text={plan.instructor.reviewRubric.map((item) => `- ${item}`).join("\n")} />
+      </section>
+    </div>
+  </section>
+</BaseLayout>

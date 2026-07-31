@@ -1,39 +1,63 @@
-# AI Lead Scoring & Automation System - Real Estate
+# Antigravity Teaching Workspace
 
-Dự án hoàn thiện bài tập xây dựng hệ thống tự động hóa và chấm điểm khách hàng tiềm năng cho ngành Bất Động Sản (Real Estate).
+Workspace này dùng để chuẩn bị và giảng dạy khóa `Agentic AI với Google Antigravity`.
 
-## 🚀 Tính Năng Chính
-1. **Google Sheets Connector**: Tự động tải dữ liệu khách hàng từ liên kết Google Sheets (hoặc dán CSV dự phòng).
-2. **Dual-Mode Scoring Engine**:
-   - **Chế độ Offline (Regex)**: Quy tắc nghiệp vụ cứng theo bộ tiêu chuẩn Việt Nam của `tieu_chi_cham_diem.txt`.
-   - **Chế độ Semantic AI (Gemini)**: Phân tích ngữ nghĩa ngôn ngữ tự nhiên từ câu mô tả nhu cầu thực tế của khách hàng (yêu cầu API Key).
-3. **Human-in-the-loop Interface**: Giao diện điều khiển, lọc danh sách, hiệu chỉnh thông tin, cập nhật điểm và ghi chú phê duyệt trước khi chốt.
-4. **Excel Export**: Xuất báo cáo bàn giao chuyên nghiệp `.xlsx` sử dụng SheetJS.
+## Bắt đầu
+- Entry point: `docs/index.md`
+- Lộ trình 11 buổi học + buổi 12 thuyết trình dự án: `docs/course-curriculum-map.md`
+- Giáo án từng buổi: `docs/lesson-prep/`
+- Hướng dẫn giảng viên: `docs/instructor/facilitator-guide.md`
+- Hướng dẫn học viên: `docs/student/quickstart.md`
+- Template workspace học viên: `assets/templates/student-antigravity-workspace/`
 
-## 🛠️ Hướng Dẫn Chạy Nhanh
+## Course Companion
+Webapp local/private để giảng viên và học viên dùng trong lớp. App dùng dữ liệu từ `docs/` nhưng hiển thị lại thành bản classroom-ready:
+- Student Missions: mục tiêu, chuẩn bị, lab từng bước, prompt, checkpoint, stuck help và artifact.
+- Instructor Guides: timing 3 giờ, demo script, lỗi cần quan sát, rubric, backup và after-class notes.
+- Templates, Resource Library và Review Board cho bài nộp cuối khóa.
 
-### Phương Án A: Giao Diện Web App HTML/JS (Chạy Cực Nhanh)
-Mở trực tiếp file `index.html` trong trình duyệt web, hoặc chạy máy chủ cục bộ bằng lệnh:
 ```bash
-python3 -m http.server 8000
-```
-Sau đó mở trình duyệt truy cập: `http://localhost:8000`
-
-### Phương Án B: Giao Diện Web App Streamlit (Tối Ưu Hóa Bằng Python)
-Cài đặt các thư viện cần thiết và khởi chạy Streamlit bằng lệnh:
-```bash
-pip install -r requirements.txt
-streamlit run app_streamlit.py
-```
-Ứng dụng sẽ tự động mở trên trình duyệt tại địa chỉ `http://localhost:8501`.
-
-### Phương Án C: Chạy Chấm Điểm Qua CLI Python (Xử Lý Hàng Loạt Offline)
-Chạy trực tiếp file script Python để chấm điểm và tự động xuất file Excel:
-```bash
-python3 app_lead_scoring.py --demo
+pnpm install
+pnpm build
+pnpm preview
 ```
 
+Mở `http://127.0.0.1:4321/` để xem companion app.
 
-## 📄 Tài Liệu Liên Quan
-- Xem hướng dẫn đầy đủ tại: [lead_scoring_skill.md](file:///Users/thuanyogi/Downloads/Thuchanhb7/lead_scoring_skill.md)
-- Tiêu chí chấm điểm gốc: [tieu_chi_cham_diem.txt](file:///Users/thuanyogi/Downloads/Thuchanhb7/tieu_chi_cham_diem.txt)
+Route chính:
+- `/sessions/`: Student Missions (dashboard + tiếp tục học + tìm kiếm buổi)
+- `/glossary/`: thuật ngữ cốt lõi (PDCA, OIPO, MICRO, CLEAR, SCOPE…)
+- `/instructor/`: Instructor Guides
+- `/templates/`: mẫu bài làm
+- `/review/`: artifact tracker và rubric
+- `/resources/`: trung tâm điều hướng tài nguyên
+
+Tìm kiếm nhanh: nhấn **Cmd+K** (Mac) / **Ctrl+K** (Windows) ở bất kỳ trang nào, hoặc nút kính lúp trên header.
+
+Dùng `pnpm preview` khi show cho học viên để tránh metadata debug của dev server.
+
+## Cấu trúc
+```text
+.claude/   # Agents, commands, skills, workflows cho giảng viên
+docs/      # Tài liệu dạy, học, rubric, checklist
+assets/    # Source decks, derived assets, student templates
+plans/     # Plan và reports triển khai workspace
+src/       # Astro Course Companion
+```
+
+## Source Materials
+File PDF/HTML gốc đã được chuyển vào:
+
+```text
+assets/source-materials/original/
+```
+
+Không chỉnh trực tiếp file trong thư mục này. Nếu cần OCR, trích xuất, hoặc tạo handout, lưu bản mới vào:
+
+```text
+assets/source-materials/derived/
+```
+
+## Ghi chú
+- Buổi 12 là phiên thuyết trình dự án, không phải buổi học nội dung mới, và hiện chưa có PDF nguồn riêng.
+- Trước khi dạy cohort mới, kiểm tra lại setup Google Antigravity theo tài liệu chính thức.

@@ -1,0 +1,169 @@
+---
+---
+<div class="micro-diagram-container">
+  <h3>🤖 Mô tả AI Agent theo khung MICRO</h3>
+  <p class="diagram-intro">Mỗi AI nhân sự trong workspace luôn được lập trình và khai báo cụ thể thông qua 5 yếu tố cấu thành:</p>
+
+  <div class="micro-bento-grid">
+    <!-- Role (R) -->
+    <div class="bento-card bento-role">
+      <div class="card-badge color-indigo">Role (R)</div>
+      <h4>Vai trò & Nhân dạng</h4>
+      <p>Định dạng tính cách, giọng điệu, xưng hô và chuyên môn giả định của Agent.</p>
+      <div class="example-tag">Ví dụ: Trợ lý tuyển dụng chuyên về sàng lọc ứng viên IT.</div>
+    </div>
+
+    <!-- Mission (M) -->
+    <div class="bento-card bento-mission">
+      <div class="card-badge color-primary">Mission (M)</div>
+      <h4>Nhiệm vụ cốt lõi</h4>
+      <p>Một mục tiêu kinh doanh duy nhất, đo lường được mà Agent phải tập trung hoàn thành.</p>
+      <div class="example-tag">Ví dụ: Đánh giá độ phù hợp của CV so với JD công việc.</div>
+    </div>
+
+    <!-- Inputs (I) -->
+    <div class="bento-card bento-inputs">
+      <div class="card-badge color-teal">Inputs (I)</div>
+      <h4>Thông tin đầu vào</h4>
+      <p>Dữ liệu, tài liệu, tham số Agent được cấp để xử lý.</p>
+      <div class="example-tag">Ví dụ: File CV (PDF) + File JD vị trí tương ứng.</div>
+    </div>
+
+    <!-- Constraints (C) -->
+    <div class="bento-card bento-constraints">
+      <div class="card-badge color-orange">Constraints (C)</div>
+      <h4>Ràng buộc an toàn</h4>
+      <p>Các luật lệ cứng cấm Agent vi phạm (không bịa thông tin, không tiết lộ mật khẩu, giới hạn chi phí).</p>
+      <div class="example-tag">Ví dụ: Không tự chẩn đoán bệnh án, không lộ API key.</div>
+    </div>
+
+    <!-- Output (O) -->
+    <div class="bento-card bento-output">
+      <div class="card-badge color-success">Output (O)</div>
+      <h4>Sản phẩm đầu ra</h4>
+      <p>Format dữ liệu bàn giao (thường là JSON, bảng Markdown hoặc file báo cáo).</p>
+      <div class="example-tag">Ví dụ: JSON gồm xếp hạng Đạt/Không đạt & 3 câu hỏi phỏng vấn.</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .micro-diagram-container {
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .micro-diagram-container h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-xs);
+    color: var(--text-primary);
+  }
+
+  .diagram-intro {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Bento Grid */
+  .micro-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: var(--space-md);
+  }
+
+  .bento-card {
+    background: var(--bg-inset);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: all var(--duration-normal) var(--ease-out);
+    position: relative;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .bento-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bento-role {
+    grid-column: span 1;
+  }
+
+  .bento-mission {
+    grid-column: span 2;
+  }
+
+  .bento-inputs {
+    grid-column: span 1;
+  }
+
+  .bento-constraints {
+    grid-column: span 1;
+  }
+
+  .bento-output {
+    grid-column: span 1;
+  }
+
+  .card-badge {
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: var(--space-sm);
+  }
+
+  .color-primary { background: var(--accent-primary); }
+  .color-teal { background: var(--accent-teal); }
+  .color-indigo { background: var(--accent-indigo); }
+  .color-orange { background: var(--accent-orange, #f97316); }
+  .color-success { background: var(--success); }
+
+  .bento-card h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-xs);
+    color: var(--text-primary);
+  }
+
+  .bento-card p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0 0 var(--space-md);
+  }
+
+  .example-tag {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px dashed var(--border-subtle);
+    padding-top: var(--space-sm);
+    margin-top: auto;
+  }
+
+  @media (max-width: 820px) {
+    .micro-bento-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    .bento-card {
+      grid-column: span 1 !important;
+    }
+  }
+</style>

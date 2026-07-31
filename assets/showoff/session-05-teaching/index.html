@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Buổi 5 — Triển Khai AI Agent | MindX × Google Antigravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E03131;--red-d:#C92A2A;--red-l:#FFE3E3;--red-m:#FF6B6B;
+  --black:#111;--g900:#1A1A1A;--g700:#3D3D3D;--g500:#6B6B6B;
+  --g300:#C4C4C4;--g100:#F7F7F7;--white:#fff;--border:#E8E8E8;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#fff;}
+
+/* ── SLIDE SHELL ── */
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden;}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .45s ease,transform .45s ease;
+  transform:translateX(60px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.slide.exit{opacity:0;transform:translateX(-60px);}
+
+/* ── TOP BAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 40px;
+  border-bottom:1px solid var(--border);
+  background:#fff;
+  flex-shrink:0;
+}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-badge{
+  background:var(--red);color:#fff;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;
+  padding:4px 12px;border-radius:20px;
+}
+.tb-title{font-size:13px;font-weight:600;color:var(--g700);}
+.tb-right{display:flex;align-items:center;gap:20px;}
+.slide-counter{font-size:13px;font-weight:700;color:var(--g500);}
+.slide-counter span{color:var(--red);font-weight:900;}
+.progress-bar{
+  width:140px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--red);border-radius:2px;transition:width .4s ease;}
+
+/* ── SLIDE BODY ── */
+.sbody{
+  flex:1;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:40px 60px;
+}
+
+/* ── BOTTOM NAV ── */
+.nav-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 40px;
+  border-top:1px solid var(--border);
+  background:#fff;flex-shrink:0;
+}
+.dot-nav{display:flex;gap:8px;align-items:center;}
+.dot{
+  width:8px;height:8px;border-radius:50%;background:var(--border);
+  cursor:pointer;transition:all .25s;
+}
+.dot.active{background:var(--red);width:24px;border-radius:4px;}
+.dot:hover{background:var(--g300);}
+.dot.active:hover{background:var(--red);}
+.nav-btns{display:flex;gap:10px;}
+.btn{
+  display:flex;align-items:center;gap:6px;
+  padding:9px 22px;border-radius:8px;
+  font-size:13px;font-weight:700;cursor:pointer;border:none;
+  transition:all .2s;
+}
+.btn-prev{background:var(--g100);color:var(--g700);}
+.btn-prev:hover{background:var(--border);}
+.btn-next{background:var(--red);color:#fff;}
+.btn-next:hover{background:var(--red-d);}
+.btn:disabled{opacity:.35;cursor:default;}
+.key-hint{font-size:11px;color:var(--g300);}
+
+/* ══════════════════════════════════
+   SLIDE SPECIFIC STYLES
+══════════════════════════════════ */
+
+/* HERO */
+.hero-label{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red-l);color:var(--red);
+  border:1px solid rgba(224,49,49,.2);
+  padding:5px 14px;border-radius:20px;
+  font-size:11px;font-weight:800;letter-spacing:1px;
+  margin-bottom:28px;
+  width:fit-content;
+}
+.hero-h1{
+  font-size:clamp(40px,5.5vw,80px);font-weight:900;
+  letter-spacing:-3px;line-height:1.02;margin-bottom:20px;
+}
+.hero-h1 em{color:var(--red);font-style:normal;}
+.hero-sub{font-size:18px;color:var(--g500);margin-bottom:40px;font-weight:400;}
+.hero-chips{display:flex;gap:12px;flex-wrap:wrap;}
+.chip{
+  display:flex;align-items:center;gap:6px;
+  background:#fff;border:1px solid var(--border);
+  padding:8px 16px;border-radius:8px;
+  font-size:13px;color:var(--g700);font-weight:500;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+.chip-dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+
+/* SECTION LABEL */
+.s-label{font-size:11px;font-weight:800;color:var(--red);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;}
+.s-h2{font-size:clamp(28px,3.5vw,52px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;line-height:1.05;}
+.s-h2 em{color:var(--red);font-style:normal;}
+.s-desc{font-size:15px;color:var(--g500);margin-bottom:36px;max-width:640px;}
+
+/* CARDS */
+.card-grid{display:grid;gap:16px;}
+.card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  position:relative;overflow:hidden;
+  transition:box-shadow .2s;
+}
+.card-accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
+.card h3{font-size:15px;font-weight:700;margin-bottom:6px;}
+.card p{font-size:13px;color:var(--g500);line-height:1.55;}
+.card .num{font-size:11px;font-weight:800;color:var(--red);letter-spacing:1.5px;margin-bottom:6px;}
+
+/* MICRO */
+.micro-row-wrap{display:flex;flex-direction:column;gap:12px;}
+.mrow{
+  display:flex;align-items:center;gap:16px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:16px 20px;
+  transition:background .2s;
+}
+.mrow:hover{background:var(--red-l);}
+.mletter{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;flex-shrink:0;
+}
+.ml-m{background:var(--red-l);color:var(--red);}
+.ml-i{background:#FFE8CC;color:#E67700;}
+.ml-c{background:#C3FAE8;color:#0CA678;}
+.ml-r{background:#D0EBFF;color:#1971C2;}
+.ml-o{background:#E5DBFF;color:#7048E8;}
+.mrow-body{flex:1;}
+.mrow-name{font-size:11px;font-weight:800;color:var(--g500);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.mrow-q{font-size:14px;font-weight:600;color:var(--black);}
+.mrow-tip{font-size:12px;color:var(--g500);margin-top:2px;}
+
+/* FINANCE EXAMPLE */
+.fin-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+}
+.fin-header{background:var(--red);color:#fff;padding:18px 24px;}
+.fin-header h3{font-size:16px;font-weight:700;}
+.fin-header p{font-size:12px;opacity:.8;margin-top:3px;}
+.fin-body{display:grid;grid-template-columns:repeat(5,1fr);}
+.fin-col{padding:16px 14px;border-right:1px solid var(--border);}
+.fin-col:last-child{border-right:none;}
+.fin-col-tag{
+  font-size:18px;font-weight:900;
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:10px;
+}
+.fin-col-label{font-size:10px;font-weight:800;color:var(--g500);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;}
+.fin-col-val{font-size:13px;font-weight:600;color:var(--black);line-height:1.4;}
+
+/* PIPELINE */
+.pipe-wrap{display:flex;align-items:center;gap:0;}
+.pipe-box{
+  flex:1;background:#fff;border:1px solid var(--border);
+  padding:20px 16px;text-align:center;
+  position:relative;
+  transition:background .2s;
+}
+.pipe-box:first-child{border-radius:14px 0 0 14px;}
+.pipe-box:last-child{border-radius:0 14px 14px 0;}
+.pipe-box:hover{background:var(--red-l);}
+.pipe-lbl{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:800;letter-spacing:1px;
+  padding:2px 10px;border-radius:10px;white-space:nowrap;
+}
+.pipe-icon{font-size:28px;margin-bottom:8px;}
+.pipe-box h4{font-size:13px;font-weight:700;margin-bottom:4px;}
+.pipe-box p{font-size:11px;color:var(--g500);}
+.pipe-arrow{
+  font-size:18px;color:var(--red);
+  padding:0 4px;
+  background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+}
+
+/* CODE */
+.code{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:var(--g100);border:1px solid var(--border);
+  border-radius:10px;padding:16px 18px;
+  color:var(--g700);line-height:1.6;white-space:pre;overflow-x:auto;
+}
+.kw{color:var(--red);font-weight:700;}
+.str{color:#2F9E44;}
+.cmt{color:#aaa;}
+
+/* TWO-COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.tbl th{background:var(--black);color:#fff;padding:12px 14px;font-size:11px;font-weight:700;text-align:left;letter-spacing:.5px;}
+.tbl td{padding:11px 14px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--g100);}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;}
+.tag-r{background:var(--red-l);color:var(--red);}
+.tag-g{background:#C3FAE8;color:#0CA678;}
+
+/* CRITERIA */
+.crit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.crit{border-radius:14px;padding:24px;border:1px solid var(--border);}
+.crit.c1{background:#FFF5F5;border-color:rgba(224,49,49,.2);}
+.crit.c2{background:#F0FFF4;border-color:rgba(12,166,120,.2);}
+.crit.c3{background:#F0F4FF;border-color:rgba(25,113,194,.2);}
+.crit-n{font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:8px;}
+.c1 .crit-n{color:var(--red);}
+.c2 .crit-n{color:#0CA678;}
+.c3 .crit-n{color:#1971C2;}
+.crit h4{font-size:15px;font-weight:700;margin-bottom:8px;}
+.crit p{font-size:12px;color:var(--g500);line-height:1.5;}
+
+/* CHECKLIST */
+.cklist{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cki{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;
+  font-size:13px;font-weight:500;
+  transition:all .2s;cursor:default;
+}
+.cki:hover{border-color:var(--red);background:var(--red-l);}
+.cki-box{
+  width:20px;height:20px;border-radius:5px;
+  border:2px solid var(--border);flex-shrink:0;
+  transition:all .2s;
+}
+.cki:hover .cki-box{border-color:var(--red);}
+
+/* INSIGHT BANNER */
+.insight{
+  background:var(--red);color:#fff;
+  border-radius:20px;padding:36px 40px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.insight::after{
+  content:'💡';position:absolute;
+  font-size:180px;opacity:.06;
+  bottom:-30px;right:-10px;line-height:1;
+}
+.insight h2{font-size:clamp(22px,3vw,36px);font-weight:900;margin-bottom:12px;line-height:1.2;}
+.insight p{font-size:15px;opacity:.9;max-width:600px;margin:0 auto;line-height:1.6;}
+
+/* ERR TABLE */
+.etbl{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.etbl th{background:var(--g900);color:#fff;padding:11px 16px;font-size:11px;font-weight:700;text-align:left;}
+.etbl td{padding:11px 16px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.etbl tr:last-child td{border:none;}
+.etbl tr:hover td{background:var(--g100);}
+
+/* DEMO STEPS */
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.dstep{
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.dnum{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:10px;
+}
+.dstep h4{font-size:14px;font-weight:700;margin-bottom:6px;}
+.dstep p{font-size:12px;color:var(--g500);margin-bottom:10px;line-height:1.5;}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column;gap:10px;}
+.tli{display:flex;gap:16px;align-items:flex-start;}
+.tli-dot{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--g100);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:var(--g500);
+  flex-shrink:0;
+}
+.tli.hi .tli-dot{background:var(--red);border-color:var(--red);color:#fff;}
+.tli-box{
+  flex:1;background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;
+}
+.tli.hi .tli-box{border-color:rgba(224,49,49,.3);}
+.tli-time{font-size:10px;font-weight:800;color:var(--red);letter-spacing:1px;margin-bottom:3px;}
+.tli-box h4{font-size:14px;font-weight:700;margin-bottom:3px;}
+.tli-box p{font-size:12px;color:var(--g500);}
+
+/* BACKUP */
+.bk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.bk{
+  display:flex;gap:14px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:18px;
+}
+.bk-icon{font-size:26px;flex-shrink:0;}
+.bk h4{font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px;}
+.bk p{font-size:12px;color:var(--g500);line-height:1.5;}
+
+/* Mtips */
+.tips-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.tip{border-radius:10px;padding:14px;}
+.tip-n{font-size:10px;font-weight:800;letter-spacing:1.5px;margin-bottom:6px;}
+.tip p{font-size:11px;color:var(--g700);line-height:1.5;}
+.tp-m{background:var(--red-l);} .tp-m .tip-n{color:var(--red);}
+.tp-i{background:#FFF8F0;} .tp-i .tip-n{color:#E67700;}
+.tp-c{background:#F0FFF4;} .tp-c .tip-n{color:#0CA678;}
+.tp-r{background:#F0F4FF;} .tp-r .tip-n{color:#1971C2;}
+.tp-o{background:#F8F0FF;} .tp-o .tip-n{color:#7048E8;}
+
+/* MCP comparison */
+.mcp-split{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.mcp-box{background:#fff;border:1px solid var(--border);border-radius:14px;padding:26px;}
+.mcp-box .icon{font-size:32px;margin-bottom:12px;}
+.mcp-box .lbl{font-size:10px;font-weight:800;color:var(--red);letter-spacing:2px;margin-bottom:8px;}
+.mcp-box h3{font-size:17px;font-weight:700;margin-bottom:10px;}
+.mcp-box p{font-size:13px;color:var(--g500);margin-bottom:14px;line-height:1.5;}
+
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 1: COVER ══ -->
+<div class="slide active" id="s1">
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-badge">BUỔI 5</div>
+      <span class="tb-title">MindX × Google Antigravity</span>
+    </div>
+    <div class="tb-right">
+      <span class="slide-counter"><span id="cur">1</span> / <span id="tot">12</span></span>
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:8.33%"></div></div>
+    </div>
+  </div>
+  <div class="sbody" style="padding:60px 80px;">
+    <div class="hero-label">📘 Phase 2 — Modify &nbsp;·&nbsp; Lesson 5 of 11</div>
+    <h1 class="hero-h1">Triển Khai<br/><em>AI Agent</em><br/>Như Nhân Sự</h1>
+    <p class="hero-sub">Chuyên trách trong hệ thống — 3 giờ thực chiến</p>
+    <div class="hero-chips">
+      <div class="chip"><div class="chip-dot"></div>Khung MICRO</div>
+      <div class="chip"><div class="chip-dot"></div>MCP + API</div>
+      <div class="chip"><div class="chip-dot"></div>Finance Agent</div>
+      <div class="chip"><div class="chip-dot"></div>Python → Google Sheet</div>
+      <div class="chip"><div class="chip-dot"></div>Thực chiến</div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="dot-nav" id="dots"></div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <span class="key-hint">← → để chuyển slide</span>
+      <div class="nav-btns">
+        <button class="btn btn-prev" id="prev" disabled>← Trước</button>
+        <button class="btn btn-next" id="next">Tiếp →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: MỤC TIÊU ══ -->
+<div class="slide" id="s2">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">MỤC TIÊU</div><span class="tb-title">Buổi học này, bạn cần nắm rõ</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>2</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:16.66%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Mục tiêu học tập</div>
+    <h2 class="s-h2">3 Điều Bạn Sẽ <em>Làm Được</em></h2>
+    <p class="s-desc">Kết thúc buổi học, không chỉ hiểu lý thuyết — bạn sẽ có sản phẩm chạy thật.</p>
+    <div class="card-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="card"><div class="card-accent"></div>
+        <div class="num">MỤC TIÊU 01</div>
+        <h3>MCP + API Tích Hợp</h3>
+        <p>Tích hợp giao thức MCP và API để mở rộng không gian làm việc của AI Agent ra hệ thống thực tế.</p>
+      </div>
+      <div class="card"><div class="card-accent"></div>
+        <div class="num">MỤC TIÊU 02</div>
+        <h3>Thiết Lập AI Agent Chuẩn</h3>
+        <p>Xây dựng AI Agent hoàn chỉnh theo khung MICRO, tối ưu từng yếu tố trong cấu trúc.</p>
+      </div>
+      <div class="card"><div class="card-accent"></div>
+        <div class="num">MỤC TIÊU 03</div>
+        <h3>FIN Agent Thực Chiến</h3>
+        <p>Phát triển Finance Agent — ghi dữ liệu chi phí thật vào Google Sheet thật.</p>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 3: CẤU TRÚC 3H ══ -->
+<div class="slide" id="s3">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">CẤU TRÚC</div><span class="tb-title">Lịch trình 3 giờ chi tiết</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>3</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Cấu trúc buổi học</div>
+    <h2 class="s-h2">3 Giờ — <em>Nhịp Độ Từng Khối</em></h2>
+    <p class="s-desc">Phân bổ thời gian và mục đích từng giai đoạn.</p>
+    <div class="tl">
+      <div class="tli">
+        <div class="tli-dot">10'</div>
+        <div class="tli-box"><div class="tli-time">0 – 10 PHÚT</div><h4>Khai mạc & Recap OIPO</h4><p>Câu hỏi mở: "Bạn đang copy-paste thủ công cái gì hàng ngày?" → Dẫn vào bài.</p></div>
+      </div>
+      <div class="tli hi">
+        <div class="tli-dot">25'</div>
+        <div class="tli-box"><div class="tli-time">10 – 35 PHÚT</div><h4>Phần 1: Thiết Lập AI Agent Chuẩn</h4><p>Vấn đề thực tế → AI Agent = Nhân Sự AI → Khung MICRO với Finance Agent.</p></div>
+      </div>
+      <div class="tli hi">
+        <div class="tli-dot">45'</div>
+        <div class="tli-box"><div class="tli-time">35 – 80 PHÚT</div><h4>Phần 2: MCP + API + Demo Live</h4><p>MCP, API, pipeline GG Anti → Python → Apps Script → Google Sheet → Demo 6 bước.</p></div>
+      </div>
+      <div class="tli">
+        <div class="tli-dot">10'</div>
+        <div class="tli-box"><div class="tli-time">80 – 90 PHÚT</div><h4>Break & Checkpoint Nhanh</h4><p>Học viên ghi 3 câu: pipeline mấy bước? MCP ≠ API? Finance Agent có Constraint nào?</p></div>
+      </div>
+      <div class="tli hi">
+        <div class="tli-dot">80'</div>
+        <div class="tli-box"><div class="tli-time">90 – 170 PHÚT</div><h4>Phần 3: Thực Hành</h4><p>Setup Sheet → Viết Finance MICRO → send_to_sheet.py → Pipeline đầu đến cuối.</p></div>
+      </div>
+      <div class="tli">
+        <div class="tli-dot">10'</div>
+        <div class="tli-box"><div class="tli-time">170 – 180 PHÚT</div><h4>Review Artifact & Giao BTVH</h4><p>Checklist 7 tiêu chí. Giao bài về nhà.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 4: VẤN ĐỀ THỰC TẾ ══ -->
+<div class="slide" id="s4">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">PHẦN 1</div><span class="tb-title">Bối cảnh vấn đề — Tại sao cần AI Agent?</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>4</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:33.33%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Phần 1 — Thiết lập AI Agent chuẩn</div>
+    <h2 class="s-h2">Công Việc Văn Phòng <em>Tiêu Tốn</em><br/>Nguồn Lực Khổng Lồ</h2>
+    <p class="s-desc">Quy trình thủ công lặp lại mỗi ngày — bạn có gặp vấn đề này?</p>
+    <div class="two-col">
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--g500);letter-spacing:1px;margin-bottom:12px;">QUY TRÌNH HIỆN TẠI</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;">
+            <span style="font-size:20px;">📋</span><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">Copy-paste thủ công</div><div style="font-size:12px;color:var(--g500);">Từng dòng dữ liệu mỗi ngày</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;">
+            <span style="font-size:20px;">🗂️</span><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">Phân loại thủ công</div><div style="font-size:12px;color:var(--g500);">Dễ nhầm lẫn, không nhất quán</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;">
+            <span style="font-size:20px;">🔄</span><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">Report lặp lại mỗi ngày</div><div style="font-size:12px;color:var(--g500);">Không tạo ra giá trị mới</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--red);letter-spacing:1px;margin-bottom:12px;">HẬU QUẢ</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;">
+            <div style="font-size:22px;font-weight:900;color:var(--red);margin-bottom:4px;">⏱️ Tốn thời gian</div>
+            <div style="font-size:13px;color:var(--g700);">Hàng giờ mỗi ngày cho công việc lặp lại</div>
+          </div>
+          <div style="padding:16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;">
+            <div style="font-size:22px;font-weight:900;color:var(--red);margin-bottom:4px;">📈 Không scale được</div>
+            <div style="font-size:13px;color:var(--g700);">Tăng khối lượng → phải tăng nhân sự</div>
+          </div>
+          <div style="padding:16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;">
+            <div style="font-size:22px;font-weight:900;color:var(--red);margin-bottom:4px;">❌ Sai sót cao</div>
+            <div style="font-size:13px;color:var(--g700);">Người mệt mỏi → lỗi không tránh khỏi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 5: MICRO FRAMEWORK ══ -->
+<div class="slide" id="s5">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">MICRO</div><span class="tb-title">5 thành phần cốt lõi của AI Agent</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>5</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:41.66%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Khung MICRO</div>
+    <h2 class="s-h2"><em>MICRO</em> — JD Cho Nhân Viên AI</h2>
+    <p class="s-desc">Năm thành phần bắt buộc. Thiếu một phần → Agent hoạt động sai hoặc không nhất quán.</p>
+    <div class="micro-row-wrap">
+      <div class="mrow"><div class="mletter ml-m">M</div><div class="mrow-body"><div class="mrow-name">Mission</div><div class="mrow-q">Nhiệm vụ cụ thể của Agent là gì?</div><div class="mrow-tip">💡 "Nhân viên giỏi nhất team bạn làm gì?" → Đó là Mission</div></div></div>
+      <div class="mrow"><div class="mletter ml-i">I</div><div class="mrow-body"><div class="mrow-name">Input</div><div class="mrow-q">Dữ liệu đầu vào Agent nhận được</div><div class="mrow-tip">💡 "Thiếu input này, agent có làm được không?" → Bắt buộc hay tùy chọn</div></div></div>
+      <div class="mrow"><div class="mletter ml-c">C</div><div class="mrow-body"><div class="mrow-name">Constraints</div><div class="mrow-q">Quy tắc và giới hạn xử lý — Agent KHÔNG được làm gì?</div><div class="mrow-tip">💡 "Điều tệ nhất agent có thể làm sai?" → Đó là Constraint cần viết</div></div></div>
+      <div class="mrow"><div class="mletter ml-r">R</div><div class="mrow-body"><div class="mrow-name">Role</div><div class="mrow-q">Vai trò và danh tính — persona, tone, chuyên môn</div><div class="mrow-tip">💡 "JD như vậy có ai apply không?" → Role phải đủ cụ thể</div></div></div>
+      <div class="mrow"><div class="mletter ml-o">O</div><div class="mrow-body"><div class="mrow-name">Output</div><div class="mrow-q">Kết quả cụ thể Agent tạo ra — format, cấu trúc</div><div class="mrow-tip">💡 "Nhận output này, dùng được ngay không?" → Tốt = dùng ngay, không xử lý thêm</div></div></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 6: FINANCE AGENT MICRO ══ -->
+<div class="slide" id="s6">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">VÍ DỤ</div><span class="tb-title">Finance Agent — MICRO thực tế</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>6</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Ví dụ thực tế từ slide</div>
+    <h2 class="s-h2">Finance Agent — <em>MICRO Đầy Đủ</em></h2>
+    <p class="s-desc">Áp dụng khung MICRO vào trường hợp quản lý tài chính doanh nghiệp.</p>
+    <div class="fin-card">
+      <div class="fin-header"><h3>📊 Finance Agent Definition</h3><p>Quản lý và phân loại chi phí doanh nghiệp — chạy thật với Google Sheet</p></div>
+      <div class="fin-body">
+        <div class="fin-col">
+          <div class="fin-col-tag" style="background:var(--red-l);color:var(--red);">M</div>
+          <div class="fin-col-label">Mission</div>
+          <div class="fin-col-val">Quản lý và phân loại chi phí doanh nghiệp</div>
+        </div>
+        <div class="fin-col">
+          <div class="fin-col-tag" style="background:#FFE8CC;color:#E67700;">I</div>
+          <div class="fin-col-label">Input</div>
+          <div class="fin-col-val">Dữ liệu chi tiêu từ các phòng ban</div>
+        </div>
+        <div class="fin-col">
+          <div class="fin-col-tag" style="background:#C3FAE8;color:#0CA678;">C</div>
+          <div class="fin-col-label">Constraints</div>
+          <div class="fin-col-val">&gt;500k → kiểm tra<br/>Liên quan khách → cần chứng từ</div>
+        </div>
+        <div class="fin-col">
+          <div class="fin-col-tag" style="background:#D0EBFF;color:#1971C2;">R</div>
+          <div class="fin-col-label">Role</div>
+          <div class="fin-col-val">Finance Assistant chuyên trách</div>
+        </div>
+        <div class="fin-col">
+          <div class="fin-col-tag" style="background:#E5DBFF;color:#7048E8;">O</div>
+          <div class="fin-col-label">Output</div>
+          <div class="fin-col-val">JSON + Google Sheet cập nhật tự động</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding:16px 20px;background:#fff;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:20px;">🔄</span>
+      <span style="font-size:13px;font-weight:600;color:var(--g700);">Luồng xử lý: <span style="color:var(--red);">Nhận dữ liệu</span> → <span style="color:var(--red);">Phân loại</span> → <span style="color:var(--red);">Ghi vào sheet</span></span>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 7: MCP + API ══ -->
+<div class="slide" id="s7">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">PHẦN 2</div><span class="tb-title">MCP + API — AI không chỉ "nghĩ" mà còn "làm"</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>7</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:58.33%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Phần 2 — MCP + API tích hợp</div>
+    <h2 class="s-h2">AI Không Chỉ <em>"Nghĩ"</em> — AI Còn <em>"Làm"</em></h2>
+    <p class="s-desc">Hai thứ biến AI Agent từ chatbot thành nhân sự thực sự ghi dữ liệu vào hệ thống.</p>
+    <div class="mcp-split">
+      <div class="mcp-box">
+        <div class="icon">🔗</div>
+        <div class="lbl">MCP = MODEL CONTEXT PROTOCOL</div>
+        <h3>AI có tay để làm việc</h3>
+        <p>Cách AI sử dụng công cụ bên ngoài để thực hiện hành động thực tế trong thế giới số.</p>
+        <div class="code">GG Anti gọi Python file
+Python thực thi logic
+<span class="kw">→ Kết quả ghi vào hệ thống thật</span></div>
+      </div>
+      <div class="mcp-box">
+        <div class="icon">🚪</div>
+        <div class="lbl">API = APPLICATION PROGRAMMING INTERFACE</div>
+        <h3>Cổng giao tiếp hệ thống</h3>
+        <p>Cho phép các hệ thống "nói chuyện" với nhau theo cấu trúc — AI nói chuyện với thế giới thật.</p>
+        <div class="code">Python gửi JSON đã xử lý
+  → Apps Script nhận request
+    → <span class="kw">Ghi vào Google Sheet</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 8: PIPELINE ══ -->
+<div class="slide" id="s8">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">PIPELINE</div><span class="tb-title">Flow hoàn chỉnh — AI Agent đến hệ thống thực tế</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>8</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:66.66%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Flow hoàn chỉnh MCP + API</div>
+    <h2 class="s-h2">Pipeline: <em>AI Agent → Google Sheet</em></h2>
+    <p class="s-desc">4 bước liên tiếp — mỗi bước có vai trò riêng biệt trong hệ thống.</p>
+    <div class="pipe-wrap" style="margin-bottom:24px;">
+      <div class="pipe-box"><div class="pipe-lbl">INPUT</div><div class="pipe-icon">🤖</div><h4>GG Anti Agent</h4><p>Xử lý & ra quyết định</p></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-box"><div class="pipe-lbl">MCP</div><div class="pipe-icon">🐍</div><h4>Python Script</h4><p>Thực thi logic xử lý</p></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-box"><div class="pipe-lbl">API CALL</div><div class="pipe-icon">📡</div><h4>Apps Script</h4><p>Mini backend — API endpoint</p></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-box"><div class="pipe-lbl">OUTPUT</div><div class="pipe-icon">📊</div><h4>Google Sheet</h4><p>Dữ liệu thật, cập nhật thật</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div style="padding:16px;background:var(--red-l);border-radius:10px;border:1px solid rgba(224,49,49,.2);">
+        <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:6px;">MCP</div>
+        <div style="font-size:13px;font-weight:600;">AI có tay để làm việc</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Gọi tool bên ngoài thực tế</div>
+      </div>
+      <div style="padding:16px;background:#F0FFF4;border-radius:10px;border:1px solid rgba(12,166,120,.2);">
+        <div style="font-size:12px;font-weight:800;color:#0CA678;margin-bottom:6px;">API</div>
+        <div style="font-size:13px;font-weight:600;">AI nói chuyện với hệ thống</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Apps Script = mini API server</div>
+      </div>
+      <div style="padding:16px;background:#F0F4FF;border-radius:10px;border:1px solid rgba(25,113,194,.2);">
+        <div style="font-size:12px;font-weight:800;color:#1971C2;margin-bottom:6px;">GOOGLE CLOUD</div>
+        <div style="font-size:13px;font-weight:600;">Nơi chạy backend</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Không cần server riêng</div>
+      </div>
+    </div>
+    <div class="insight" style="margin-top:20px;padding:20px 28px;">
+      <h2 style="font-size:17px;margin-bottom:6px;">💡 Insight quan trọng nhất</h2>
+      <p style="font-size:13px;">AI chỉ có giá trị thực sự khi → <strong>đi vào workflow thật</strong> → tạo ra <strong>output thật</strong></p>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 9: DEMO 6 BƯỚC ══ -->
+<div class="slide" id="s9">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">DEMO LIVE</div><span class="tb-title">Finance Agent — Pipeline 6 bước chạy thật</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>9</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Demo buổi học</div>
+    <h2 class="s-h2">6 Bước — Từ Input <em>Đến Google Sheet Thật</em></h2>
+    <p class="s-desc">Giảng viên thực hiện live. Học viên theo dõi sheet thay đổi thời gian thực.</p>
+    <div class="demo-grid">
+      <div class="dstep"><div class="dnum">1</div><h4>Tạo Google Sheet Admin</h4><p>Admin Expense Tracker — header 7 cột chuẩn.</p><div class="code" style="font-size:10px;">Date|Employee|Item
+Amount|Category|Status|AI Note</div></div>
+      <div class="dstep"><div class="dnum">2</div><h4>Apps Script — Backend</h4><p>Extensions → Apps Script → hàm <code style="background:var(--red-l);color:var(--red);padding:1px 4px;border-radius:3px;font-size:10px;">doPost(e)</code></p><div class="code" style="font-size:10px;"><span class="kw">function</span> doPost(e) {
+  <span class="cmt">// nhận POST, ghi sheet</span>
+}</div></div>
+      <div class="dstep"><div class="dnum">3</div><h4>Deploy Web App</h4><p>Deploy → Web App → Execute as Me → Anyone</p><div class="code" style="font-size:10px;"><span class="str">script.google.com/
+macros/s/XXX/exec</span></div></div>
+      <div class="dstep"><div class="dnum">4</div><h4>Python Tool</h4><p>File <code style="background:var(--red-l);color:var(--red);padding:1px 4px;border-radius:3px;font-size:10px;">send_to_sheet.py</code> — dán URL /exec vào</p><div class="code" style="font-size:10px;">url = <span class="str">"URL_EXEC"</span>
+requests.post(url, json=data)</div></div>
+      <div class="dstep"><div class="dnum">5</div><h4>Prompt Finance Agent</h4><p>Gửi prompt — agent phân loại, xuất JSON chuẩn 7 trường.</p><div class="code" style="font-size:10px;"><span class="cmt">Bạn là AI Finance Agent
+>500k → cần chứng từ
+Xuất JSON 7 trường...</span></div></div>
+      <div class="dstep"><div class="dnum">6</div><h4>Chạy & Xem Kết Quả</h4><p>Sheet cập nhật ngay! Agent + MCP + API chạy thật.</p><div class="code" style="font-size:10px;">type data.json | python \
+  send_to_sheet.py
+<span class="str">{"success": true}</span></div></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 10: THỰC HÀNH ══ -->
+<div class="slide" id="s10">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">THỰC HÀNH</div><span class="tb-title">Đề bài — Tự động hóa Google Sheets bằng Python</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>10</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:83.33%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="s-label">Phần 3 — Thực hành</div>
+    <h2 class="s-h2">Đóng Vai <em>Chuyên Gia Tự Động Hóa</em></h2>
+    <p class="s-desc">Công ty ABC — hàng ngày kế toán copy tay từ Data_Nhan_Vien sang Admin Expense Tracker. Viết Python Script giải quyết.</p>
+    <div class="crit-grid">
+      <div class="crit c1">
+        <div class="crit-n">TIÊU CHÍ 01</div>
+        <h4>🔐 Kết Nối An Toàn</h4>
+        <p>OAuth 2.0 qua file <code>credentials.json</code>. Không dùng phương pháp kém bảo mật.</p>
+      </div>
+      <div class="crit c2">
+        <div class="crit-n">TIÊU CHÍ 02</div>
+        <h4>📝 Ghi Thông Minh</h4>
+        <p>Tự động phát hiện dòng trống cuối file Admin và <strong>append</strong>. Tuyệt đối không ghi đè dữ liệu cũ.</p>
+      </div>
+      <div class="crit c3">
+        <div class="crit-n">TIÊU CHÍ 03</div>
+        <h4>🛡️ Chống Trùng Lặp</h4>
+        <p>Tạo cột <code>SyncStatus</code>, đánh dấu "Done". Lần chạy sau chỉ bốc dòng chưa có "Done".</p>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding:16px 20px;background:var(--g100);border-radius:10px;border-left:4px solid var(--red);">
+      <span style="font-size:13px;font-weight:600;color:var(--g700);">🛠️ Sử dụng <span style="color:var(--red);">Google Antigravity</span> để hướng dẫn và thực hiện. Artifact: <code>send_to_sheet.py</code> + MICRO definition + Google Sheet thực tế.</span>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 11: LỖI PHỔ BIẾN + CHECKLIST ══ -->
+<div class="slide" id="s11">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">LỖI & CHECKLIST</div><span class="tb-title">Nhận diện lỗi — Nghiệm thu artifact</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>11</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:91.66%"></div></div></div>
+  </div>
+  <div class="sbody">
+    <div class="two-col">
+      <div>
+        <div class="s-label">Lỗi phổ biến học viên hay gặp</div>
+        <h2 class="s-h2" style="font-size:26px;margin-bottom:16px;">Nhận Diện <em>Sớm</em></h2>
+        <table class="etbl">
+          <thead><tr><th>Lỗi</th><th>Dấu hiệu</th><th>Can thiệp</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tag tag-r">MICRO</span> Mission chung</td><td>"Agent xử lý tài chính"</td><td>Khác ChatGPT chỗ nào?</td></tr>
+            <tr><td><span class="tag tag-r">MICRO</span> Constraint thiếu</td><td>Không có ngưỡng số</td><td>Rule >500k đã thêm chưa?</td></tr>
+            <tr><td><span class="tag tag-r">JSON</span> Sai format</td><td>Sheet nhận text thường</td><td>7 trường khớp 7 cột header</td></tr>
+            <tr><td><span class="tag tag-r">APPS SCRIPT</span> Lỗi deploy</td><td>"Function not found"</td><td>Tên hàm phải là doPost</td></tr>
+            <tr><td><span class="tag tag-r">PYTHON</span> Không kết nối</td><td>ConnectionError / 403</td><td>URL /exec đúng chưa? Anyone?</td></tr>
+            <tr><td><span class="tag tag-r">SHEET</span> Ghi đè</td><td>Dữ liệu cũ bị xóa</td><td>Dùng append, không clear+write</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="s-label">Checklist nghiệm thu</div>
+        <h2 class="s-h2" style="font-size:26px;margin-bottom:16px;">7 Tiêu Chí <em>Pass</em></h2>
+        <div class="cklist">
+          <div class="cki"><div class="cki-box"></div><span>Đủ 5 thành phần MICRO</span></div>
+          <div class="cki"><div class="cki-box"></div><span>≥2 Constraints cụ thể</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Output đúng 7 trường JSON</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Apps Script đã deploy (/exec)</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Python gọi API thành công</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Sheet hiển thị dữ liệu thật</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Anti-duplication (SyncStatus)</span></div>
+        </div>
+        <div style="margin-top:16px;padding:14px 16px;background:var(--red-l);border-radius:10px;border:1px solid rgba(224,49,49,.2);">
+          <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">BTVH</div>
+          <div style="font-size:13px;color:var(--g700);">Hoàn thiện bài thực hành và nộp lại giáo viên. Ghi lỗi sau 2 lần chạy thực tế.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 12: WRAP UP ══ -->
+<div class="slide" id="s12">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">TỔNG KẾT</div><span class="tb-title">Buổi 5 — Những gì bạn đã xây</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>12</span> / 12</span><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div>
+  </div>
+  <div class="sbody" style="justify-content:center;text-align:center;gap:32px;">
+    <div class="insight" style="max-width:700px;margin:0 auto;">
+      <h2>Bạn Vừa Xây Hệ Thống AI Agent Hoàn Chỉnh</h2>
+      <p>MICRO → MCP → API → Google Sheet<br/>Đây là nền tảng để scale lên bất kỳ workflow nào trong doanh nghiệp.</p>
+    </div>
+    <div style="display:flex;gap:20px;justify-content:center;max-width:700px;margin:0 auto;">
+      <div style="flex:1;padding:20px;background:#fff;border:1px solid var(--border);border-radius:14px;text-align:left;">
+        <div style="font-size:28px;margin-bottom:10px;">🤖</div>
+        <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:6px;">MICRO</div>
+        <div style="font-size:14px;font-weight:700;">Biết xử lý</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Agent phân tích và áp dụng business rules tự động</div>
+      </div>
+      <div style="flex:1;padding:20px;background:#fff;border:1px solid var(--border);border-radius:14px;text-align:left;">
+        <div style="font-size:28px;margin-bottom:10px;">🔗</div>
+        <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:6px;">MCP + API</div>
+        <div style="font-size:14px;font-weight:700;">Biết quyết định</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Đánh giá từng trường hợp theo constraints đã định nghĩa</div>
+      </div>
+      <div style="flex:1;padding:20px;background:#fff;border:1px solid var(--border);border-radius:14px;text-align:left;">
+        <div style="font-size:28px;margin-bottom:10px;">📊</div>
+        <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:6px;">GOOGLE SHEET</div>
+        <div style="font-size:14px;font-weight:700;">Biết ghi vào hệ thống thật</div>
+        <div style="font-size:12px;color:var(--g500);margin-top:4px;">Output thật — không phải text, mà là dữ liệu thực trong Google Sheet</div>
+      </div>
+    </div>
+    <div style="font-size:14px;color:var(--g500);">Buổi 6 → Knowledge Base & RAG &nbsp;·&nbsp; Buổi 7 → Handoff & Checkpoints</div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next" disabled>Kết thúc ✓</button></div></div>
+</div>
+
+<!-- ══ SLIDE 13: SOCIAL MEDIA KIT ══ -->
+<div class="slide" id="s13">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">SOCIAL KIT</div><span class="tb-title">6 ảnh sẵn sàng đăng mạng xã hội</span></div>
+    <div class="tb-right"><span class="slide-counter"><span>13</span> / 13</span><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div>
+  </div>
+  <div class="sbody" style="padding:24px 40px;">
+    <div class="s-label">Social Media Kit — Buổi 5</div>
+    <h2 class="s-h2" style="font-size:28px;margin-bottom:6px;">Bộ Ảnh <em>Chia Sẻ</em> — Sẵn Sàng Đăng</h2>
+    <p class="s-desc" style="margin-bottom:16px;font-size:13px;">Tất cả ảnh đã lưu trong <code style="background:var(--g100);padding:2px 6px;border-radius:4px;font-size:11px;">assets/showoff/session-05-teaching/</code></p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_cover_square.png')">
+        <img src="session05_cover_square.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">1 · Cover Square — Feed FB/LI</div>
+      </div>
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_micro_framework.png')">
+        <img src="session05_micro_framework.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">2 · MICRO Framework — Infographic</div>
+      </div>
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_pipeline_landscape.png')">
+        <img src="session05_pipeline_landscape.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">3 · Pipeline Landscape — FB/Twitter</div>
+      </div>
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_quote_card.png')">
+        <img src="session05_quote_card.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">4 · Quote Card — Viral Insight</div>
+      </div>
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_story_vertical.png')">
+        <img src="session05_story_vertical.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;object-position:top;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">5 · Story Dọc — IG/FB Stories</div>
+      </div>
+      <div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="window.open('session05_finance_agent_demo.png')">
+        <img src="session05_finance_agent_demo.png" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;"/>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:6px 10px;backdrop-filter:blur(4px);">6 · Finance Agent Demo — Chia sẻ học viên</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next" disabled>Kết thúc ✓</button></div></div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const TOTAL = 13;
+let cur = 0;
+
+const slides = document.querySelectorAll('.slide');
+const prevBtns = document.querySelectorAll('.btn-prev');
+const nextBtns = document.querySelectorAll('.btn-next');
+
+// Build dot nav on each slide's nav bar
+const dotNavs = document.querySelectorAll('.dot-nav');
+dotNavs.forEach(nav => {
+  for(let i=0;i<TOTAL;i++){
+    const d = document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.dataset.i = i;
+    d.addEventListener('click',()=>goTo(i));
+    nav.appendChild(d);
+  }
+});
+
+function updateAll(){
+  // counter & progress
+  document.getElementById('cur').textContent = cur+1;
+  const pct = ((cur+1)/TOTAL*100).toFixed(2)+'%';
+  document.getElementById('prog').style.width = pct;
+
+  // slides
+  slides.forEach((s,i)=>{
+    s.classList.remove('active','exit');
+    if(i===cur) s.classList.add('active');
+  });
+
+  // dots on ALL navbars
+  document.querySelectorAll('.dot').forEach(d=>{
+    d.classList.toggle('active', +d.dataset.i===cur);
+  });
+
+  // prev/next buttons
+  prevBtns.forEach(b=>b.disabled=cur===0);
+  nextBtns.forEach((b,idx)=>{
+    if(cur===TOTAL-1){b.disabled=true;b.textContent='Kết thúc ✓';}
+    else{b.disabled=false;b.textContent='Tiếp →';}
+  });
+}
+
+function goTo(i){
+  if(i<0||i>=TOTAL||i===cur) return;
+  slides[cur].classList.add('exit');
+  setTimeout(()=>slides[cur].classList.remove('exit'),450);
+  cur=i;
+  updateAll();
+}
+
+prevBtns.forEach(b=>b.addEventListener('click',()=>goTo(cur-1)));
+nextBtns.forEach(b=>b.addEventListener('click',()=>goTo(cur+1)));
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') goTo(cur+1);
+  if(e.key==='ArrowLeft') goTo(cur-1);
+});
+
+// Touch swipe
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>60){ dx<0?goTo(cur+1):goTo(cur-1); }
+});
+
+updateAll();
+</script>
+</body>
+</html>

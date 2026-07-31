@@ -1,0 +1,676 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const templates = [
+  {
+    id: "pdca-log",
+    title: "Nhật ký cải tiến PDCA",
+    use: "Dùng từ Buổi 2 trở đi để ghi lại nhật ký chạy thử và cải tiến Agent.",
+    icon: "🔄",
+    fields: [
+      { name: "Plan (Kế hoạch)", desc: "Mục tiêu nhỏ, dữ liệu đầu vào và kết quả kỳ vọng." },
+      { name: "Do (Thực hiện)", desc: "Prompt, cấu hình agent và mã lệnh thực tế đã chạy." },
+      { name: "Check (Kiểm tra)", desc: "Đối chiếu kết quả thực tế với kỳ vọng, chỉ ra điểm lỗi/thiếu sót." },
+      { name: "Act (Cải tiến)", desc: "Biện pháp khắc phục (sửa prompt, thêm rules) cho vòng tiếp theo." }
+    ],
+    markdown: `# NHẬT KÝ CẢI TIẾN PDCA (VÒNG 1)
+
+## 1. Plan (Kế hoạch)
+- **Mục tiêu**: Tự động hóa phân loại hồ sơ ứng viên (CV) theo Mô tả công việc (JD).
+- **Dữ liệu test**: 10 hồ sơ CV thực tế định dạng PDF.
+- **Kỳ vọng**: Độ chính xác phân loại Đạt/Không Đạt đạt trên 90% so với chuyên viên HR tuyển dụng.
+
+## 2. Do (Thực hiện)
+- **Prompt sử dụng**:
+\`\`\`text
+Bạn là Trợ lý Tuyển dụng AI. Hãy đọc CV sau đây và đối chiếu với JD để đánh giá ứng viên. Trả về kết quả: ĐẠT hoặc KHÔNG ĐẠT.
+\`\`\`
+- **Công cụ**: Sử dụng Google Antigravity Agent với mô hình Gemini Flash.
+
+## 3. Check (Kiểm tra)
+- **Kết quả thực tế**: Phân loại đúng 8/10 CV (Đạt tỷ lệ 80%).
+- **Phân tích lỗi**:
+  - Nhầm lẫn kinh nghiệm làm việc: Ứng viên mới ra trường 1 năm nhưng ghi quá trình thực tập 2 năm trước đó, AI tính tổng là 3 năm kinh nghiệm và đánh giá ĐẠT cho vị trí Senior (yêu cầu > 3 năm).
+  - Bỏ sót thông tin kỹ năng bắt buộc: JD yêu cầu bắt buộc biết React nhưng ứng viên chỉ ghi JavaScript, AI vẫn chấm ĐẠT.
+
+## 4. Act (Cải tiến cho Vòng 2)
+- **Hành động cụ thể**:
+  - Cấu hình lại prompt bắt buộc tính số năm kinh nghiệm dựa trên thời gian làm việc chính thức tại các công ty lớn (không tính thời gian thực tập/sinh viên).
+  - Thêm Rules nghiêm ngặt: "Nếu CV không chứa từ khóa 'React' hoặc các thư viện liên quan trực tiếp, đánh giá KHÔNG ĐẠT."`,
+    exampleHtml: `
+      <div class="example-content">
+        <h4 style="margin-top:0">🎯 Case Study: Hệ thống Sàng lọc CV Tự động (HR Automation)</h4>
+        <p><strong>1. Plan (Kế hoạch):</strong> Lọc 100 hồ sơ ứng viên Developer cho vị trí Mid-level. Kỳ vọng độ chính xác &gt; 90% so với HR Lead chấm.</p>
+        <p><strong>2. Do (Thực hiện):</strong> Chạy Agent với prompt phân tích CV theo các từ khóa công nghệ và số năm kinh nghiệm.</p>
+        <p><strong>3. Check (Kiểm tra):</strong> Đạt 80% độ chính xác. Phát hiện lỗi: AI tính gộp cả thời gian thực tập thời sinh viên thành số năm kinh nghiệm chính thức, làm trọt kết quả Junior thành Mid-level.</p>
+        <p><strong>4. Act (Cải tiến):</strong> Sửa rules của Agent bắt buộc tính số năm kinh nghiệm = năm hiện tại trừ đi năm tốt nghiệp chính thức. Chạy lại vòng 2 đạt độ chính xác 95%.</p>
+      </div>
+    `
+  },
+  {
+    id: "skill-draft",
+    title: "Phác thảo Skill chuyên môn",
+    use: "Dùng ở Buổi 3 để đóng gói chuyên môn cụ thể thành một Skill dùng chung.",
+    icon: "⚡",
+    fields: [
+      { name: "Mission (Nhiệm vụ)", desc: "Mô tả một câu duy nhất về vai trò của Skill." },
+      { name: "Inputs (Đầu vào)", desc: "Các tham số đầu vào và định dạng dữ liệu được chấp nhận." },
+      { name: "Workflow (Quy trình)", desc: "Các bước xử lý logic tuần tự bên trong Skill." },
+      { name: "Rules (Quy tắc nghiệp vụ)", desc: "Các giới hạn nghiêm ngặt AI không được vi phạm (CLEAR)." },
+      { name: "Output Format (Đầu ra)", desc: "Định dạng kết quả trả về (JSON schema hoặc Markdown)." }
+    ],
+    markdown: `# PHÁC THẢO SKILL: TRÍCH XUẤT HÓA ĐƠN (INVOICE OCR)
+
+## 1. Mission (Nhiệm vụ)
+- Trích xuất tự động và cấu trúc hóa các thông tin cốt lõi từ ảnh chụp hóa đơn mua hàng thành dữ liệu JSON.
+
+## 2. Inputs (Đầu vào)
+- \`invoice_image\`: File ảnh (JPEG/PNG) hoặc PDF của hóa đơn.
+- \`currency_default\`: Chuẩn tiền tệ mặc định (ví dụ: VND).
+
+## 3. Workflow (Quy trình xử lý)
+- Bước 1: Quét toàn bộ văn bản từ hóa đơn (OCR).
+- Bước 2: Xác định tên nhà cung cấp (Vendor Name) và mã số thuế (Tax ID).
+- Bước 3: Đọc danh sách sản phẩm (Line Items) gồm: Tên, Số lượng, Đơn giá, Thành tiền.
+- Bước 4: Đọc Tổng tiền thanh toán (Total Amount) và Thuế VAT.
+- Bước 5: Thực hiện đối chiếu tổng thanh toán = tổng các line items + thuế.
+
+## 4. Rules (Quy tắc nghiêm ngặt)
+- **Rule 1 (Độ chính xác)**: Không tự ý suy đoán mã số thuế hoặc tên vendor nếu ảnh bị mờ. Ghi nhận giá trị là \`[MANUAL_REVIEW]\` để người duyệt.
+- **Rule 2 (Đối chiếu)**: Nếu sai lệch số học giữa tổng tiền thanh toán và tổng chi tiết lớn hơn 100đ, gắn cờ cảnh báo \`is_flagged: true\`.
+
+## 5. Output Format (Định dạng đầu ra)
+\`\`\`json
+{
+  "vendor_name": "string",
+  "tax_id": "string",
+  "total_amount": "number",
+  "is_flagged": "boolean",
+  "items": [
+    { "name": "string", "quantity": "number", "price": "number" }
+  ]
+}
+\`\`\``,
+    exampleHtml: `
+      <div class="example-content">
+        <h4 style="margin-top:0">🎯 Case Study: Skill trích xuất dữ liệu hóa đơn tự động (Invoice OCR Extractions)</h4>
+        <p><strong>Mission:</strong> Trích xuất chính xác Vendor, Tax ID, Total Amount, và Items từ hóa đơn.</p>
+        <p><strong>Rules áp dụng:</strong> Cấm tự đoán Tax ID nếu ảnh mờ; phải trả về mã lỗi <code>[MANUAL_REVIEW]</code> để chuyển sang nhân sự kiểm tra lại.</p>
+        <p><strong>Đầu ra mong đợi:</strong> JSON chuẩn để đẩy thẳng vào hệ thống kế toán thông qua webhook API của Google Sheet.</p>
+      </div>
+    `
+  },
+  {
+    id: "workflow-oipo",
+    title: "Cấu trúc Workflow OIPO",
+    use: "Dùng ở Buổi 4 và Project cuối khóa để quy hoạch luồng làm việc tự động.",
+    icon: "⚙️",
+    fields: [
+      { name: "Objective (Mục tiêu)", desc: "Đầu ra nghiệp vụ đo lường được của toàn bộ luồng." },
+      { name: "Input (Đầu vào)", desc: "Dữ liệu kích hoạt luồng (email, hàng mới trong Google Sheet, webhook)." },
+      { name: "Process (Các bước)", desc: "Từng bước xử lý từ đầu vào đến đầu ra, bao gồm cả agent nào xử lý." },
+      { name: "Output (Đầu ra)", desc: "Sản phẩm bàn giao cuối cùng (email đã soạn, sheet đã cập nhật)." }
+    ],
+    markdown: `# CẤU TRÚC WORKFLOW OIPO: SOẠN BẢN TIN TIN TỨC AI
+
+## 1. Objective (Mục tiêu)
+- Tự động thu thập, dịch thuật và tổng hợp tin tức AI nóng hổi hàng ngày để gửi lên kênh truyền thông nội bộ trước 8h00 sáng.
+
+## 2. Input (Đầu vào)
+- Danh sách 5 nguồn RSS feed từ các trang tin lớn (TechCrunch, VentureBeat, Google Blog...).
+- Thời gian kích hoạt: Hàng ngày lúc 6h30 sáng.
+
+## 3. Process (Quy trình)
+- **Bước 1 (Thu thập)**: Fetch bài viết mới trong vòng 24 giờ qua từ các nguồn RSS.
+- **Bước 2 (Lọc bài trùng)**: Agent phân tích tiêu đề và tóm tắt ngắn để gộp các bài viết đưa tin cùng một sự kiện.
+- **Bước 3 (Dịch và Tổng hợp)**: Agent dịch thuật chuyển ngữ các tin đã lọc sang tiếng Việt, định dạng thành 3 bullet points chính cho mỗi bài viết.
+- **Bước 4 (Duyệt nội dung)**: Human-in-the-loop checkpoint gửi bản nháp qua Telegram cho biên tập viên bấm nút Duyệt/Từ chối.
+- **Bước 5 (Đăng tải)**: Tự động gửi bài viết đã duyệt lên kênh Telegram Channel chính thức của công ty.
+
+## 4. Output (Đầu ra)
+- Bài đăng Markdown hoàn chỉnh gồm tiêu đề, 3 ý tóm tắt bằng tiếng Việt, link bài viết gốc, được đăng thành công lên Telegram Channel.`,
+    exampleHtml: `
+      <div class="example-content">
+        <h4 style="margin-top:0">🎯 Case Study: Soạn bản tin AI hàng ngày tự động (AI News Digests)</h4>
+        <p><strong>Objective:</strong> Xuất bản bản tin tổng hợp 5 tin tức AI hàng đầu bằng tiếng Việt trước 8h00 mỗi ngày.</p>
+        <p><strong>Input:</strong> Dữ liệu từ 5 RSS feeds công nghệ kích hoạt qua Cron Job.</p>
+        <p><strong>Process:</strong> RSS Reader → Lọc trùng lặp bằng AI → Dịch thuật bằng AI → Human Checkpoint duyệt → Post tự động lên Telegram Channel.</p>
+        <p><strong>Output:</strong> Bài đăng tin tức chuẩn định dạng Markdown kèm link nguồn.</p>
+      </div>
+    `
+  },
+  {
+    id: "capstone-scope",
+    title: "Đề bài Capstone SCOPE",
+    use: "Dùng ở Buổi 10 để chốt đề bài dự án thực hành tốt nghiệp cuối khóa.",
+    icon: "🎓",
+    fields: [
+      { name: "Scope (Phạm vi)", desc: "Các tính năng sẽ xây dựng và giới hạn của bản demo trên lớp." },
+      { name: "Constraint (Ràng buộc)", desc: "Ràng buộc kỹ thuật, bảo mật hoặc nguồn dữ liệu." },
+      { name: "Output (Sản phẩm)", desc: "Sản phẩm thực tế sẽ trình diễn (Workspace hoạt động)." },
+      { name: "Process (Luồng chạy)", desc: "Sơ đồ các bước vận hành chính của hệ thống." },
+      { name: "Evaluation (Đánh giá)", desc: "Tiêu chí nghiệm thu rõ ràng (đúng format, chạy được)." }
+    ],
+    markdown: `# ĐỀ BÀI CAPSTONE PROJECT: HỆ THỐNG CSKH TỰ ĐỘNG CHO PHÒNG KHÁM
+
+## 1. Scope (Phạm vi dự án)
+- Xây dựng Agent tự động trả lời tư vấn dịch vụ của phòng khám da liễu qua kênh Messenger.
+- Phạm vi tư vấn: Chỉ trả lời các câu hỏi FAQ về lịch làm việc, bảng giá dịch vụ, và quy trình điều trị mụn. Các câu hỏi chuyên sâu sẽ tự động chuyển cho bác sĩ.
+
+## 2. Constraint (Ràng buộc kỹ thuật)
+- KHÔNG được tự ý chẩn đoán bệnh hoặc kê đơn thuốc (Ràng buộc an toàn y khoa).
+- Phải bảo mật thông tin cá nhân của khách hàng, không ghi số điện thoại khách hàng vào log công khai.
+- Chỉ sử dụng nguồn tri thức (Knowledge Base) đã được kiểm duyệt bởi Bác sĩ trưởng khoa.
+
+## 3. Output (Đầu ra thực tế)
+- Một Workspace Antigravity hoàn chỉnh gồm: 1 Custom Agent tư vấn, 1 Knowledge Base FAQ, 2 Skills (Tra cứu bảng giá và Đặt lịch hẹn), hệ thống Handoff sang nhân viên trực.
+
+## 4. Process (Quy trình vận hành)
+- Bước 1: Khách hàng hỏi câu hỏi qua Messenger.
+- Bước 2: Agent phân loại ý định (Hỏi thông tin FAQ / Yêu cầu chẩn đoán / Đặt lịch hẹn).
+- Bước 3: Nếu là FAQ, Agent tra cứu Knowledge Base và trả lời.
+- Bước 4: Nếu đặt lịch, kích hoạt Skill đặt lịch kết nối với Google Sheet để ghi nhận.
+- Bước 5: Nếu là yêu cầu chẩn đoán/khiếu nại, kích hoạt Handoff bàn giao cho nhân viên thật trực ca.
+
+## 5. Evaluation (Tiêu chí nghiệm thu)
+- Trả lời đúng 100% thông tin bảng giá và lịch làm việc.
+- Chuyển hướng chính xác (Handoff) 100% các câu hỏi liên quan đến chuyên môn y khoa.
+- Tốc độ phản hồi trung bình < 12 giây.`,
+    exampleHtml: `
+      <div class="example-content">
+        <h4 style="margin-top:0">🎯 Case Study: Hệ thống CSKH Tự động cho Phòng khám Da liễu</h4>
+        <p><strong>Scope:</strong> Chỉ tư vấn bảng giá, dịch vụ trị mụn và đặt lịch hẹn. Các trường hợp chẩn đoán da phức tạp sẽ bàn giao cho Bác sĩ.</p>
+        <p><strong>Constraint:</strong> Tuyệt đối cấm kê đơn thuốc hoặc tư vấn sai bảng giá chính thức.</p>
+        <p><strong>Evaluation:</strong> AI trả lời chính xác FAQ đạt 100%, tự động kích hoạt handoff khi khách hàng gửi ảnh da cần bác sĩ khám.</p>
+      </div>
+    `
+  }
+];
+---
+
+<BaseLayout title="Starter Templates">
+  <div class="templates-page-container">
+    <header class="page-header">
+      <div class="header-badge">🚀 Starter Kits</div>
+      <h1>Mẫu làm bài cho học viên</h1>
+      <p class="subtitle">Không bắt đầu từ trang giấy trắng. Dưới đây là các cấu trúc chuẩn hóa được thiết kế riêng để học viên tải về, copy nhanh và áp dụng trực tiếp vào các buổi thực hành.</p>
+    </header>
+
+    <div class="templates-layout">
+      <!-- Sidebar navigation for quick scrolling -->
+      <aside class="templates-sidebar">
+        <h3>Danh mục template</h3>
+        <nav class="sidebar-nav">
+          {templates.map((t) => (
+            <a href={`#card-${t.id}`} class="sidebar-link">
+              <span class="sidebar-icon">{t.icon}</span>
+              <span class="sidebar-title">{t.title}</span>
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <!-- Main list of templates -->
+      <main class="templates-main">
+        {templates.map((template) => (
+          <article class="template-card" id={`card-${template.id}`}>
+            <div class="card-header">
+              <div class="card-title-row">
+                <span class="card-icon">{template.icon}</span>
+                <div>
+                  <h2>{template.title}</h2>
+                  <p class="card-use">{template.use}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs buttons -->
+            <div class="tab-buttons" data-template-id={template.id}>
+              <button class="tab-btn active" data-tab="structure">
+                📋 Cấu trúc & Hướng dẫn
+              </button>
+              <button class="tab-btn" data-tab="example">
+                💡 Ví dụ thực tế
+              </button>
+              <button class="tab-btn" data-tab="markdown">
+                ⚡ Markdown nguồn
+              </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-panes" id={`panes-${template.id}`}>
+              <!-- Pane 1: Structure -->
+              <div class="tab-pane active" data-pane="structure">
+                <div class="structure-list">
+                  {template.fields.map((f) => (
+                    <div class="field-item">
+                      <strong>{f.name}</strong>
+                      <p>{f.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Pane 2: Real Example -->
+              <div class="tab-pane" data-pane="example" set:html={template.exampleHtml} />
+
+              <!-- Pane 3: Raw Markdown with copy option -->
+              <div class="tab-pane" data-pane="markdown">
+                <div class="code-wrapper">
+                  <button class="copy-code-btn" data-copy-target={`code-${template.id}`}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span>Copy</span>
+                  </button>
+                  <pre><code id={`code-${template.id}`}>{template.markdown}</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .templates-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-2xl);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-xl);
+  }
+
+  .header-badge {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-header h1 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Layout grid */
+  .templates-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  /* Sidebar styling */
+  .templates-sidebar {
+    position: sticky;
+    top: 84px;
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .templates-sidebar h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-md);
+    padding-left: var(--space-xs);
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all var(--duration-fast);
+  }
+
+  .sidebar-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+  }
+
+  .sidebar-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Main components list */
+  .templates-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .template-card {
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    scroll-margin-top: 84px;
+    transition: border-color var(--duration-normal);
+  }
+
+  .template-card:hover {
+    border-color: var(--border-strong);
+  }
+
+  .card-header {
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .template-card h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xs);
+    line-height: 1.3;
+  }
+
+  .card-use {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* Tabs controller styling */
+  .tab-buttons {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-inset);
+    padding: 0 var(--space-lg);
+    gap: 8px;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: var(--space-md) var(--space-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all var(--duration-fast);
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .tab-btn.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+  }
+
+  /* Tab panes */
+  .tab-panes {
+    padding: var(--space-xl);
+  }
+
+  .tab-pane {
+    display: none;
+  }
+
+  .tab-pane.active {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  /* Pane 1 Structure grid */
+  .structure-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .field-item {
+    background: var(--bg-inset);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .field-item strong {
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  .field-item p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Pane 2 Real Example styling */
+  :global(.example-content) {
+    background: color-mix(in srgb, var(--accent-teal) 5%, var(--bg-base));
+    border-left: 4px solid var(--accent-teal);
+    padding: var(--space-lg) var(--space-xl);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  :global(.example-content h4) {
+    color: var(--accent-teal-dark, var(--text-primary));
+    font-size: 0.95rem;
+    margin-bottom: var(--space-md);
+  }
+
+  :global(.example-content p) {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--space-sm);
+  }
+
+  :global(.example-content p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Pane 3 Code box styling */
+  .code-wrapper {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0f141c;
+    border: 1px solid #1a2333;
+  }
+
+  .code-wrapper pre {
+    margin: 0;
+    padding: var(--space-lg);
+    overflow-x: auto;
+  }
+
+  .code-wrapper code {
+    color: #e5e9f0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  .copy-code-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .copy-code-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+  }
+
+  .copy-code-btn.copied {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive styling */
+  @media (max-width: 960px) {
+    .templates-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .templates-sidebar {
+      position: static;
+      margin-bottom: var(--space-md);
+    }
+
+    .sidebar-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .structure-list {
+      grid-template-columns: 1fr;
+    }
+
+    .tab-buttons {
+      padding: 0 var(--space-sm);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .tab-btn {
+      padding: var(--space-md) var(--space-xs);
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    /* Handle tabs switches */
+    document.querySelectorAll('.tab-buttons').forEach(buttonsContainer => {
+      const templateId = buttonsContainer.dataset.templateId;
+      const panesContainer = document.getElementById(`panes-${templateId}`);
+      if (!panesContainer) return;
+
+      const buttons = buttonsContainer.querySelectorAll('.tab-btn');
+      const panes = panesContainer.querySelectorAll('[data-pane]');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabName = btn.dataset.tab;
+          
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          panes.forEach(pane => {
+            if (pane.dataset.pane === tabName) {
+              pane.classList.add('active');
+            } else {
+              pane.classList.remove('active');
+            }
+          });
+        });
+      });
+    });
+
+    /* Handle Code Clipboard Copies */
+    document.querySelectorAll('.copy-code-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.copyTarget;
+        const codeElement = document.getElementById(targetId);
+        if (!codeElement) return;
+
+        navigator.clipboard.writeText(codeElement.innerText)
+          .then(() => {
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Đã copy!</span>
+            `;
+            btn.classList.add('copied');
+
+            setTimeout(() => {
+              btn.innerHTML = originalHtml;
+              btn.classList.remove('copied');
+            }, 2000);
+          })
+          .catch(err => {
+            console.error('Không thể copy code: ', err);
+          });
+      });
+    });
+  });
+</script>

@@ -1,0 +1,164 @@
+/* Companion-specific styles: Light theme */
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0 var(--space-xl);
+}
+
+.mode-panel,
+.guide-card,
+.template-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-base);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent-primary);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.mode-panel:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.mode-panel:hover::before {
+  opacity: 1;
+}
+
+.mode-panel h2,
+.guide-card h3,
+.template-card h2 {
+  margin: 0 0 var(--space-sm);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.mode-panel p,
+.guide-card p,
+.template-card p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* Guide grid */
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.guide-card:hover,
+.template-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Mission board */
+.mission-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+/* Template grid */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-md);
+  padding: var(--space-lg) 0;
+}
+
+.template-card textarea {
+  width: 100%;
+  min-height: 200px;
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.template-card textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary-glow);
+}
+
+/* Tracker table */
+.tracker-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-base);
+  box-shadow: var(--shadow-card);
+}
+
+.tracker-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.tracker-table th,
+.tracker-table td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.875rem;
+}
+
+.tracker-table th {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tracker-table td {
+  color: var(--text-secondary);
+}
+
+.tracker-table tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .mode-grid,
+  .mission-board {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-grid,
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+}

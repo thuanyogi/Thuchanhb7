@@ -1,0 +1,260 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/protect-source-materials.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/descriptive-name.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Glob|Grep|Read|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/scout-block.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/privacy-block.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/session-init.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/usage-quota-cache-refresh.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/simplify-gate.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/dev-rules-reminder.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/usage-quota-cache-refresh.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dev-rules-reminder.cjs",
+            "_origin": "marketing"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/usage-context-awareness.cjs",
+            "timeout": 30,
+            "_origin": "marketing"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/subagent-init.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      },
+      {
+        "matcher": "content-creator|copywriter|social-media-manager|email-wizard|sale-enabler",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/brand-guidelines-reminder.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      },
+      {
+        "matcher": "campaign-manager|campaign-debugger|social-media-manager|email-wizard|content-creator|analytics-analyst",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/campaign-tracking.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/approval-workflow.cjs",
+            "_origin": "marketing"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/subagent-init.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/plan-format-kanban.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-edit-simplify-reminder.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      },
+      {
+        "matcher": "Task|TaskCreate|TaskUpdate|TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/session-state.cjs\"",
+            "_origin": "engineer"
+          },
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/usage-quota-cache-refresh.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "Plan",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/cook-after-plan-reminder.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/session-state.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \".claude/hooks/session-state.cjs\"",
+            "_origin": "engineer"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/write-compact-marker.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-end.cjs",
+            "_origin": "marketing"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/task-completed-handler.cjs"
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/teammate-idle-handler.cjs"
+          }
+        ]
+      }
+    ]
+  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "skillListingBudgetFraction": 0.04,
+  "skillListingMaxDescChars": 512,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node \".claude/statusline.cjs\"",
+    "padding": 0
+  },
+  "includeCoAuthoredBy": false
+}

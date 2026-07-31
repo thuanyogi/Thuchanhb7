@@ -1,0 +1,296 @@
+---
+import "../styles/global.css";
+import CommandPalette from "../components/CommandPalette.astro";
+import BottomNav from "../components/BottomNav.astro";
+import LearningAssistant from "../components/LearningAssistant.astro";
+import { getCourseStats } from "../lib/course";
+
+interface Props {
+  title: string;
+  description?: string;
+  fullWidth?: boolean;
+}
+
+const { title, description, fullWidth } = Astro.props;
+const fullTitle = `${title} · Thuận Yogi · LMS`;
+const currentPath = Astro.url.pathname;
+const stats = getCourseStats();
+const themeColor = "#E64A19";
+---
+
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  {description && <meta name="description" content={description} />}
+  <meta name="theme-color" content={themeColor} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script is:inline>
+    // Client-side passcode protection gate for all instructor guides
+    if (window.location.pathname.startsWith('/instructor')) {
+      const SESSION_KEY = 'instructor_auth';
+      if (sessionStorage.getItem(SESSION_KEY) !== '1') {
+        const path = window.location.pathname;
+        if (path !== '/instructor' && path !== '/instructor/') {
+          window.location.href = '/instructor/';
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Bỏ qua tới nội dung</a>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span>TY</span>
+      <strong>Thuận Yogi <em>· LMS</em></strong>
+    </a>
+
+    <button class="header-search-btn" id="header-search-btn" aria-label="Tìm kiếm (Cmd+K)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="header-search-label">Tìm kiếm</span>
+      <kbd>⌘K</kbd>
+    </button>
+
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+
+    <nav>
+      <a href="/" aria-current={currentPath === "/" ? "page" : undefined}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Trang chủ
+      </a>
+      <a href="/sessions/" aria-current={currentPath.startsWith("/sessions") ? "page" : undefined}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Lộ trình
+      </a>
+      <div class="nav-dropdown" aria-current={currentPath.startsWith("/glossary") || currentPath.startsWith("/templates") ? "page" : undefined}>
+        <button class="nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Tra cứu
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="/glossary/">Thuật ngữ</a>
+          <a href="/templates/">Templates</a>
+          <a href="/resources/">Tài nguyên</a>
+        </div>
+      </div>
+      <a href="/review/" aria-current={currentPath.startsWith("/review") ? "page" : undefined}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Đánh giá
+      </a>
+    </nav>
+
+    <div class="header-progress" id="header-progress" data-total={stats.sessionCount} title="Tiến độ tổng khoá học">
+      <svg viewBox="0 0 36 36">
+        <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border)" stroke-width="3" />
+        <circle id="header-progress-fill" cx="18" cy="18" r="15" fill="none" stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="94.2" transform="rotate(-90 18 18)" />
+      </svg>
+      <span id="header-progress-text" aria-live="polite">0%</span>
+    </div>
+  </header>
+
+  <main id="main-content" class:list={[{ 'main-full': fullWidth }]}>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <span>Agentic AI with Google Antigravity · <em>Sáng với AI, chiều với Yoga</em></span>
+    <a href="/">Thuận Yogi · LMS</a>
+  </footer>
+
+  <CommandPalette />
+  <BottomNav />
+  <LearningAssistant />
+
+  <script is:inline>
+    /* ====== Thuận Yogi Course Companion — shared client runtime ====== */
+    (function () {
+      var KEY = 'aa-progress-v2';
+      var STREAK_KEY = 'aa-streak-v2';
+      var ARTIFACT_KEY = 'aa-artifacts-v2';
+      function load() { try { return JSON.parse(localStorage.getItem(KEY)) || { sessions: {}, last: null, bookmarks: [] }; } catch (e) { return { sessions: {}, last: null, bookmarks: [] }; } }
+      function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
+      var state = load();
+      function sess(n) { if (!state.sessions[n]) state.sessions[n] = { checks: {}, done: false }; return state.sessions[n]; }
+      function loadStreak() { try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || { current: 0, longest: 0, lastActiveDate: null }; } catch (e) { return { current: 0, longest: 0, lastActiveDate: null }; } }
+      function saveStreak(d) { try { localStorage.setItem(STREAK_KEY, JSON.stringify(d)); } catch (e) {} }
+      var streakState = loadStreak();
+      function loadArtifacts() { try { return JSON.parse(localStorage.getItem(ARTIFACT_KEY)) || {}; } catch (e) { return {}; } }
+      function saveArtifacts(d) { try { localStorage.setItem(ARTIFACT_KEY, JSON.stringify(d)); } catch (e) {} }
+      var artifactState = loadArtifacts();
+
+      window.AA = {
+        getCheck: function (n, id) { var s = state.sessions[n]; return !!(s && s.checks[id]); },
+        setCheck: function (n, id, v) { var s = sess(n); if (v) s.checks[id] = true; else delete s.checks[id]; save(state); },
+        isDone: function (n) { var s = state.sessions[n]; return !!(s && s.done); },
+        setDone: function (n, v) { var s = sess(n); s.done = v; save(state); },
+        setLast: function (n) { state.last = String(n); save(state); },
+        last: function () { return state.last; },
+        toggleBookmark: function (id) { state.bookmarks = state.bookmarks || []; var i = state.bookmarks.indexOf(id); if (i >= 0) state.bookmarks.splice(i, 1); else state.bookmarks.push(id); save(state); return state.bookmarks.includes(id); },
+        isBookmarked: function (id) { return (state.bookmarks || []).includes(id); },
+        doneCount: function () { return Object.keys(state.sessions).filter(function (n) { return state.sessions[n].done; }).length; },
+        sessionCheckedCount: function (n) { var s = state.sessions[n]; return s ? Object.keys(s.checks).filter(function (k) { return s.checks[k]; }).length : 0; },
+        getStreak: function () { return streakState; },
+        updateStreak: function () {
+          var today = new Date().toISOString().split('T')[0];
+          if (streakState.lastActiveDate === today) return streakState;
+          var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+          if (streakState.lastActiveDate === yesterday) { streakState.current = (streakState.current || 0) + 1; }
+          else { streakState.current = 1; }
+          streakState.longest = Math.max(streakState.longest || 0, streakState.current);
+          streakState.lastActiveDate = today;
+          saveStreak(streakState);
+          return streakState;
+        },
+        getXP: function () {
+          var xp = 0;
+          Object.keys(state.sessions).forEach(function (n) {
+            var s = state.sessions[n];
+            if (s.done) xp += 100;
+            xp += Object.keys(s.checks || {}).filter(function (k) { return s.checks[k]; }).length * 10;
+          });
+          return xp;
+        },
+        getArtifact: function (n) { return artifactState[String(n)] || null; },
+        setArtifact: function (n, data) { artifactState[String(n)] = Object.assign({ updatedAt: new Date().toISOString() }, artifactState[String(n)] || {}, data); saveArtifacts(artifactState); },
+        artifactState: function (n) { var a = artifactState[String(n)]; return a ? (a.state || 'draft') : 'draft'; }
+      };
+
+      function refreshProgress() {
+        /* session detail sidebar ring */
+        var checks = document.querySelectorAll('.interactive-checklist input[type=checkbox]');
+        var ring = document.querySelector('.progress-ring-fill');
+        if (ring && checks.length) {
+          var c = Array.prototype.filter.call(checks, function (x) { return x.checked; }).length;
+          var pct = Math.round(c / checks.length * 100);
+          var circ = 2 * Math.PI * 18;
+          ring.style.strokeDashoffset = String(circ - (pct / 100) * circ);
+          var t = document.querySelector('.progress-ring-text'); if (t) t.textContent = pct + '%';
+        }
+        /* dashboard global + per-card */
+        var doneChecks = document.querySelectorAll('.session-done-check');
+        if (doneChecks.length) {
+          var done = 0; var totalProgress = 0;
+          doneChecks.forEach(function (cb) {
+            var n = cb.getAttribute('data-session-num');
+            var isD = window.AA.isDone(n);
+            cb.checked = isD; if (isD) done++;
+            var card = cb.closest('.dash-card'); if (card) card.classList.toggle('completed', isD);
+            var tot = parseInt(card.getAttribute('data-check-total'), 10) || 0;
+            var chk = window.AA.sessionCheckedCount(n);
+            var sessPct = isD ? 100 : (tot > 0 ? Math.round(chk / tot * 100) : 0);
+            totalProgress += sessPct;
+          });
+          var total = doneChecks.length, pct = Math.round(totalProgress / total), circ = 326.7;
+          var circle = document.getElementById('progress-circle'); if (circle) circle.style.strokeDashoffset = String(circ - (circ * pct / 100));
+          var pe = document.getElementById('progress-pct'); if (pe) pe.textContent = pct + '%';
+          var de = document.getElementById('progress-detail'); if (de) de.textContent = done + ' / ' + total + ' buổi hoàn thành';
+          document.querySelectorAll('.phase-section').forEach(function (sec) {
+            var ph = sec.getAttribute('data-phase'); var pc = sec.querySelectorAll('.session-done-check'); var d = 0;
+            pc.forEach(function (cb) { if (window.AA.isDone(cb.getAttribute('data-session-num'))) d++; });
+            var bar = sec.querySelector('[data-phase-bar="' + ph + '"]'); if (bar && pc.length) bar.style.width = Math.round(d / pc.length * 100) + '%';
+          });
+          document.querySelectorAll('.dash-card[data-check-total]').forEach(function (card) {
+            var n = card.getAttribute('data-session'); var tot = parseInt(card.getAttribute('data-check-total'), 10) || 0;
+            var chk = window.AA.sessionCheckedCount(n); var pEl = card.querySelector('.dash-check-pct'); var bEl = card.querySelector('.dash-check-bar-fill');
+            if (tot > 0) { var p = Math.round(chk / tot * 100); if (pEl) pEl.textContent = p + '%'; if (bEl) bEl.style.width = p + '%'; }
+          });
+          var last = window.AA.last();
+          document.querySelectorAll('.dash-card.is-current').forEach(function (c) { c.classList.remove('is-current'); });
+          if (last) { var cc = document.querySelector('.dash-card[data-session="' + last + '"]'); if (cc) cc.classList.add('is-current'); }
+        }
+        /* header mini progress */
+        var hp = document.getElementById('header-progress');
+        if (hp) {
+          var ht = parseInt(hp.getAttribute('data-total'), 10) || 12; var hd = window.AA.doneCount(); var hpct = Math.round(hd / ht * 100);
+          var hf = document.getElementById('header-progress-fill'); if (hf) { var hc = 94.2; hf.style.strokeDashoffset = String(hc - (hpct / 100) * hc); }
+          var htx = document.getElementById('header-progress-text'); if (htx) htx.textContent = hpct + '%';
+        }
+        /* resume link */
+        var rl = document.getElementById('resume-link');
+        if (rl) {
+          var l = window.AA.last(); var target = null;
+          if (l) { var c = document.querySelector('.dash-card[data-session="' + l + '"] a.dash-card-link'); if (c) target = c.getAttribute('href'); }
+          if (!target) {
+            var cards = document.querySelectorAll('.dash-card');
+            for (var i = 0; i < cards.length; i++) { if (!window.AA.isDone(cards[i].getAttribute('data-session'))) { var a = cards[i].querySelector('a.dash-card-link'); if (a) { target = a.getAttribute('href'); break; } } }
+          }
+          if (target) rl.href = target;
+        }
+      }
+      window.AA.refresh = refreshProgress;
+
+      function init() {
+        document.querySelectorAll('.interactive-checklist input[type=checkbox]').forEach(function (cb) {
+          var id = cb.id; var m = id && id.match(/^s(\d+)-/); var num = m ? m[1] : null;
+          if (num) cb.checked = window.AA.getCheck(num, id);
+          cb.addEventListener('change', function () { if (num) window.AA.setCheck(num, id, cb.checked); refreshProgress(); });
+        });
+        document.querySelectorAll('.completion-check').forEach(function (el) {
+          el.addEventListener('click', function (e) {
+            e.preventDefault(); e.stopPropagation();
+            var cb = el.querySelector('.session-done-check'); if (!cb) return;
+            var n = cb.getAttribute('data-session-num'); cb.checked = !cb.checked; window.AA.setDone(n, cb.checked); refreshProgress();
+          });
+        });
+        var pageEl = document.querySelector('[data-session-page]'); if (pageEl) { var n = pageEl.getAttribute('data-session-page'); if (n) window.AA.setLast(n); }
+        document.querySelectorAll('.bookmark-btn').forEach(function (btn) {
+          var id = btn.getAttribute('data-bookmark');
+          if (window.AA.isBookmarked(id)) btn.classList.add('is-on');
+          btn.setAttribute('aria-pressed', String(window.AA.isBookmarked(id)));
+          btn.addEventListener('click', function () { var on = window.AA.toggleBookmark(id); btn.classList.toggle('is-on', on); btn.setAttribute('aria-pressed', String(on)); });
+        });
+        var sb = document.getElementById('header-search-btn'); if (sb) sb.addEventListener('click', function () { if (window.AACmdk) window.AACmdk.open(); });
+        var toggle = document.querySelector('.menu-toggle'); var nav = document.querySelector('.site-header nav');
+        if (toggle && nav) toggle.addEventListener('click', function () { nav.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', nav.classList.contains('is-open')); });
+        document.querySelectorAll('.nav-dropdown-toggle').forEach(function (btn) {
+          btn.addEventListener('click', function (e) { e.stopPropagation(); var dd = btn.closest('.nav-dropdown'); var open = dd.classList.toggle('is-open'); btn.setAttribute('aria-expanded', String(open)); });
+        });
+        document.addEventListener('click', function () { document.querySelectorAll('.nav-dropdown.is-open').forEach(function (dd) { dd.classList.remove('is-open'); var b = dd.querySelector('.nav-dropdown-toggle'); if (b) b.setAttribute('aria-expanded', 'false'); }); });
+        document.querySelectorAll('.accordion-trigger').forEach(function (btn) {
+          btn.addEventListener('click', function () { var item = btn.closest('.accordion-item'); if (item) item.classList.toggle('is-open'); });
+        });
+        document.querySelectorAll('.copy-button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var tid = btn.dataset.copyTarget || btn.dataset.panel; var ta = document.querySelector('#' + tid);
+            if (ta) { navigator.clipboard.writeText(ta.value); var o = btn.textContent; btn.textContent = '✓ Copied!'; setTimeout(function () { btn.textContent = o; }, 2000); }
+          });
+        });
+        var ob = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); ob.unobserve(en.target); } }); }, { threshold: 0.05 });
+        document.querySelectorAll('.stagger-fade > *').forEach(function (el) { ob.observe(el); });
+        /* streak/XP strip (P2) */
+        var ss = document.getElementById('streak-current'); if (ss) { var st = window.AA.getStreak(); ss.textContent = st.current || 0; }
+        var xp = document.getElementById('xp-current'); if (xp) { xp.textContent = window.AA.getXP(); }
+        /* module status icons (P2) */
+        document.querySelectorAll('.module-status-icon').forEach(function (el) {
+          var n = el.getAttribute('data-session'); if (!n) return;
+          var isD = window.AA.isDone(n);
+          var chk = window.AA.sessionCheckedCount(n);
+          el.classList.remove('status-done', 'status-progress', 'status-pending');
+          if (isD) { el.classList.add('status-done'); el.setAttribute('aria-label', 'Đã hoàn thành'); }
+          else if (chk > 0) { el.classList.add('status-progress'); el.setAttribute('aria-label', 'Đang học'); }
+          else { el.classList.add('status-pending'); el.setAttribute('aria-label', 'Chưa bắt đầu'); }
+        });
+        window.AA.updateStreak(); /* update streak on page visit (P2) */
+        /* home resume card (P1 — returning user) */
+        var hr = document.getElementById('home-resume');
+        if (hr) { var l2 = window.AA.last(); var d2 = window.AA.doneCount(); if (l2 || d2 > 0) hr.style.display = 'block'; }
+        refreshProgress();
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+    })();
+  </script>
+</body>
+</html>

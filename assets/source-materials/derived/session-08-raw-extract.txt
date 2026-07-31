@@ -1,0 +1,524 @@
+SOURCE: MindX_AG_Slide 8.pdf
+PAGES: 35
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 8
+AI AGENCY OPERATIONS
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Kỹ năng kiểm toán hệ thống
+Xây dựng các câu lệnh /audit để hệ thống tự động đánh giá, cảnh báo lỗi, và
+chặn đứng các điểm rò rỉ chi phí/tắc nghẽn trước khi phát sinh thực tế.
+MỤC TIÊU
+HỌC TẬP
+Tư duy quản trị AI
+Thiết kế kiến trúc AI 3 tầng (Hierarchy), từ đó loại bỏ sự can thiệp thủ công vào
+các tác vụ vận hành hàng ngày để tập trung vào việc ra quyết định chiến lược.
+Quy trình tự động hóa thực chiến
+Triển khai một Agentic Workflow hoàn chỉnh (từ Google Apps Script và AI
+Agent) tự động xuất báo cáo, phát tín hiệu cảnh báo và thực thi cơ chế tự
+phục hồi (self-heal) khi gặp sự cố.
+
+=== PAGE 3 ===
+Phần 1:
+TƯ DUY QUẢN TRỊ AI
+
+=== PAGE 4 ===
+Kỷ nguyên của AI Operations
+AI là công cụ
+Bạn hỏi, AI trả lời. 
+Bản chất: Là một hệ thống phản hồi thụ
+động, hoạt động theo cơ chế hỏi - đáp
+(input - output) dựa trên câu lệnh trực
+tiếp của người dùng.
+Đặc điểm: Chỉ xử lý các tác vụ rời rạc,
+đơn lẻ. Thiếu tính liên kết hệ thống, do
+đó không có khả năng tự động hóa và
+mở rộng quy mô (scale-up) trong các
+quy trình phức tạp.
+AI là nhân sự số
+ AI Operations
+Bản chất: Là một thực thể tự động hóa
+được phân quyền để thực thi các chuỗi
+tác vụ cụ thể trong một quy trình làm
+việc (workflow).
+Đặc điểm:
+Có vai trò rõ ràng
+Có KPI đo lường
+Có người giám sát
+Bản chất: Là khung quản lý và duy trì
+hoạt động của toàn bộ hệ thống AI
+trong một tổ chức.
+Đặc điểm: Bao gồm việc thiết kế kiến
+trúc hệ thống, điều phối luồng công
+việc giữa các "nhân sự số" và con người,
+đồng thời giám sát rủi ro. 
+Mục tiêu cốt lõi của AI Ops là tối ưu hóa
+nguồn lực công nghệ để tạo ra lợi thế
+cạnh tranh bền vững và mang lại hiệu
+quả vận hành thực tế cho doanh
+nghiệp.
+
+=== PAGE 5 ===
+Vấn đề khi scale up
+1 DỰ ÁN
+Bạn có thể soi thủ công - kiểm tra từng chi tiết, phát
+hiện lỗi ngay lập tức.
+Tại sao khi Agency có nhiều khách hàng thì hệ thống bắt đầu đổ vỡ?
+500 DỰ ÁN
+Bạn sẽ bị "ngộp" trong dữ liệu - không thể kiểm soát
+thủ công được nữa.
+Ví dụ thực tế:
+Khi chạy 100 chiến dịch Content cho khách hàng. Một con Bot AI bị lỗi lặp (Loop), nó tiêu hết $2.000
+trong 1 đêm chỉ để viết đi viết lại một câu. Nếu không có Audit, bạn có thể sẽ mất trắng tiền mà không
+hề hay biết.
+
+=== PAGE 6 ===
+Hệ phân cấp Hierarchy
+Cấu trúc tổ chức để hệ thống không bị chồng chéo — mỗi tầng có vai trò và trách nhiệm riêng biệt.
+Tư duy cốt lõi: 
+Hệ thống mạnh là hệ thống mà chỉ cần làm việc ở Tầng 3 — tập trung vào chiến lược, không sa lầy vào vận hành.
+1
+2
+3
+Tầng 3: Điều phối
+Giám đốc - Nhìn bức tranh lớn, ký duyệt chi
+Tầng 2: Quản lý
+Quản đốc - Giám sát, kiểm tra chất lượng
+Tầng 1: Thực thi
+Công nhân — Làm việc theo lệnh, xử lý dữ liệu thô
+
+=== PAGE 7 ===
+Tầng 1 - Thực thi (Execution)
+Đây là nơi dữ liệu thô được xử lý — tầng nền tảng của toàn bộ hệ thống AI Agency.
+Ví dụ thực tế
+Một đoạn code Google Apps Script tự động lấy Email khách hàng và gửi vào
+GPT để tóm tắt - không cần can thiệp thủ công.
+Rủi ro tiềm ẩn
+Nếu tầng này sai (ví dụ: Code lỗi), nó sẽ sai hàng loạt mà không biết tự dừng
+lại -  đó là lý do cần Tầng 2 giám sát.
+
+=== PAGE 8 ===
+Tầng 2 - Quản lý (Management)
+AI đóng vai trò làm "Người kiểm soát" — không trực tiếp tạo ra sản phẩm mà đảm bảo
+chất lượng đầu ra của Tầng 1.
+Đọc & Đánh giá
+Antigravity (AI Agent) không đi viết
+content, mà nó đi đọc lại content của
+Tầng 1.
+Phát hiện lỗi
+Nếu thấy content có từ ngữ nhạy cảm
+hoặc sai định dạng, nó sẽ đánh dấu đỏ.
+Yêu cầu làm lại
+Tự động gửi yêu cầu về Tầng 1 để xử lý
+lại mà không cần con người can thiệp.
+Mấu chốt
+Tầng này dùng "Trí tuệ" để đánh
+giá kết quả của "Sức lực" (Tầng 1).
+Đây là ranh giới giữa một hệ
+thống thông minh và một hệ
+thống chỉ biết chạy theo lệnh.
+
+=== PAGE 9 ===
+Tầng 3 - Điều phối (Coordination)
+Nơi ra quyết định chiến lược dựa trên báo cáo từ Tầng 2 - đây là nơi con người thực sự
+tạo ra giá trị.
+Báo cáo từ Antigravity
+"Thưa anh/chị, tháng này Model Claude 3 đang tốn tiền gấp đôi GPT-4
+nhưng hiệu quả chỉ ngang nhau."
+Quyết định của anh/chị
+"Chuyển toàn bộ dự án sang GPT ngay lập tức để tối ưu chi phí."
+Vai trò của Tầng 3: Sáng tạo và đưa ra chiến lược tối ưu lợi nhuận -
+không bị cuốn vào chi tiết vận hành.
+
+=== PAGE 10 ===
+Phần 2:
+KIỂM TOÁN HỆ THỐNG
+
+=== PAGE 11 ===
+Bản chất của System Audit
+Là quá trình "Khám sức khỏe" định kỳ cho cỗ máy AI - phát hiện sớm trước khi sự cố xảy ra.
+Cost Audit
+Tiền có đang bị rò rỉ không? Phát
+hiện các khoản chi phí bất thường
+và lãng phí trong hệ thống.
+Quality Audit
+Kết quả AI trả về có đúng yêu cầu
+(Prompt) không? Đảm bảo đầu ra
+đạt tiêu chuẩn cam kết với khách
+hàng.
+Performance Audit
+Hệ thống có đang bị chậm ở bước
+nào không? Xác định điểm nghẽn
+và tối ưu tốc độ xử lý.
+
+=== PAGE 12 ===
+Các điểm mù và điểm tắc nghẽn
+Những nơi lỗi thường ẩn nấp mà mắt thường khó thấy — đây là nơi Audit phát huy sức mạnh thực sự.
+Bước 1-4 chạy rất nhanh, nhưng Bước 5 (Duyệt kết quả) phải chờ con người làm thủ công. Dữ liệu bị "tắc" tại đây, làm
+chậm toàn bộ tiến độ. Audit giúp bạn tìm ra và tự động hóa bước 5 này.
+Nhập dữ liệu
+Tiền xử lý nhanh
+Tạo nội dung
+Sinh kết quả tự
+động
+Duyệt thủ công
+Bottleneck -
+chậm
+Xử lý AI
+Mô hình phân
+tích
+Kiểm tra chất
+lượng
+Đánh giá và sửa
+lỗi
+
+=== PAGE 13 ===
+Monitoring vs Auditing
+Monitoring (Giám sát)
+Giống như cái nhiệt kế - chỉ báo con số mà không
+giải thích nguyên nhân.
+"Hôm nay tốn 1 triệu Token."
+Cho bạn biết điều gì đang xảy ra nhưng không nói tại
+sao.
+Auditing (Kiểm toán)
+Giống như bác sĩ - phán đoán nguyên nhân và đưa ra
+giải pháp cụ thể.
+"1 triệu Token này bị lãng phí do Prompt quá dài và
+dư thừa thông tin."
+Cho bạn biết tại sao và phải làm gì.
+Monitoring là điều kiện cần, Auditing là điều kiện đủ để vận hành Agency AI chuyên nghiệp.
+
+=== PAGE 14 ===
+Xây dựng lệnh /audit
+Cách tích hợp tính năng kiểm toán vào quy trình làm việc hàng ngày - biến Audit từ công việc thủ công thành tự động
+hoàn toàn.
+1 2
+3 4
+Gõ /audit trong File dữ liệu
+Kích hoạt lệnh kiểm toán tức thì - không cần mở bất kỳ
+công cụ nào khác.
+Hệ thống quét dòng dữ liệu
+Tự động phân tích toàn bộ dữ liệu dự án trong vài giây.
+Tô màu đỏ dự án lỗ
+Trực quan hóa ngay lập tức những dự án đang gây thiệt
+hại tài chính.
+Gửi báo cáo 
+Tổng hợp thiệt hại và gửi cảnh báo ngay - không bỏ sót
+bất kỳ sự cố nào.
+
+=== PAGE 15 ===
+Agentic Auditing
+Dùng AI có khả năng suy luận để kiểm tra logic — giải pháp chống Hallucination trong môi trường Agency
+chuyên nghiệp.
+Nếu AI thứ nhất "nói dối" (Hallucination), Audit Agent sẽ chặn kết quả đó lại, không cho gửi đi - bảo vệ uy tín của
+người thực hiện
+
+=== PAGE 16 ===
+Triggers & Real-time Alert
+Tầm quan trọng của việc báo động ngay khi có sự cố - không đợi đến cuối tháng mới phát hiện thiệt hại.
+Kịch bản nguy hiểm
+Một nhân viên vô tình sửa nhầm công thức trong
+Sheet làm chi phí nhảy lên $10.000. Nếu đợi đến
+cuối tháng mới Audit thì Agency phá sản.
+On-Edit Trigger cứu nguy
+Ngay giây phút nhân viên đó nhấn Enter, mail cảnh
+báo đã "bay" thẳng vào Email — phản ứng trong tích
+tắc, ngăn chặn thiệt hại.
+Os
+Thời gian phản ứng
+Cảnh báo được gửi ngay lập tức
+khi phát hiện bất thường
+24/7
+Giám sát liên tục
+Hệ thống hoạt động không ngừng
+nghỉ, kể cả khi bạn đang ngủ
+100%
+Tự động hóa
+Không cần con người can thiệp
+vào quy trình cảnh báo
+
+=== PAGE 17 ===
+Hệ thống tự chữa lành
+AI tự đưa ra giải pháp xử lý sự cố mà không cần hỏi sếp - đây là cấp độ vận hành cao nhất của AI Agency.
+1 - Phát hiện sự có
+Antigravity phát hiện API của OpenAI bị sập lúc 2
+giờ sáng.
+3 - Chuyển hướng tự động
+Tự động chuyển dòng dữ liệu sang API của Anthropic
+(Claude) để đảm bảo không gián đoạn.
+2 - Tự quyết định
+Thay vì báo lỗi và dừng hệ thống, AI tự phân tích
+phương án thay thế.
+4 - Báo cáo sáng hôm sau
+"Đêm qua OpenAI sập, tôi đã tự chuyển sang
+Claude, mọi thứ vẫn ổn."
+
+=== PAGE 18 ===
+Bảo mật thông tin trong vận hành AI
+Bảo vệ tài sản lớn nhất - Dữ liệu & API Keys là nền tảng của toàn bộ hoạt động kinh doanh.
+❌  Không bao giờ Hard-code API
+Key
+Không nhúng API Key trực tiếp vào
+file Sheet hay code. Sử dụng biến
+môi trường hoặc các công cụ quản
+lý bảo mật chuyên dụng.
+⚠  Hậu quả nếu lộ API Key
+Kẻ xấu có thể dùng chùa tiền của
+bạn để chạy dự án của họ — thiệt
+hại tài chính không thể lường
+trước được.
+🔍  Audit bảo mật định kỳ
+Audit phải quét xem có ai đang
+dùng trộm API của công ty hay
+không — phát hiện sớm để ngăn
+chặn kịp thời.
+
+=== PAGE 19 ===
+TỔNG KẾT
+Kết hợp tất cả các tầng, công cụ và quy trình để tạo ra một hệ thống AI Agent không thể bị đánh bại.
+🎯  Bước tiếp theo: Áp dụng ngay Kiềng 3 chân vào Agent — bắt đầu từ việc xác định rõ vai trò của từng tầng 
+trong hệ thống hiện tại.
+
+=== PAGE 20 ===
+DEMO
+ĐỀ BÀI: HỆ THỐNG KIỂM TOÁN DỰ ÁN AI (AI PROJECT AUDIT CENTER)
+1.BỐI CẢNH 
+Bạn đang là CEO của một AI Agency quản lý 500 dự án cùng lúc. Dữ liệu chi phí và hiệu quả của các dự án được cập nhật
+liên tục vào Google Sheet bởi đội ngũ thực thi (Tầng 1). Link dữ liệu: Tại đây
+2. THỬ THÁCH 
+Bạn không có thời gian soi từng dòng. Bạn cần thiết lập một "Trợ lý Quản lý AI" (Antigravity) ở Tầng 2 để thực hiện lệnh
+/audit nhằm:
+Quét toàn bộ hệ thống: Tìm ra các dự án "đốt tiền" nhưng hiệu quả kém (Chi phí > $2000 và Điểm hiệu quả < 4).
+Báo động thị giác: Tự động tô màu đỏ các dòng lỗi để nhân viên biết đường mà sửa.
+Chẩn đoán bệnh: Đưa ra lời khuyên cụ thể cho từng lỗi (Ví dụ: "Tắc nghẽn Prompt", "Rò rỉ ngân sách").
+Báo cáo tức thì: Gửi Email cho bạn kèm link file ngay khi phát hiện sự cố (Real-time).
+
+=== PAGE 21 ===
+DEMO
+Áp dụng kiến trúc 3 tầng hệ thống để thực hiện
+Mỗi tầng có vai trò rõ ràng: Con người đặt mục tiêu, AI Agent thiết kế giải pháp, và Code/Data thực thi tự động 24/7 mà không
+cần can thiệp thủ công.
+
+=== PAGE 22 ===
+DEMO
+📊  Dữ Liệu — Google Sheets
+(Online)
+File Google Sheet với 500+ dòng
+dữ liệu dự án. Các cột mục tiêu
+quan trọng: API_Cost_USD (Cột H)
+và Efficiency_Score (Cột O). Dữ
+liệu được cập nhật liên tục theo
+thời gian thực.
+⚙  Hành Động — Google Apps
+Script (Javascript)
+Ngôn ngữ lập trình tích hợp sẵn
+trong Google Workspace. Cho
+phép tự động hóa hoàn toàn: tô
+màu ô, ghi dữ liệu, gửi email, tạo
+trigger theo lịch hoặc sự kiện.
+🤖  Trí Tuệ — Antigravity (AI
+Agent Assistant)
+AI Agent thông minh đóng vai trò
+"Chuyên gia tư vấn" — nhận yêu
+cầu bằng ngôn ngữ tự nhiên, tự
+động viết code, lập kế hoạch và
+thực thi các tác vụ phức tạp.
+Công cụ sử dụng
+
+=== PAGE 23 ===
+DEMO
+Quy trình thực hiện
+5 bước triển khai hệ thống kiểm toán tự động từ đầu đến cuối
+Quy trình này đảm bảo hệ thống hoạt động hoàn toàn tự động — từ lúc dữ liệu được nhập vào cho đến khi báo cáo được 
+gửi đến hộp thư của bạn.
+Chuẩn bị dữ liệu
+Tham vấn Antigravity
+Triển khai Code
+Thiết lập Trigger
+
+=== PAGE 24 ===
+DEMO
+Bước 1 & 2: Chuẩn bị & Tham vấn AI
+ Bước 1: Chuẩn Bị Dữ Liệu
+Tầng thực thi
+Sử dụng file Google Sheet có sẵn 500 dòng
+data
+Xác định cột mục tiêu: API_Cost_USD →  Cột H
+Xác định cột hiệu quả: Efficiency_Score →  Cột O
+Cột U dành để ghi lời khuyên tự động
+Bước 2: Tạo Skill và Prompt Mẫu tạo code Cho
+Antigravity
+Tầng quản lý — Câu lệnh tham vấn chuyên gia:
+“Hãy viết code Google Apps Script để kiểm toán file
+Sheet này, đây là link file: . Nếu Cost > 2000 và
+Score < 4, hãy tô đỏ, ghi lời khuyên vào cột U và gửi
+mail báo cáo kèm link file cho tôi."
+Antigravity sẽ phân tích yêu cầu và tự động tạo ra
+toàn bộ đoạn mã cần thiết.
+
+=== PAGE 25 ===
+DEMO
+Bước 3 & 4: Triển khai & Tự động hóa
+1 2
+3 4
+Mở Apps Script
+Vào Extensions →  Apps Script trong Google Sheets. Đây
+là môi trường lập trình tích hợp sẵn, không cần cài đặt
+thêm.
+Dán Mã & Cấu Hình
+Dán đoạn mã do Antigravity cung cấp. Thay địa chỉ Email
+cá nhân vào biến email trong code trước khi chạy.
+Cấp Quyền & Chạy
+Bấm Run lần đầu để cấp quyền truy cập Google Account.
+Hệ thống sẽ yêu cầu xác nhận quyền đọc/ghi Sheet và
+gửi Email.
+Thiết Lập Trigger 24/7
+Vào mục Triggers (biểu tượng đồng hồ) →  Tạo Trình kích
+hoạt mới →  Chọn sự kiện On Edit để hệ thống báo động
+tức thì khi có dữ liệu mới.
+
+=== PAGE 26 ===
+DEMO
+Bước 5: Tác vụ Agent nâng cao
+Những tác vụ mà lập trình thông thường không thể làm được - chỉ có AI Agent mới thực hiện được
+🗂  Tự Động Tạo Action Plan
+Antigravity tự động tạo Tab mới
+trong Google Sheet để lập Kế hoạch
+hành động chi tiết cho từng dự án có
+vấn đề — bao gồm người phụ trách,
+deadline và giải pháp đề xuất.
+🏆  Infographic Vinh Danh Leader
+Thiết kế Infographic tự động vinh
+danh Leader xuất sắc nhất dựa trên
+dữ liệu Online — hiệu suất cao, chi
+phí tối ưu — trực tiếp từ Google
+Sheet.
+📄  Xuất Báo Cáo PDF
+Tự động xuất báo cáo PDF chuyên
+nghiệp từ dữ liệu vừa phân tích —
+định dạng đẹp, có logo, bảng tổng
+hợp và biểu đồ — sẵn sàng gửi cho
+ban lãnh đạo.
+
+=== PAGE 27 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 28 ===
+ĐỀ BÀI THỰC HÀNH: KIỂM TOÁN TÀI NGUYÊN AI (AI RESOURCE AUDIT)
+1. TÌNH HUỐNG
+Công ty bạn đang sử dụng rất nhiều tài nguyên AI (GPT-5, Claude 4...). Bạn có một file log 1000 dòng ghi lại lịch sử sử dụng của nhân viên.
+Nhiệm vụ của bạn là xây dựng hệ thống kiểm toán tự động để báo cáo cho các bộ phận: Tài chính, Kỹ thuật và Giám đốc. Link dữ liệu: Tại đây
+2. NHIỆM VỤ CỦA HỌC VIÊN 
+Tác vụ 1: Xây dựng Bộ não (AI Skill Building)
+Hãy tạo một file audit_skill_student.md để huấn luyện AI của bạn:
+Định nghĩa thế nào là chi tiêu "Lãng phí" (Ví dụ: Cost > $100).
+Đưa ra các quy tắc để AI tự động chẩn đoán lỗi dựa trên dữ liệu.
+Tác vụ 2: Lập trình Báo cáo (Google Apps Script)
+Viết code để tự động trích xuất dữ liệu ra 2 Sheet mới:
+Sheet "High_Spenders": Liệt kê những người tiêu > $100 (Gồm 3 cột: User_ID, Model, Cost).
+Sheet "Model_Summary": Tính tổng chi phí cho từng loại Model AI (GPT-5, Claude 4...).
+Tác vụ 3: Thông báo Đa kênh (Multi-Recipient Email)
+Thiết lập hệ thống tự động gửi Email tổng hợp kết quả:
+Gửi cho (To): 2-3 email giả định (tự sử dụng email cá nhân để test)
+Đồng kính gửi (CC): Email cá nhân của bạn.
+Nội dung: Báo cáo số lượng người tiêu vượt mức và kèm Link dẫn trực tiếp tới file Google Sheet và file cứng đính kèm
+3. TIÊU CHUẨN HOÀN THÀNH 
+Dữ liệu được lọc sạch, báo cáo trình bày gọn gàng, có màu sắc chuyên nghiệp.
+Email được gửi thành công tới đúng các địa chỉ yêu cầu.
+Học viên giải thích được sơ đồ phân cấp (Hierarchy) trong hệ thống mình vừa xây dựng.
+
+=== PAGE 29 ===
+HƯỚNG DẪN
+Chi Tiết Nhiệm Vụ 1: AI Skill Building
+File audit_skill_student.md
+Trước khi viết code, hãy nghĩ: "Nếu thuê một nhân
+sự AI về làm kiểm toán, mình sẽ dặn nó những gì?"
+File Markdown phải định nghĩa đầy đủ:
+Vai trò: AI là Chuyên gia kiểm soát chi phí
+Tiêu chuẩn: Cost > $100 →  "Nguy hiểm"; Token
+> 1 triệu →  "Cần tối ưu"
+Hành động: Khi thấy lỗi phải đề xuất giải pháp
+cụ thể
+💡  Ví Dụ Giải Pháp Đề Xuất
+Cost > $100 được phát hiện tại nhân viên X — Đề
+xuất: Chuyển từ GPT-4 sang GPT-3.5 để tiết kiệm
+~70% chi phí
+Token > 1 triệu — Đề xuất: Rút ngắn prompt, sử
+dụng kỹ thuật chunking để giảm token tiêu thụ
+Tư duy Skill Building này chính là nền tảng để AI sau
+này có thể tự làm kiểm toán thay bạn hoàn toàn.
+
+=== PAGE 30 ===
+HƯỚNG DẪN
+Chi Tiết Nhiệm Vụ 2: Google Apps Script
+📤  Trích Xuất — Sheet
+High_Spenders
+Sử dụng cấu hình mảng (Arrays)
+để lọc dữ liệu. Tạo Sheet mới liệt
+kê tất cả nhân viên có chi tiêu 
+>$100, bao gồm tên, model sử
+dụng, tổng chi phí và số token.
+📊  Tổng Hợp — Sheet
+Model_Usage
+Sử dụng đối tượng (Object) để tích
+lũy tổng chi phí theo
+Model_Name. Tính tổng chi tiêu
+cho GPT-5, Claude 4, Llama 3... để
+biết model nào tốn kém nhất.
+🎨  Định Dạng — Auto Format
+Tô màu đỏ cho tiêu đề báo cáo, tự
+động căn chỉnh độ rộng cột
+(autoResizeColumns), in đậm
+header và freeze hàng đầu để dễ
+đọc.
+Hệ thống báo cáo tự động với 3 chức năng chính cần lập trình
+Thiết lập Trigger On Edit để hệ thống tự chạy mỗi khi có dữ liệu mới được nhập vào — không cần can thiệp thủ công.
+
+=== PAGE 31 ===
+HƯỚNG DẪN
+Chi Tiết Nhiệm Vụ 3: Multi-Recipient Email
+Hệ thống báo cáo tự động với 3 chức năng chính cần lập trình
+Cấu Hình Gửi Email
+To (Gửi cho): Sếp + Kế toán + Trưởng phòng Kỹ
+thuật
+CC (Đồng kính gửi): Email của chính học viên
+Subject: Báo cáo Kiểm toán AI Resource —
+[Ngày tháng]
+📋  Nội Dung Email Bắt Buộc
+✅  Tổng số tiền thất thoát (tính từ
+High_Spenders)
+✅  Link trực tiếp dẫn tới file Google Sheet
+✅  File cứng đính kèm
+✅  Danh sách Top nhân viên chi tiêu cao nhất
+✅  Model AI nào đang tốn kém nhất
+✅  Đề xuất hành động tiết kiệm chi phí
+
+=== PAGE 32 ===
+BÀI TẬP VỀ NHÀ: KIỂM TOÁN HIỆU SUẤT ĐA KÊNH
+1. YÊU CẦU DỮ LIỆU
+Học viên tự tìm hoặc tạo bộ dữ liệu (ít nhất 200 dòng) về Chiến dịch Marketing hoặc Kinh doanh, bao gồm các cột:
+Tên, Chi phí, Doanh thu/Kết quả.
+2. NHIỆM VỤ THỰC HIỆN 
+Audit: Tự động tô đỏ các dòng có hiệu suất kém (Ví dụ: Doanh thu < Chi phí).
+Report: Trích xuất các dòng hiệu suất cao ra một Sheet riêng tên là Top_Performance.
+Notify: Gửi 1 Email báo cáo tổng hợp cho 2 người sếp và CC cho chính mình (Kèm link file).
+3. NHIỆM VỤ TƯ DUY 
+Tạo file audit_logic.md định nghĩa vai trò và các quy tắc để AI tự động đánh giá dữ liệu này.
+4. NỘP BÀI
+Link file Google Sheet chứa Code và Dữ liệu.
+File Skill AI.
+
+=== PAGE 33 ===
+ĐỀ BÀI GIỮA KỲ
+
+=== PAGE 34 ===
+Hãy hoàn thành Bài test giữa kỳ sau đây: LINK
+Bài tập này chiếm 10% trọng số điểm toàn khóa.
+Học viên cần hoàn thành bài test này để đủ điều kiện tham gia Project cuối khóa
+
+=== PAGE 35 ===
+THANK YOU!

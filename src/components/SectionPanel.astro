@@ -1,0 +1,18 @@
+---
+interface Props {
+  title: string;
+  html: string;
+  tone?: "default" | "warning" | "success";
+}
+
+const { title, html, tone = "default" } = Astro.props;
+---
+
+{
+  html?.trim() && (
+    <section class:list={["panel", `panel-${tone}`]}>
+      <h2>{title}</h2>
+      <div class="rich-text" set:html={html} />
+    </section>
+  )
+}

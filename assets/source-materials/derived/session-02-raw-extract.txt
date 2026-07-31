@@ -1,0 +1,288 @@
+SOURCE: MindX_AG_Slide 2.pdf
+PAGES: 23
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 2
+VẬN HÀNH & TỐI ƯU
+AGENTIC WORKSPACE QUA PDCA
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Hiểu và áp dụng mô hình PDCA trong công việc hàng ngày
+Plan – Do – Check – Act để tổ chức và cải thiện quy trình làm việc một cách
+có hệ thống.
+MỤC TIÊU
+HỌC TẬP
+Cài đặt và làm quen với Google Antigravity
+(hiểu giao diện, workspace, cách tương tác với AI) để sẵn sàng áp dụng vào các
+bài toán thực tế.
+Vận dụng AI để xử lý trọn vẹn một luồng công việc thực tế
+Thực hiện tìm kiếm dữ liệu, làm sạch →  phân tích →  chuyển đổi thành báo
+cáo Dashboard một cách nhanh chóng và có cấu trúc.
+
+=== PAGE 3 ===
+Phần 1:
+3 cấp độ khai thác AI
+
+=== PAGE 4 ===
+Câu hỏi ôn tập
+Click để xem và trả lời câu hỏi →
+
+=== PAGE 5 ===
+AGENTIC AI LÀ GÌ?
+Agentic AI = AI có khả năng tự thực
+hiện nhiệm vụ — giống như một nhân
+viên junior thông minh và chăm chỉ.
+1
+2
+3
+4
+Hiểu mục tiêu
+Nắm bắt yêu cầu và ngữ cảnh công việc
+Lập kế hoạch
+Tự phân tích và xây dựng các bước thực hiện
+Thực hiện
+Tự động xử lý từng bước theo kế hoạch
+Trả kết quả
+Xuất output hoàn chỉnh theo yêu cầu
+AI = nhân viên số có thể: Xử lý end-to-end, Làm nhiều bước liên tiếp, Được giao việc rõ ràng
+
+=== PAGE 6 ===
+MỘT WORKFLOW AI GỒM NHỮNG GÌ?
+Để AI hoạt động hiệu quả, mỗi workflow cần
+đủ 3 thành phần cốt lõi. 
+Thiếu bất kỳ một yếu tố nào, AI sẽ cho ra kết
+quả sai hoặc không đầy đủ.
+INPUT
+Dữ liệu đầu vào: file, văn
+bản, số liệu, hình ảnh...
+TASK
+Nhiệm vụ cụ thể: phân
+tích, tổng hợp, tạo nội
+dung...
+OUTPUT
+Kết quả mong muốn: báo cáo, dashboard, file Excel...
+
+=== PAGE 7 ===
+Phần 2:
+PDCA Làm việc hiệu quả với AI
+
+=== PAGE 8 ===
+Vì sao cần Task Queue Trong Agent?
+
+=== PAGE 9 ===
+Khái niệm PDCA
+PDCA là mô hình quản lý lặp đi lặp lại dùng để kiểm soát và cải tiến liên tục các quy trình, sản phẩm hoặc dịch vụ
+trong doanh nghiệp.
+Là một vòng tuần hoàn khép kín, giúp các cá nhân và tổ chức không ngừng nâng cao chất lượng theo thời gian.
+Plan - Lên kế hoạch
+ Xác định mục tiêu, phân tích vấn đề
+và lên phương án hành động chi tiết.
+Do - Thực hiện
+Triển khai kế hoạch vào thực tế, ưu tiên
+áp dụng thử nghiệm trên quy mô nhỏ
+để kiểm soát rủi ro.
+Act - Cải tiến
+Chuẩn hóa quy trình nếu thành
+công, hoặc điều chỉnh kế hoạch
+và bắt đầu vòng lặp mới nếu thất
+bại để liên tục cải tiến.
+Check - Kiểm tra
+Đánh giá kết quả thực tế so với mục
+tiêu ban đầu để đo lường hiệu quả và
+tìm ra nguyên nhân của những điểm
+chưa đạt.
+
+=== PAGE 10 ===
+Plan - Xác định rõ việc cần làm
+Plan là bước quan trọng nhất
+Định hướng chính xác: Xác định đúng vấn đề
+và mục tiêu từ đầu để tránh đi sai hướng.
+Tạo thước đo: Thiết lập các tiêu chí cụ thể làm
+cơ sở bắt buộc để đánh giá kết quả ở bước
+"Check".
+Kiểm soát rủi ro: Dự báo trước các khó khăn
+để chuẩn bị sẵn phương án dự phòng.
+Tối ưu nguồn lực: Tính toán và phân bổ hợp lý
+nhân sự, thời gian, chi phí để tránh lãng phí.
+3 CÂU HỎI CẦN TRẢ LỜI TRONG PLAN:
+1. Mục tiêu là gì?
+Kết quả cuối cùng bạn muốn đạt được là gì? Cụ
+thể và đo lường được.
+2.Output mong muốn?
+Định dạng, độ dài, cấu trúc của kết quả đầu ra
+cần như thế nào?
+3.Dữ liệu cần gì?
+Cần cung cấp những thông tin, file, dữ liệu nào
+cho AI để xử lý?
+
+=== PAGE 11 ===
+DO - AI thực hiện công việc
+Chạy Prompt
+Gửi yêu cầu đã được chuẩn
+bị kỹ lưỡng từ bước Plan
+cho AI thực thi.
+Đây là giai đoạn AI bắt đầu làm việc. thực thi toàn bộ công việc bạn dã lên kế hoạch. Nhiệm vụ của bạn lúc này là
+quan sát và không can thiệp khi không cần thiết.
+Xử lý dữ liệu
+AI tự động phân tích, tổng
+hợp và xử lý toàn bộ dữ
+liệu đầu vào theo yêu cầu.
+Tạo kết quả
+AI xuất ra output theo
+đúng định dạng và yêu cầu
+đã được chỉ định trong
+prompt.
+Tập trung vào tư duy chiến lược và kiểm soát chất lượng
+
+=== PAGE 12 ===
+CHECK - Đánh giá kết quả
+Đây là bước bảo vệ chất lượng công việc của bạn.
+Kiểm tra kết quả và trả lời 3 câu hỏi:
+Có đúng không?
+Kiểm tra tính chính xác của
+thông tin, số liệu và nội dung
+AI tạo ra. So sánh với nguồn
+gốc dữ liệu ban đầu.
+Có thiếu không?
+Xem xét xem AI có bỏ sót yêu
+cầu nào không. Đối chiếu với
+danh sách yêu cầu ban đầu
+trong bước Plan.
+Có hợp lý không?
+Đánh giá tính logic và thực tế
+của kết quả. Kết quả có phù
+hợp với ngữ cảnh và mục tiêu
+ban đầu không?
+
+=== PAGE 13 ===
+ACT - Cải tiến hệ thống
+Act không có nghĩa là làm lại từ đầu. 
+Đây là bước nâng cấp thông minh dựa trên những
+gì bạn học được từ bước Check.
+Sửa prompt
+Điều chỉnh cách diễn đạt, thêm chi tiết hoặc
+làm rõ yêu cầu để AI hiểu đúng hơn lần sau.
+Bổ sung yêu cầu
+Thêm các ràng buộc, điều kiện hoặc ví dụ cụ
+thể để kết quả sát với kỳ vọng hơn.
+Tối ưu output
+Cải thiện định dạng, cấu trúc và chất lượng
+của kết quả đầu ra cho phù hợp hơn.
+Triết lý
+Mỗi lần Act, bạn đang xây dựng một hệ thống
+AI tốt hơn - không phải làm lại từ đầu mà là
+nâng cấp liên tục.
+Sau 5-10 vòng lặp, bạn sẽ có một workflow AI
+gần như hoàn hảo cho công việc của mình.
+
+=== PAGE 14 ===
+Vòng lặp PDCA
+AI hiệu quả không đến từ một lần thử, mà đến từ việc lặp lại PDCA liên tục. 
+Mỗi vòng lặp là một lần cải tiến.
+Tối ưu câu lệnh: 
+Thử nghiệm và chỉnh sửa liên tục để AI cho ra
+kết quả chính xác, ổn định và không bị lỗi.
+Khắc phục lỗi phối hợp: 
+Dễ dàng tìm ra điểm tắc nghẽn và sửa lỗi khi
+cho nhiều AI kết hợp làm việc cùng nhau.
+Kiểm soát rủi ro:
+Chạy thử nghiệm có giám sát ở quy mô nhỏ
+trước khi giao cho AI tự động xử lý toàn bộ
+công việc.
+Đóng gói quy trình:
+Lưu lại các bước phối hợp thành công thành
+một khuôn mẫu chuẩn để áp dụng nhanh
+cho các dự án sau.
+
+=== PAGE 15 ===
+ỨNG DỤNG VÒNG LẶP PDCA HIỆU QUẢ VỚI
+
+=== PAGE 16 ===
+Tải GG Antigravity: https://antigravity.google/
+
+=== PAGE 17 ===
+Giao diện GG Antigravity
+
+=== PAGE 18 ===
+Phiên làm việc GG Antigravity
+
+=== PAGE 19 ===
+Mô tả: Bạn là Business Analyst, nhận được file dữ liệu bán hàng từ hệ thống.
+Nhiệm vụ của bạn là sử dụng AI để:
+Làm sạch dữ liệu 
+Tạo dashboard trực quan 
+Phân tích và đưa ra insight 
+Yêu cầu: Vận dụng mô hình PDCA
+Làm sạch dữ liệu (kiểm tra lỗi, format) 
+Tạo dashboard gồm: 
+Doanh thu theo thời gian 
+Top sản phẩm 
+So sánh theo khu vực/kênh 
+Đưa ra: 
+3 insight quan trọng 
+2 đề xuất hành động 
+Output mong muốn:
+1 file Excel có dashboard 
+1 phần insight rõ ràng, dễ hiểu
+Demo: Agentic AI xử lý & phân tích dữ liệu kinh doanh
+File dữ liệu: Tại đây
+
+=== PAGE 20 ===
+Phần 3: 
+THỰC HÀNH
+
+=== PAGE 21 ===
+Thực hành: Agentic Workspace tự tìm dữ liệu & chuẩn hóa thành file Excel
+Mô tả:
+Bạn KHÔNG có sẵn dữ liệu.
+Hãy sử dụng AI để:
+Tìm kiếm dữ liệu trên internet 
+Chuẩn hóa thành bảng Excel 
+Làm sạch và sẵn sàng phân tích 
+Yêu cầu: Dùng mô hình PDCA, thực hiện:
+Output mong muốn:
+1 file Excel sạch, có cấu trúc rõ ràng 
+Dữ liệu có thể dùng để phân tích 
+ 1. Chọn 1 chủ đề (ví dụ): 
+Quán cà phê Quận 1 
+Sản phẩm skincare 
+Khóa học AI tại Việt
+Nam 
+Hoặc chủ đề anh chị
+muốn
+2. Thu thập tối thiểu
+15–20 dữ liệu 
+3. Chuẩn hóa thành
+bảng gồm các cột: 
+Tên 
+Giá 
+Địa điểm / Thương
+hiệu 
+Đánh giá (nếu có) 
+4. Làm sạch dữ liệu: 
+Format giá đồng
+nhất 
+Loại bỏ dữ liệu trùng 
+Sắp xếp hợp lý 
+Hướng dẫn: tạo Workspace mới + Ứng dụng công thức prompt theo PDCA để thực hiện
+
+=== PAGE 22 ===
+Bài tập về nhà: Nâng cấp file dữ liệu đã làm trên lớp bằng Agentic AI 
+Yêu cầu:
+Sử dụng lại file Excel đã tạo ở bài Thực hành trên
+lớp, dùng Agentic Workspace để:
+Kiểm tra và làm sạch lại dữ liệu 
+Phân tích (top, phân loại, so sánh) 
+Viết 3 insight chính 
+Tạo thêm 1 output (Word / PPT / summary) 
+Lưu ý:
+Phải chỉnh sửa prompt ít nhất 1 lần (PDCA)
+Output:
+File Excel nâng cấp 
+Insight + output bổ sung 
+Prompt đã sử dụng
+
+=== PAGE 23 ===
+THANK YOU!

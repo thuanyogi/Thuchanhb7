@@ -1,0 +1,300 @@
+---
+---
+<div class="pdca-diagram-container">
+  <h3>🔄 Chu trình PDCA trong Vận hành Agent</h3>
+  <p class="diagram-intro">Rê chuột vào từng bước trong chu trình bên dưới để xem chi tiết cách áp dụng PDCA giúp cải tiến chất lượng đầu ra của AI Agent liên tục.</p>
+  
+  <div class="diagram-wrapper">
+    <div class="svg-container">
+      <svg viewBox="0 0 400 400" width="100%" height="100%">
+        <!-- Central connection point -->
+        <circle cx="200" cy="200" r="45" fill="var(--bg-base)" stroke="var(--border-strong)" stroke-width="2" />
+        <text x="200" y="195" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-primary)">AGENT</text>
+        <text x="200" y="213" text-anchor="middle" font-size="10" font-weight="600" fill="var(--accent-primary)">CYCLE</text>
+
+        <!-- Quadrant 1: PLAN (Top Right) -->
+        <g class="quadrant plan" data-step="plan">
+          <path d="M 200,200 L 200,60 A 140,140 0 0,1 340,200 Z" fill="none" stroke="var(--accent-primary)" stroke-width="3" />
+          <path class="quadrant-fill" d="M 200,200 L 200,60 A 140,140 0 0,1 340,200 Z" />
+          <text x="260" y="130" font-size="14" font-weight="700">P - PLAN</text>
+          <text x="260" y="150" font-size="10" class="subtext">Lập kế hoạch</text>
+        </g>
+
+        <!-- Quadrant 2: DO (Bottom Right) -->
+        <g class="quadrant do" data-step="do">
+          <path d="M 200,200 L 340,200 A 140,140 0 0,1 200,340 Z" fill="none" stroke="var(--accent-teal)" stroke-width="3" />
+          <path class="quadrant-fill" d="M 200,200 L 340,200 A 140,140 0 0,1 200,340 Z" />
+          <text x="260" y="265" font-size="14" font-weight="700">D - DO</text>
+          <text x="260" y="285" font-size="10" class="subtext">Thực thi</text>
+        </g>
+
+        <!-- Quadrant 3: CHECK (Bottom Left) -->
+        <g class="quadrant check" data-step="check">
+          <path d="M 200,200 L 200,340 A 140,140 0 0,1 60,200 Z" fill="none" stroke="var(--accent-indigo)" stroke-width="3" />
+          <path class="quadrant-fill" d="M 200,200 L 200,340 A 140,140 0 0,1 60,200 Z" />
+          <text x="140" y="265" text-anchor="end" font-size="14" font-weight="700">C - CHECK</text>
+          <text x="140" y="285" text-anchor="end" font-size="10" class="subtext">Đánh giá</text>
+        </g>
+
+        <!-- Quadrant 4: ACT (Top Left) -->
+        <g class="quadrant act" data-step="act">
+          <path d="M 200,200 L 60,200 A 140,140 0 0,1 200,60 Z" fill="none" stroke="var(--accent-orange, #f97316)" stroke-width="3" />
+          <path class="quadrant-fill" d="M 200,200 L 60,200 A 140,140 0 0,1 200,60 Z" />
+          <text x="140" y="130" text-anchor="end" font-size="14" font-weight="700">A - ACT</text>
+          <text x="140" y="150" text-anchor="end" font-size="10" class="subtext">Cải tiến</text>
+        </g>
+
+        <!-- Outer Arrow Circles to show flow direction -->
+        <path d="M 200,45 A 155,155 0 0,1 355,200" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="5 5" />
+        <path d="M 355,200 A 155,155 0 0,1 200,355" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="5 5" />
+        <path d="M 200,355 A 155,155 0 0,1 45,200" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="5 5" />
+        <path d="M 45,200 A 155,155 0 0,1 200,45" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="5 5" />
+      </svg>
+    </div>
+
+    <!-- Explanatory text panel -->
+    <div class="pdca-info-panel">
+      <div class="pdca-info-box active" id="pdca-plan">
+        <span class="info-badge plan-badge">Plan</span>
+        <h4>Thiết kế & Lên kế hoạch</h4>
+        <ul>
+          <li><strong>Mục tiêu:</strong> Xác định cụ thể đầu ra mong muốn của Agent (ví dụ: định dạng báo cáo, độ chính xác).</li>
+          <li><strong>Dữ liệu:</strong> Chuẩn bị sẵn bộ câu hỏi test hoặc hồ sơ đầu vào mẫu.</li>
+          <li><strong>Prompting:</strong> Soạn thảo các prompt ban đầu dựa trên guideline tuyển dụng.</li>
+        </ul>
+      </div>
+
+      <div class="pdca-info-box" id="pdca-do">
+        <span class="info-badge do-badge">Do</span>
+        <h4>Thực hiện chạy thử nghiệm</h4>
+        <ul>
+          <li><strong>Vận hành:</strong> Đẩy prompt và dữ liệu mẫu vào Agent chạy thử thực tế.</li>
+          <li><strong>Ghi chép:</strong> Lưu lại log gồm: Prompt đầu vào, Tool call được gọi, và kết quả thô AI trả về.</li>
+          <li><strong>Tránh can thiệp:</strong> Để AI chạy tự động hoàn toàn nhằm phát hiện đúng hành vi tự nhiên của nó.</li>
+        </ul>
+      </div>
+
+      <div class="pdca-info-box" id="pdca-check">
+        <span class="info-badge check-badge">Check</span>
+        <h4>Đánh giá chất lượng đầu ra</h4>
+        <ul>
+          <li><strong>So khớp:</strong> So sánh kết quả AI trả về với bảng kết quả mong đợi (Ground Truth).</li>
+          <li><strong>Nhận diện lỗi:</strong> Đánh giá xem AI bị ảo tưởng (hallucination), sai số năm kinh nghiệm, hay bỏ sót quy tắc nào.</li>
+          <li><strong>Ghi log:</strong> Lưu lỗi vào file <code>pdca-log.md</code> theo bảng lỗi rõ ràng.</li>
+        </ul>
+      </div>
+
+      <div class="pdca-info-box" id="pdca-act">
+        <span class="info-badge act-badge">Act</span>
+        <h4>Tinh chỉnh & Cải tiến hệ thống</h4>
+        <ul>
+          <li><strong>Hành động:</strong> Sửa prompt để khắc phục lỗi cụ thể vừa phát hiện.</li>
+          <li><strong>Áp rules:</strong> Viết thêm các rule cứng dạng CLEAR để bắt buộc Agent thực thi đúng logic kỹ thuật.</li>
+          <li><strong>Tiếp tục chu kỳ:</strong> Chuyển sang vòng PDCA tiếp theo với prompt/rules mới đã tinh chỉnh.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pdca-diagram-container {
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-top: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pdca-diagram-container h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-xs);
+    color: var(--text-primary);
+  }
+
+  .diagram-intro {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+  }
+
+  .diagram-wrapper {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .svg-container {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .quadrant {
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .quadrant text {
+    fill: var(--text-primary);
+    transition: fill 0.3s;
+    pointer-events: none;
+  }
+
+  .quadrant .subtext {
+    fill: var(--text-muted);
+  }
+
+  .quadrant-fill {
+    fill: transparent;
+    transition: fill 0.3s ease;
+    pointer-events: visiblePainted;
+  }
+
+  /* Plan hover styling */
+  .quadrant.plan:hover .quadrant-fill,
+  .quadrant.plan.active .quadrant-fill {
+    fill: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  }
+  .quadrant.plan:hover text,
+  .quadrant.plan.active text {
+    fill: var(--accent-primary);
+  }
+
+  /* Do hover styling */
+  .quadrant.do:hover .quadrant-fill,
+  .quadrant.do.active .quadrant-fill {
+    fill: color-mix(in srgb, var(--accent-teal) 10%, transparent);
+  }
+  .quadrant.do:hover text,
+  .quadrant.do.active text {
+    fill: var(--accent-teal-dark, var(--accent-teal));
+  }
+
+  /* Check hover styling */
+  .quadrant.check:hover .quadrant-fill,
+  .quadrant.check.active .quadrant-fill {
+    fill: color-mix(in srgb, var(--accent-indigo) 10%, transparent);
+  }
+  .quadrant.check:hover text,
+  .quadrant.check.active text {
+    fill: var(--accent-indigo);
+  }
+
+  /* Act hover styling */
+  .quadrant.act:hover .quadrant-fill,
+  .quadrant.act.active .quadrant-fill {
+    fill: color-mix(in srgb, var(--accent-orange, #f97316) 10%, transparent);
+  }
+  .quadrant.act:hover text,
+  .quadrant.act.active text {
+    fill: var(--accent-orange, #f97316);
+  }
+
+  /* Information panel */
+  .pdca-info-panel {
+    background: var(--bg-inset);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pdca-info-box {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .pdca-info-box.active {
+    display: block;
+  }
+
+  .info-badge {
+    display: inline-flex;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: var(--space-sm);
+  }
+
+  .plan-badge { background: var(--accent-primary); }
+  .do-badge { background: var(--accent-teal); }
+  .check-badge { background: var(--accent-indigo); }
+  .act-badge { background: var(--accent-orange, #f97316); }
+
+  .pdca-info-box h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-sm);
+    color: var(--text-primary);
+  }
+
+  .pdca-info-box ul {
+    margin: 0;
+    padding-left: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .pdca-info-box li {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 820px) {
+    .diagram-wrapper {
+      grid-template-columns: 1fr;
+    }
+    .svg-container {
+      max-width: 280px;
+      margin-bottom: var(--space-md);
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const quadrants = document.querySelectorAll('.quadrant');
+    const infoBoxes = document.querySelectorAll('.pdca-info-box');
+
+    function setActiveStep(step) {
+      quadrants.forEach(q => {
+        if (q.dataset.step === step) {
+          q.classList.add('active');
+        } else {
+          q.classList.remove('active');
+        }
+      });
+
+      infoBoxes.forEach(box => {
+        if (box.id === `pdca-${step}`) {
+          box.classList.add('active');
+        } else {
+          box.classList.remove('active');
+        }
+      });
+    }
+
+    quadrants.forEach(quad => {
+      quad.addEventListener('mouseenter', () => {
+        const step = quad.dataset.step;
+        if (step) setActiveStep(step);
+      });
+    });
+  });
+</script>

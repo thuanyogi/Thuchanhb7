@@ -1,0 +1,443 @@
+SOURCE: MindX_AG_Lesson 4.pdf
+PAGES: 30
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 4
+THIẾT KẾ WORKFLOW
+TỰ ĐỘNG VỚI AI
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Kỹ năng thiết kế (mô hình OIPO)
+Ứng dụng mô hình OIPO để phân tích và thiết kế một quy trình làm việc bài
+bản, có cấu trúc rõ ràng.
+MỤC TIÊU
+HỌC TẬP
+Tư duy về Workflow
+Trình bày được khái niệm cốt lõi của Workflow và giải thích được tầm quan
+trọng của việc chuẩn hóa quy trình đối với hiệu suất công việc hiện đại.
+Kỹ năng thực thi (hệ thống tự động)
+Xây dựng và vận hành thành công một hệ thống tự động hóa cơ bản (từ
+bước thiết lập đầu vào đến khi ra kết quả cuối cùng).
+
+=== PAGE 3 ===
+Phần 1:
+WORKFLOW VÀ OIPO
+
+=== PAGE 4 ===
+Tình huống: Khi thực hiện việc tìm kiếm thông tin, nghiên cứu, bạn thường làm những công việc sau:
+Bạn có gặp vấn đề này? 
+Tự tìm tin, tài liệu mỗi ngày
+Mở hàng chục tab, tìm kiếm thủ công các
+nguồn tin tức khác nhau
+Đọc và lọc thông tin
+Đọc tất cả các bài viết để lọc những thông tin
+quan trọng, cần cho chủ đề đang tìm kiếm
+Báo cáo
+Sau khi lọc xong, tổng hợp, phân tích và gửi
+lại báo cáo cho những đối tượng liên quan
+Lặp lại
+Toàn bộ quy trình lặp lại mỗi khi cần
+thực hiện
+1
+23
+4
+
+=== PAGE 5 ===
+Định nghĩa WORKFLOW
+Workflow = Luồng công việc có thứ tự rõ ràng, từng bước được xác định cụ thể để đạt được một mục tiêu nhất định.
+Workflow giúp chuẩn hóa công việc một cách logic, quy định rõ ràng: 
+Bắt đầu từ đâu?
+Bước tiếp theo là gì?
+Đạt điều kiện gì mới được đi tiếp?
+Điểm kết thúc ở đâu?
+Workflow To-do list
+Liệt kê danh sách các công việc
+phải làm
+Quy định chính xác cách thức và
+thứ tự của các công việc
+
+=== PAGE 6 ===
+O
+-
+Objective
+Mô hình OIPO
+OIPO là khung tư duy giúp bóc tách và thiết kế bất kỳ quay trình làm việc nào (workflow) một cách có hệ thống.
+I
+- 
+Input
+P
+- 
+Process
+O
+- 
+Output
+Mục tiêu:
+Kết quả cuối cùng mà
+luồng công việc này phải
+đạt được là gì?
+ 
+Xác định một mục tiêu
+duy nhất và có thể đo
+lường được cho toàn bộ
+quy trình.
+Dữ liệu đầu vào: 
+Nguồn dữ liệu gốc cần lấy
+từ đâu và ở định dạng
+nào?
+Thu thập và chỉ định chính
+xác nguồn cấp thông tin.
+Trình tự cốt lõi: 
+Dữ liệu đầu vào cần trải
+qua các bước biến đổi nào
+để trở thành kết quả cuối?
+Thiết lập tuần tự các bước
+thực thi. Phân định rõ
+ràng: tác vụ nào do hệ
+thống tự động chuyển đổi,
+tác vụ nào yêu cầu con
+người kiểm duyệt (review)
+Định dạng đầu ra:
+Kết quả cuối cùng được
+xuất ra dưới hình thức nào
+và lưu trữ/gửi đến đâu?
+Định dạng và phân phối
+thành phẩm đến đúng
+điểm tiếp nhận.
+
+=== PAGE 7 ===
+O
+-
+Objective
+Mô hình OIPO 
+- Ví dụ thực tế
+I
+- 
+Input
+P
+- 
+Process
+O
+- 
+Output
+Mục tiêu:
+Tự động hóa việc cập nhật tin
+tức công nghệ AI mới nhất
+toàn cầu hàng ngày
+Dữ liệu đầu vào: 
+Trích xuất dữ liệu  bài viết
+thô (Resource) liên tục từ
+Google News (hoặc hệ thống
+ERP của doanh nghiệp).
+Trình tự cốt lõi: 
+Thiết lập chuỗi xử lý thông minh qua
+3 bước:
+Bước 1: Sử dụng Python script để
+tự động kết nối và lấy dữ liệu thô  
+từ Google News
+Bước 2: Chuyển tiếp dữ liệu thô
+sang Dịch AI, chuyển ngữ và tóm
+tắt những ý chính quan trọng
+nhất.
+Bước 3: Định dạng nội dung
+thành các đoạn ngắn, dễ đọc
+kèm hình ảnh trực quan.
+Định dạng đầu ra:
+Phân phối bản tin hoàn thiện
+đến người dùng.
+Điểm đến: Sử dụng Telegram
+Bot để tự động "bắn" bản tin đã
+hoàn thiện vào nhóm làm việc
+đúng 10:00 sáng hàng ngày.
+
+=== PAGE 8 ===
+Định nghĩa Automation
+Automation = Hệ thống tự chạy
+Một khi luồng công việc (workflow) được thiết lập, hệ
+thống sẽ tự thực hiện các tác vụ theo lịch trình hoặc
+điều kiện đã định sẵn
+Ví dụ thực tế
+Mỗi ngày lúc 10h sáng, hệ thống tự động:
+1. Kết nối Google News
+2. Lấy tin về AI mới nhất
+3. Dịch sang tiếng Việt, tóm tắt ý quan trọng, tổng
+hợp thành bản tin
+4. Gửi lên nhóm Telegram
+
+=== PAGE 9 ===
+3 cấp độ Automation
+Cấp 1: Manual
+Thực hiện công việc một cách kỷ luật theo trình tự nhất định.
+Cần: Viết SOP một cách chuẩn xác
+Kiến thức: Kỹ năng phân tích công việc, SOP
+Cấp 2: Semi-auto
+Máy làm những việc lặp lại, con người đóng vai trò "Trạm kiểm soát".
+Cần: Xác định các bước tốn thời gian nhất và giao việc cho công cụ.
+Kiến thức: Prompt Engineering 
+Cấp 3: Full automation
+Hệ thống tự xử lý với nhau dựa trên kịch bản có sẵn.
+Cần: Thiết lập tư duy logic và các điều kiện ràng buộc để hệ thống tự xử lý các tình huống phát
+sinh.
+Kiến thức: Tư duy lập trình/logic (if-then), kiến thức về API, webhook...
+
+=== PAGE 10 ===
+DEMO
+
+=== PAGE 11 ===
+Sai lầm phổ biến khi dùng AI
+Hầu hết người mới bắt đầu làm việc AI để tự động hóa workflow sẽ mắc phải một số sai lầm sau:
+Tập trung vào công cụ
+Học cách sử dụng tool, không
+hiểu nguyên lý hoạt động, hay
+tư duy tự động hóa.
+Khi tool thay đổi, phải học lại từ
+đầu.
+Không thiết kế workflow
+Ngay từ đầu đã tập trung vào
+code hoặc prompt.
+Không vẽ ra workflow trước,
+không bao quát hết được các
+trường hợp, kết quả là hệ thống
+rối rắm, khó bảo trì.
+Input / Output không rõ ràng
+Không xác định rõ dữ liệu đầu
+vào và kết quả mong muốn.
+AI không hiểu mục đích của
+bạn và làm sai
+Kết quả: AI làm sai, hệ thống không hoạt động như mong đợi, mất thời gian debug không cần thiết!
+
+=== PAGE 12 ===
+Nguyên tắc bảo mật
+Khi làm việc với API token và credentials, bảo mật là điều bắt buộc phải tuân thủ ngay từ đầu:
+Không chia sẻ Token:
+Token là chuỗi mã đại diện cho
+quyền kiểm soát với hệ thống.
+ Tuyệt đối không gửi hoặc để lộ
+API/Bot Token qua tin nhắn,
+hình ảnh cho bất kỳ ai.
+Không đính kèm Token vào mã
+nguồn: 
+Tuyệt đối không gắn trực tiếp
+(hard-code) Token vào code khi
+chia sẻ lên GitHub hoặc Google
+Drive. Bắt buộc tách riêng và
+lưu trữ Token trong các tệp
+môi trường cục bộ (file .env).
+Chủ động thu hồi (Revoke)
+Token: 
+Ngay sau khi trình chiếu
+(demo) công khai hoặc có nghi
+ngờ rò rỉ thông tin, phải lập tức
+thu hồi Token cũ và tạo mã mới
+để cắt đứt mọi truy cập trái
+phép.
+Token: Chuỗi ký tự hệ thống cấp phát để xác thực quyền truy cập.
+Hard-code: Thao tác gõ trực tiếp thông tin nhạy cảm vào tệp mã nguồn.
+File .env: Tệp cấu hình ẩn trên máy tính, dùng để lưu trữ an toàn các thông tin bảo mật.
+Revoke: Lệnh hủy bỏ hoàn toàn giá trị của Token cũ.
+
+=== PAGE 13 ===
+Phần 2:
+XÂY DỰNG BOT AI GỬI TIN TỰ ĐỘNG VỚI
+GOOGLE ANTIGRAVITY
+
+=== PAGE 14 ===
+DEMO
+Bối cảnh:
+10h sáng hàng ngày, team được cập nhật 1 tin AI mới để hiểu xu hướng công nghệ.
+Bước 1: Tạo Telegram Bot
+Bước 2: Tạo Telegram Group
+Bước 3: Lấy Chat ID
+Bước 4: Tạo file Code
+Bước 5: Dán Code Python
+Bước 6: Thay Token & Chat ID
+Bước 7: Chạy Code
+Bước 8: Kiểm tra kết quả
+Bước 9: Hẹn giờ tự động
+
+=== PAGE 15 ===
+BƯỚC 1 - TẠO TELEGRAM BOT
+Mở Telegram & Tìm BotFather: 
+Search: BotFather trong thanh tìm kiếm Telegram
+Tạo Bot Mới
+Gõ lệnh: /newbot 
+Nhập tên bot: Tech News Demo Bot
+Đặt Username
+Nhập username (phải có chữ "bot"): 
+VD: tech_news_demo_bot
+Copy BOT TOKEN
+Lưu lại BOT TOKEN được cấp — sẽ dùng trong code
+BƯỚC 2 - TẠO TELEGRAM GROUP
+Tạo Group mới
+Tạo một group Telegram mới
+Đặt tên Group
+Đặt tên: Demo AI Group
+Add Bot vào Group
+Thêm bot vừa tạo vào group
+Nhắn tin test
+Gõ: hello bot để kích hoạt
+Bot phải được add vào group và có ít nhất 1 tin nhắn
+trước khi lấy Chat ID ở bước tiếp theo.
+
+=== PAGE 16 ===
+Bước 3 — Lấy Chat ID
+Mở Chrome
+Dán URL vào thanh địa chỉ trình duyệt
+Thay BOT_TOKEN
+Thay BOT_TOKEN bằng token thật của bạn
+Tìm Chat ID
+Tìm dòng: "chat":{"id":-xxxxxxxx
+Copy Số ID
+Copy số đó →  đây là CHAT_ID của bạn
+URL Cần Dán
+https://api.telegram.org/ botBOT_TOKEN/getUpdates
+Lưu ý: Thay BOT_TOKEN bằng token thật trước khi
+dán vào trình duyệt!
+
+=== PAGE 17 ===
+Bước 4 — Tạo File Code
+Mở GG Antigravity
+Khởi động môi trường lập trình
+Chuột phải Folder
+Click chuột phải vào thư mục dự án
+New File
+Chọn New File từ menu
+Đặt tên File
+Nhập tên: send_telegram.py
+
+=== PAGE 18 ===
+Dùng AI (Chat GPT) + Sử dụng mô hình OIPO để thiết
+kế Workflow
+ Viết đoạn code python
+ Dán toàn bộ đoạn code vừa viết vào file
+send_telegram.py:
+Bước 5 — Dán Code Python
+
+=== PAGE 19 ===
+Prompt mẫu:
+Đóng vai Automation Engineer và viết code Python hoàn chỉnh
+cho workflow theo mô hình OIPO:
+Objective:
+Tạo bot tự lấy 1 tin AI mới nhất, dịch sang tiếng Việt và gửi vào
+Telegram.
+Input:
+- Google News RSS (AI, OpenAI, Google AI)
+- BOT_TOKEN
+- CHAT_ID
+Process:
+- Lấy 1 tin từ RSS
+- Lấy title + link
+- Dịch sang tiếng Việt (không dùng googletrans)
+- Format nội dung
+- Gửi Telegram bằng requests
+Output:
+Viết full code file send_telegram.py chạy được ngay.
+Yêu cầu:
+- Có hàm translate_to_vi, get_ai_news, send_telegram
+- Dùng requests
+- Có xử lý lỗi cơ bản
+- Format:
+🧠  Tin AI hôm nay - dd/mm/yyyy
+• [nội dung]
+Nguồn:
+[link]
+#AI #TinCongNghe
+
+=== PAGE 20 ===
+Bước 6 — Thay Token & Chat ID
+Cách thay giá trị:
+BOT_TOKEN = "1234567890:ABCdef..."
+CHAT_ID = "-1001234567890"
+Dán giá trị thật vào giữa dấu ngoặc kép. Không để
+nguyên chữ "DAN_TOKEN"!
+BOT_TOKEN
+Lấy từ BotFather khi tạo bot
+CHAT_ID
+Lấy từ getUpdates API ở Bước 3
+Bước 7 — Chạy Code
+Mở Terminal
+Vào menu: Terminal →  New
+Terminal
+Cài thư viện
+Gõ lệnh: pip install requests và
+nhấn Enter
+Chạy Script
+Gõ lệnh: python
+send_telegram.py và nhấn Enter
+
+=== PAGE 21 ===
+Giao diện trong GG Antigravity
+
+=== PAGE 22 ===
+Bước 8 - Kiểm tra kết quả
+Cách kiểm tra:
+Mở Telegram group Demo AI Group trên điện thoại
+hoặc máy tính.
+Nếu thấy tin nhắn xuất hiện trong group →  Hệ thống
+đã hoạt động thành công! Bot đã lấy tin, dịch và gửi
+vào group.
+Nếu không thấy tin:
+Kiểm tra lại BOT_TOKEN và CHAT_ID
+Đảm bảo bot đã được add vào group
+Kiểm tra kết nối internet
+Xem lại lỗi trong Terminal
+.
+
+=== PAGE 23 ===
+Bước 9 - Hẹn giờ tự động
+Mở Task Scheduler
+Tìm kiếm "Task Scheduler" trong Windows Start Menu
+Tạo task mới
+Click "Create basic task" và đặt tên cho task
+Cài lịch daily
+Chọn Daily và đặt giờ chạy: 10:00
+Trỏ Đến File .py
+Chọn action "Start a program" và trỏ đến file send_telegram.py
+
+=== PAGE 24 ===
+Giao diện trong Task Scheduler
+
+=== PAGE 25 ===
+Kết quả
+
+=== PAGE 26 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 27 ===
+TỔNG KẾT BUỔI HỌC
+1. Định nghĩa WORKFLOW
+Luồng công việc có thứ tự rõ ràng, từng bước được xác định cụ thể để đạt mục tiêu
+2. Mô hình OIPO
+Objective →  Input →  Process →  Output: khung tư duy để thiết kế các luồng công việc
+3. Ba cấp độ Automation
+Manual →  Semi-auto →  Full automation: lựa chọn cấp độ phù hợp với nhu cầu
+4. Tư duy
+Workflow quan trọng hơn tool
+Bảo mật là điều không thể bỏ qua trong mọi dự án
+5. Demo AI News Bot
+Google News →  Python →  Dịch →  Telegram:  một workflow hoàn chỉnh đã được triển khai
+
+=== PAGE 28 ===
+THỰC HÀNH: AI NEWS BOT 
+Hãy thực hiện nâng cấp bot thành một hệ thống chuyên nghiệp hơn:
+1. Lấy 3 tin AI
+Nâng số lượng tin tức cần tổng hợp lên 3 thay vì 1 như trước
+2.Dịch sang tiếng Việt 
+Dịch toàn bộ tiêu đề và nội dung sang tiếng Việt chính xác
+3.Format rõ ràng
+Trình bày tin nhắn có số thứ tự rõ ràng, dễ đọc 
+4.Có insight
+Thêm phần nhận xét/insight về xu hướng AI
+5.Gửi Telegram
+Gửi nội dung vào Telegram group hàng ngày vào lúc 10h sáng
+Hướng dẫn: Dùng mô hình OIPO để nâng cấp prompt code python và làm các bước như trong demo
+
+=== PAGE 29 ===
+BÀI TẬP VỀ NHÀ
+Hoàn thành AI News Bot nâng cao hoặc tự tạo workflow theo nhu cầu công việc, sử dụng mô hình OIPO để
+thiết kế workflow
+
+=== PAGE 30 ===
+THANK YOU!

@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI4A02 — Buổi 1: Tổng Quan Hệ Thống Agentic Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0B2447;--bg2:#0a1f3d;--bg3:#091b35;
+  --surface:rgba(255,255,255,0.05);--surface2:rgba(255,255,255,0.08);--surface3:rgba(255,255,255,0.12);
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+  --blue:#19376D;--blue2:#3b5998;--blue3:#5b7fc7;
+  --purple:#E14D2A;--purple2:#FD841F;--purple3:#FCAE1E;
+  --cyan:#FD841F;--cyan2:#FCAE1E;
+  --pink:#E14D2A;--pink2:#f06040;
+  --gold:#FCAE1E;--gold2:#FFD369;
+  --green:#4CAF50;--green2:#66BB6A;
+  --text:#f5f5f5;--text2:#b0bec5;--text3:#607d8b;
+  --grad-hero:linear-gradient(135deg,#19376D 0%,#E14D2A 40%,#FD841F 70%,#FCAE1E 100%);
+  --grad-blue:linear-gradient(135deg,#19376D,#3b5998);
+  --grad-purple:linear-gradient(135deg,#E14D2A,#FD841F);
+  --grad-cyan:linear-gradient(135deg,#FD841F,#FCAE1E);
+  --grad-gold:linear-gradient(135deg,#FCAE1E,#E14D2A);
+  --glow-blue:0 0 30px rgba(25,55,109,0.5),0 0 60px rgba(25,55,109,0.2);
+  --glow-purple:0 0 30px rgba(225,77,42,0.5),0 0 60px rgba(225,77,42,0.2);
+  --glow-cyan:0 0 30px rgba(253,132,31,0.4),0 0 60px rgba(253,132,31,0.15);
+  --glow-pink:0 0 30px rgba(225,77,42,0.4),0 0 60px rgba(225,77,42,0.15);
+  --glow-gold:0 0 30px rgba(252,174,30,0.4),0 0 60px rgba(252,174,30,0.15);
+  --r:14px;--r2:20px;--r3:28px;
+}
+[data-theme="light"]{
+  --bg:#f8f9fc;--bg2:#eef1f8;--bg3:#e4e9f4;
+  --surface:rgba(255,255,255,0.85);--surface2:rgba(255,255,255,0.92);--surface3:#ffffff;
+  --border:rgba(11,36,71,0.1);--border2:rgba(11,36,71,0.18);
+  --text:#0B2447;--text2:#2c3e50;--text3:#607d8b;
+  --glow-blue:0 0 20px rgba(25,55,109,0.15);
+  --glow-purple:0 0 20px rgba(225,77,42,0.15);
+  --glow-cyan:0 0 20px rgba(253,132,31,0.15);
+  --glow-pink:0 0 20px rgba(225,77,42,0.15);
+  --glow-gold:0 0 20px rgba(252,174,30,0.15);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* ── ANIMATIONS ── */
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-40px) scale(1.08)}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-25px) rotate(5deg)}}
+@keyframes pulse-glow{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes slide-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes particle-float{0%{transform:translateY(0) translateX(0);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(-120px) translateX(30px);opacity:0}}
+@keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes border-glow{0%,100%{box-shadow:var(--glow-purple)}33%{box-shadow:var(--glow-cyan)}66%{box-shadow:var(--glow-gold)}}
+@keyframes number-pop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+@keyframes check-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes roadmap-pulse{0%,100%{box-shadow:0 0 0 0 rgba(225,77,42,0.4)}70%{box-shadow:0 0 0 12px rgba(225,77,42,0)}}
+
+/* ── FADE IN ── */
+.fade-in{opacity:0;transform:translateY(32px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.fade-in.visible{opacity:1;transform:none}
+.fade-in-delay-1{transition-delay:0.1s}.fade-in-delay-2{transition-delay:0.2s}
+.fade-in-delay-3{transition-delay:0.3s}.fade-in-delay-4{transition-delay:0.4s}
+.fade-in-delay-5{transition-delay:0.5s}.fade-in-delay-6{transition-delay:0.6s}
+.fade-in-delay-7{transition-delay:0.7s}
+
+/* ── LAYOUT ── */
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 24px;position:relative;overflow:hidden}
+.container{max-width:1140px;margin:0 auto;width:100%}
+h1,h2,h3{line-height:1.15;font-weight:800}
+
+/* ── GRADIENT TEXT ── */
+.grad-text{background:var(--grad-hero);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradient-shift 6s ease infinite}
+.grad-text-blue{background:var(--grad-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-text-purple{background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-text-cyan{background:var(--grad-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-text-gold{background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ── SECTION LABELS ── */
+.section-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+.section-eyebrow::before{content:'';display:block;width:24px;height:2px;background:var(--pink);border-radius:2px}
+.section-title{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;margin-bottom:16px}
+.section-sub{font-size:1.05rem;color:var(--text2);max-width:620px;margin-bottom:52px;line-height:1.7}
+.section-divider{width:80px;height:3px;border-radius:2px;background:var(--grad-purple);margin:20px 0;box-shadow:var(--glow-purple)}
+
+/* ── GLASS CARD ── */
+.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r2)}
+.glass-strong{background:rgba(255,255,255,0.07);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r2)}
+[data-theme="light"] .glass{background:rgba(255,255,255,0.7);border-color:rgba(0,0,0,0.08)}
+[data-theme="light"] .glass-strong{background:rgba(255,255,255,0.9);border-color:rgba(0,0,0,0.1)}
+
+/* ── GRADIENT BORDER CARD ── */
+.grad-border{position:relative;border-radius:var(--r2)}
+.grad-border::before{content:'';position:absolute;inset:-1px;border-radius:calc(var(--r2) + 1px);background:var(--grad-hero);background-size:300% 300%;animation:gradient-shift 6s ease infinite;z-index:-1;opacity:0.5}
+.grad-border-blue::before{background:var(--grad-blue);animation:none;opacity:0.6}
+.grad-border-purple::before{background:var(--grad-purple);animation:none;opacity:0.6}
+.grad-border-gold::before{background:var(--grad-gold);animation:none;opacity:0.7}
+
+/* ── TAGS ── */
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:100px;font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase}
+.tag-blue{background:rgba(25,55,109,0.15);color:var(--blue3);border:1px solid rgba(25,55,109,0.35)}
+.tag-purple{background:rgba(225,77,42,0.12);color:var(--purple3);border:1px solid rgba(225,77,42,0.3)}
+.tag-cyan{background:rgba(253,132,31,0.1);color:var(--cyan);border:1px solid rgba(253,132,31,0.3)}
+.tag-gold{background:rgba(252,174,30,0.1);color:var(--gold);border:1px solid rgba(252,174,30,0.3)}
+.tag-pink{background:rgba(225,77,42,0.1);color:var(--pink2);border:1px solid rgba(225,77,42,0.3)}
+.tag-green{background:rgba(76,175,80,0.1);color:var(--green);border:1px solid rgba(76,175,80,0.3)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;font-size:0.9rem;font-weight:700;text-decoration:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);cursor:pointer;border:none;font-family:inherit;letter-spacing:0.02em}
+.btn-primary{background:var(--grad-purple);background-size:200% 200%;color:#fff;box-shadow:var(--glow-purple)}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 0 40px rgba(225,77,42,0.6),0 0 80px rgba(253,132,31,0.2)}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);color:var(--text);transform:translateY(-2px)}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(11,36,71,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(225,77,42,0.15);transition:all 0.3s}
+[data-theme="light"] nav{background:rgba(248,249,252,0.9);border-bottom-color:rgba(11,36,71,0.1)}
+.nav-brand{font-size:0.88rem;font-weight:900;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.03em}
+.nav-links{display:flex;gap:2px;align-items:center}
+.nav-links a{font-size:0.73rem;font-weight:700;color:var(--text3);text-decoration:none;padding:6px 11px;border-radius:8px;transition:all 0.2s;letter-spacing:0.02em}
+.nav-links a:hover,.nav-links a.active{color:var(--pink);background:rgba(225,77,42,0.1)}
+.theme-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--text2);padding:7px 16px;border-radius:100px;font-size:0.72rem;font-weight:800;cursor:pointer;transition:all 0.2s;font-family:inherit;letter-spacing:0.05em}
+.theme-btn:hover{background:rgba(225,77,42,0.1);color:var(--pink);border-color:rgba(225,77,42,0.3)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;background:var(--bg)}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+.orb-1{width:700px;height:700px;background:radial-gradient(circle,rgba(25,55,109,0.35),transparent 70%);top:-200px;left:-200px;animation:float 10s ease-in-out infinite}
+.orb-2{width:600px;height:600px;background:radial-gradient(circle,rgba(225,77,42,0.3),transparent 70%);bottom:-150px;right:-150px;animation:float 12s ease-in-out infinite;animation-delay:-4s}
+.orb-3{width:500px;height:500px;background:radial-gradient(circle,rgba(253,132,31,0.25),transparent 70%);top:40%;left:60%;transform:translate(-50%,-50%);animation:float 8s ease-in-out infinite;animation-delay:-7s}
+.orb-4{width:400px;height:400px;background:radial-gradient(circle,rgba(252,174,30,0.2),transparent 70%);top:20%;right:10%;animation:float2 14s ease-in-out infinite;animation-delay:-2s}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(25,55,109,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(25,55,109,0.06) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--blue);animation:particle-float linear infinite;opacity:0}
+.hero-content{position:relative;z-index:1;max-width:960px}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 22px;border-radius:100px;background:rgba(225,77,42,0.1);border:1px solid rgba(225,77,42,0.3);font-size:0.78rem;font-weight:800;color:var(--pink);margin-bottom:36px;letter-spacing:0.06em;box-shadow:0 0 20px rgba(225,77,42,0.15)}
+.hero-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink);animation:pulse-glow 2s ease-in-out infinite}
+.hero-session{font-size:0.85rem;font-weight:700;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:20px}
+.hero-title{font-size:clamp(2.6rem,7vw,5.5rem);font-weight:900;line-height:1.05;margin-bottom:28px;background:linear-gradient(135deg,#ffffff 0%,#FCAE1E 25%,#FD841F 50%,#E14D2A 75%,#ffffff 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradient-shift 8s ease infinite;text-shadow:none;filter:drop-shadow(0 0 40px rgba(225,77,42,0.3))}
+.hero-tagline{font-size:clamp(1rem,2.5vw,1.3rem);color:var(--text2);max-width:680px;margin:0 auto 44px;font-weight:400;line-height:1.7}
+.hero-tagline strong{color:var(--cyan);font-weight:800;text-shadow:0 0 20px rgba(253,132,31,0.5)}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+.hero-stats-bar{display:flex;gap:0;justify-content:center;flex-wrap:wrap;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px 40px;max-width:700px;margin:0 auto}
+.hero-stat{text-align:center;padding:0 32px;position:relative}
+.hero-stat+.hero-stat::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:1px;height:40px;background:rgba(255,255,255,0.1)}
+.hero-stat-num{font-size:2.2rem;font-weight:900;line-height:1;margin-bottom:4px;background:var(--grad-hero);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradient-shift 6s ease infinite}
+.hero-stat-label{font-size:0.7rem;color:var(--text3);font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.scroll-indicator{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text3);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;animation:float 3s ease-in-out infinite}
+.scroll-arrow{width:24px;height:24px;border-right:2px solid var(--pink);border-bottom:2px solid var(--pink);transform:rotate(45deg);box-shadow:4px 4px 8px rgba(225,77,42,0.3)}
+
+/* ── THREE LEVELS ── */
+#three-levels{background:var(--bg2)}
+#three-levels .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(225,77,42,0.1),transparent)}
+.levels-wrapper{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:40px}
+@media(max-width:900px){.levels-wrapper{grid-template-columns:1fr;gap:16px}.level-arrow{display:none!important}}
+.level-card{padding:36px 28px;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:default}
+.level-card:hover{transform:translateY(-10px) scale(1.02)}
+.level-card-1{border-color:rgba(25,55,109,0.3)!important}
+.level-card-1:hover{box-shadow:var(--glow-blue)!important;border-color:rgba(25,55,109,0.6)!important}
+.level-card-2{border-color:rgba(225,77,42,0.25)!important}
+.level-card-2:hover{box-shadow:var(--glow-purple)!important;border-color:rgba(225,77,42,0.5)!important}
+.level-card-3{border-color:rgba(252,174,30,0.25)!important}
+.level-card-3:hover{box-shadow:var(--glow-gold)!important;border-color:rgba(252,174,30,0.5)!important}
+.level-card-glow{position:absolute;inset:0;opacity:0;transition:opacity 0.4s;border-radius:var(--r2)}
+.level-card-1 .level-card-glow{background:radial-gradient(circle at 50% 0%,rgba(25,55,109,0.15),transparent 70%)}
+.level-card-2 .level-card-glow{background:radial-gradient(circle at 50% 0%,rgba(225,77,42,0.12),transparent 70%)}
+.level-card-3 .level-card-glow{background:radial-gradient(circle at 50% 0%,rgba(252,174,30,0.12),transparent 70%)}
+.level-card:hover .level-card-glow{opacity:1}
+.level-badge{position:absolute;top:16px;right:16px;font-size:0.62rem;font-weight:900;padding:4px 10px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase}
+.level-num{font-size:0.68rem;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:16px}
+.level-num-1{color:var(--blue)}.level-num-2{color:var(--purple3)}.level-num-3{color:var(--gold)}
+.level-icon-wrap{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:20px;position:relative}
+.level-icon-wrap-1{background:rgba(25,55,109,0.15);box-shadow:0 0 20px rgba(25,55,109,0.25)}
+.level-icon-wrap-2{background:rgba(225,77,42,0.12);box-shadow:0 0 20px rgba(225,77,42,0.2)}
+.level-icon-wrap-3{background:rgba(252,174,30,0.12);box-shadow:0 0 20px rgba(252,174,30,0.2)}
+.level-title{font-size:1.3rem;font-weight:900;margin-bottom:6px}
+.level-en{font-size:0.72rem;color:var(--text3);font-weight:700;letter-spacing:0.06em;margin-bottom:14px;text-transform:uppercase}
+.level-desc{font-size:0.88rem;color:var(--text2);line-height:1.65;margin-bottom:16px}
+.level-example{padding:10px 14px;border-radius:10px;font-size:0.8rem;font-weight:600;line-height:1.5}
+.level-example-1{background:rgba(25,55,109,0.1);color:var(--blue3);border:1px solid rgba(25,55,109,0.2)}
+.level-example-2{background:rgba(225,77,42,0.1);color:var(--purple3);border:1px solid rgba(225,77,42,0.2)}
+.level-example-3{background:rgba(252,174,30,0.1);color:var(--gold2);border:1px solid rgba(252,174,30,0.2)}
+.level-arrow{display:flex;align-items:center;justify-content:center;padding:0 8px;flex-shrink:0}
+.level-arrow-inner{display:flex;flex-direction:column;align-items:center;gap:6px}
+.level-arrow-line{width:2px;height:60px;background:linear-gradient(to bottom,transparent,var(--purple2),transparent)}
+.level-arrow-head{font-size:1.4rem;color:var(--purple2);filter:drop-shadow(0 0 8px rgba(253,132,31,0.6));animation:pulse-glow 2s ease-in-out infinite}
+.level-arrow-label{font-size:0.6rem;font-weight:900;color:var(--purple3);letter-spacing:0.1em;text-transform:uppercase;writing-mode:vertical-rl;text-orientation:mixed}
+.insight-box{background:linear-gradient(135deg,rgba(25,55,109,0.08),rgba(225,77,42,0.08),rgba(253,132,31,0.06));border:1px solid rgba(225,77,42,0.25);border-radius:var(--r2);padding:28px 36px;text-align:center;position:relative;overflow:hidden}
+.insight-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(225,77,42,0.08),transparent 60%)}
+.insight-box p{font-size:1.25rem;font-weight:800;color:var(--text);position:relative;z-index:1}
+.insight-box .ib-blue{color:var(--blue)}.insight-box .ib-cyan{color:var(--cyan)}
+
+/* ── SEVEN COMPONENTS ── */
+#seven-components{background:var(--bg3)}
+#seven-components .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 80% 50%,rgba(25,55,109,0.08),transparent)}
+.components-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.comp-card{padding:26px;position:relative;overflow:hidden;transition:all 0.35s cubic-bezier(0.16,1,0.3,1);cursor:default}
+.comp-card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(225,77,42,0.15);border-color:rgba(225,77,42,0.3)!important}
+.comp-card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad-purple);transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1)}
+.comp-card:hover .comp-card-accent{transform:scaleX(1)}
+.comp-num-badge{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;background:var(--grad-purple);color:#fff;font-size:0.72rem;font-weight:900;margin-bottom:16px;box-shadow:var(--glow-purple);flex-shrink:0}
+.comp-icon{font-size:1.8rem;margin-bottom:12px;display:block;filter:drop-shadow(0 0 8px rgba(225,77,42,0.3))}
+.comp-title-vi{font-size:1rem;font-weight:900;color:var(--text);margin-bottom:3px}
+.comp-title-en{font-size:0.7rem;font-weight:700;color:var(--text3);margin-bottom:10px;letter-spacing:0.05em;text-transform:uppercase}
+.comp-desc{font-size:0.84rem;color:var(--text2);line-height:1.6}
+.comp-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+
+/* ── DESIGN MENTOR ── */
+#design-mentor{background:var(--bg2)}
+#design-mentor .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 20% 50%,rgba(225,77,42,0.08),transparent)}
+.mentor-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:860px){.mentor-layout{grid-template-columns:1fr}}
+.mentor-diagram-wrap{position:relative}
+.mentor-diagram{padding:36px;text-align:center;position:relative;overflow:hidden}
+.mentor-diagram::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(225,77,42,0.1),transparent 70%);border-radius:var(--r2)}
+.mentor-orb{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#E14D2A,#FD841F);display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin:0 auto 24px;box-shadow:0 0 40px rgba(225,77,42,0.5),0 0 80px rgba(253,132,31,0.2);animation:border-glow 4s ease-in-out infinite;position:relative;z-index:1}
+.mentor-orb-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(225,77,42,0.3);animation:spin-slow 8s linear infinite}
+.mentor-orb-ring2{position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(253,132,31,0.2);animation:spin-slow 12s linear infinite reverse}
+.mentor-diagram-title{font-size:1.1rem;font-weight:900;margin-bottom:6px;position:relative;z-index:1}
+.mentor-diagram-sub{font-size:0.8rem;color:var(--text3);margin-bottom:24px;position:relative;z-index:1}
+.mentor-flows{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+.mentor-flow{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;font-size:0.84rem;color:var(--text2);transition:all 0.3s}
+.mentor-flow:hover{background:rgba(225,77,42,0.1);border-color:rgba(225,77,42,0.3);color:var(--text)}
+.mentor-flow-icon{font-size:1.1rem;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(225,77,42,0.5))}
+.mentor-features{display:flex;flex-direction:column;gap:14px}
+.mentor-feature{display:flex;gap:16px;align-items:flex-start;padding:20px 22px;transition:all 0.3s cubic-bezier(0.16,1,0.3,1)}
+.mentor-feature:hover{transform:translateX(6px);border-color:rgba(225,77,42,0.4)!important;box-shadow:var(--glow-purple)}
+.mentor-feature-icon{font-size:1.6rem;flex-shrink:0;margin-top:2px;filter:drop-shadow(0 0 8px rgba(225,77,42,0.4))}
+.mentor-feature-title{font-size:0.95rem;font-weight:800;margin-bottom:5px;color:var(--text)}
+.mentor-feature-desc{font-size:0.84rem;color:var(--text2);line-height:1.6}
+
+/* ── PRACTICE ── */
+#practice{background:var(--bg3)}
+#practice .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 100%,rgba(76,175,80,0.07),transparent)}
+.checklist{display:flex;flex-direction:column;gap:14px;max-width:740px}
+.check-item{display:flex;align-items:center;gap:20px;padding:20px 24px;transition:all 0.35s cubic-bezier(0.16,1,0.3,1)}
+.check-item:hover{transform:translateX(8px);border-color:rgba(76,175,80,0.4)!important;box-shadow:0 0 20px rgba(76,175,80,0.1)}
+.check-icon-wrap{width:44px;height:44px;border-radius:50%;background:rgba(76,175,80,0.12);border:2px solid rgba(76,175,80,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(76,175,80,0.15)}
+.check-icon-wrap svg{width:22px;height:22px;stroke:var(--green);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.check-text{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.check-sub{font-size:0.8rem;color:var(--text3);line-height:1.5}
+.practice-note{margin-top:28px;padding:20px 24px;background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.25);border-radius:var(--r);display:flex;gap:14px;align-items:flex-start;max-width:740px}
+.practice-note-icon{font-size:1.4rem;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(76,175,80,0.4))}
+.practice-note-text{font-size:0.9rem;color:var(--text2);line-height:1.65}
+.practice-note-text strong{color:var(--green)}
+
+/* ── HOMEWORK ── */
+#homework{background:var(--bg);position:relative}
+#homework .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(252,174,30,0.1),transparent 60%)}
+.hw-outer{position:relative;max-width:960px}
+.hw-outer::before{content:'';position:absolute;inset:-2px;border-radius:calc(var(--r3) + 2px);background:linear-gradient(135deg,#FCAE1E,#E14D2A,#19376D,#FD841F);background-size:300% 300%;animation:gradient-shift 5s ease infinite;z-index:-1;opacity:0.7}
+.hw-box{padding:44px;border-radius:var(--r3);background:rgba(11,36,71,0.95);backdrop-filter:blur(20px);position:relative;overflow:hidden}
+[data-theme="light"] .hw-box{background:rgba(248,249,252,0.97)}
+.hw-box::before{content:'📌 BÀI TẬP VỀ NHÀ · ASSIGNMENT';position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,rgba(252,174,30,0.9),rgba(225,77,42,0.85),rgba(25,55,109,0.85));color:#fff;font-size:0.68rem;font-weight:900;letter-spacing:0.2em;padding:9px 24px;text-align:center}
+.hw-inner{margin-top:20px}
+.hw-main{font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:28px;line-height:1.55}
+.hw-main .hw-highlight{background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hw-criteria-title{font-size:0.72rem;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.hw-criteria-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.hw-criterion{display:flex;align-items:flex-start;gap:12px;font-size:0.9rem;color:var(--text2);line-height:1.55}
+.hw-criterion-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:8px;box-shadow:0 0 8px rgba(252,174,30,0.5)}
+.hw-examples{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:28px}
+.hw-example{padding:16px 18px;background:rgba(252,174,30,0.06);border:1px solid rgba(252,174,30,0.18);border-radius:14px;transition:all 0.3s}
+.hw-example:hover{background:rgba(252,174,30,0.12);border-color:rgba(252,174,30,0.4);transform:translateY(-3px);box-shadow:0 0 20px rgba(252,174,30,0.15)}
+.hw-example-role{font-weight:900;color:var(--gold);margin-bottom:5px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em}
+.hw-example-task{color:var(--text2);font-size:0.84rem;line-height:1.5}
+.hw-submit-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hw-submit{background:linear-gradient(135deg,#E14D2A,#FD841F);color:#fff;padding:16px 36px;border-radius:14px;font-size:1rem;font-weight:900;display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:none;font-family:inherit;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);box-shadow:0 0 30px rgba(225,77,42,0.4),0 0 60px rgba(253,132,31,0.2);letter-spacing:0.02em}
+.hw-submit:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 0 50px rgba(225,77,42,0.6),0 0 100px rgba(253,132,31,0.3)}
+.hw-submit-note{font-size:0.8rem;color:var(--text3)}
+
+/* ── ROADMAP ── */
+#roadmap{background:var(--bg2)}
+#roadmap .bg-accent{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(25,55,109,0.08),transparent)}
+.roadmap-timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.roadmap-timeline::before{content:'';position:absolute;left:29px;top:20px;bottom:20px;width:2px;background:linear-gradient(to bottom,var(--blue2),var(--purple2),var(--cyan),rgba(255,255,255,0.1));border-radius:2px}
+.phase-block{display:flex;gap:0;position:relative;padding-bottom:40px}
+.phase-block:last-child{padding-bottom:0}
+.phase-dot-col{display:flex;flex-direction:column;align-items:center;width:60px;flex-shrink:0;padding-top:4px}
+.phase-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:var(--bg);flex-shrink:0;z-index:1;transition:all 0.4s;position:relative}
+.phase-dot.active{width:28px;height:28px;background:linear-gradient(135deg,#E14D2A,#FD841F);border:none;box-shadow:var(--glow-purple);animation:roadmap-pulse 2s ease-in-out infinite;margin-top:-4px}
+.phase-dot.active::after{content:'📍';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.7rem}
+.phase-content{flex:1;padding-left:20px}
+.phase-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.phase-name{font-size:1.05rem;font-weight:900;color:var(--text)}
+.phase-range{font-size:0.78rem;color:var(--text3);font-weight:700;padding:3px 10px;background:rgba(255,255,255,0.05);border-radius:100px;border:1px solid var(--border)}
+.phase-desc{font-size:0.88rem;color:var(--text2);margin-bottom:14px;line-height:1.6;max-width:600px}
+.phase-sessions{display:flex;flex-wrap:wrap;gap:8px}
+.session-pill{padding:6px 14px;border-radius:100px;font-size:0.76rem;font-weight:700;border:1px solid var(--border);color:var(--text3);background:rgba(255,255,255,0.03);transition:all 0.25s}
+.session-pill:hover{border-color:var(--border2);color:var(--text2);background:rgba(255,255,255,0.06)}
+.session-pill.current{background:linear-gradient(135deg,rgba(225,77,42,0.2),rgba(253,132,31,0.2));color:var(--pink);border-color:rgba(225,77,42,0.4);box-shadow:0 0 16px rgba(225,77,42,0.2);font-weight:900}
+.roadmap-goal{margin-top:48px;padding:32px 36px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden}
+.roadmap-goal::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(225,77,42,0.08),transparent 60%);border-radius:var(--r2)}
+.roadmap-goal-icon{font-size:3rem;flex-shrink:0;filter:drop-shadow(0 0 16px rgba(252,174,30,0.5));animation:pulse-glow 3s ease-in-out infinite}
+.roadmap-goal-text h3{font-size:1.15rem;font-weight:900;margin-bottom:8px}
+.roadmap-goal-text p{font-size:0.92rem;color:var(--text2);line-height:1.65}
+.roadmap-goal-text strong{color:var(--cyan)}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid rgba(225,77,42,0.15);padding:48px 24px;text-align:center;position:relative;overflow:hidden}
+footer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(25,55,109,0.08),transparent)}
+.footer-brand{font-size:1.15rem;font-weight:900;background:var(--grad-purple);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;position:relative;z-index:1}
+.footer-sub{font-size:0.85rem;color:var(--text3);margin-bottom:24px;position:relative;z-index:1}
+.footer-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.footer-links a{font-size:0.78rem;color:var(--text3);text-decoration:none;padding:6px 14px;border-radius:100px;border:1px solid var(--border);transition:all 0.2s}
+.footer-links a:hover{color:var(--pink);border-color:rgba(225,77,42,0.3);background:rgba(225,77,42,0.08)}
+.footer-made{font-size:0.72rem;color:var(--text3);margin-top:20px;position:relative;z-index:1}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  section{padding:80px 16px}
+  .levels-wrapper{grid-template-columns:1fr;gap:16px}
+  .level-arrow{display:none!important}
+  .components-grid{grid-template-columns:1fr 1fr}
+  .hw-examples{grid-template-columns:1fr 1fr}
+  .hero-stats-bar{padding:20px 24px}
+  .hero-stat{padding:0 16px}
+  .hero-stat-num{font-size:1.6rem}
+  .roadmap-timeline::before{left:19px}
+  .phase-dot-col{width:40px}
+}
+@media(max-width:480px){
+  .components-grid{grid-template-columns:1fr}
+  .hw-examples{grid-template-columns:1fr}
+  .hero-stats-bar{flex-direction:column;gap:16px}
+  .hero-stat+.hero-stat::before{display:none}
+  .hero-stat{padding:8px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-brand">AI4A02 · Buổi 1/12</div>
+  <div class="nav-links">
+    <a href="#three-levels">3 Cấp Độ</a>
+    <a href="#seven-components">7 Thành Tố</a>
+    <a href="#design-mentor">Design Mentor</a>
+    <a href="#practice">Thực Hành</a>
+    <a href="#homework">Bài Tập</a>
+    <a href="#roadmap">Lộ Trình</a>
+  </div>
+  <button class="theme-btn" onclick="cycleTheme()" id="themeBtn">🌙 Dark</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="hero-grid"></div>
+    <div class="particles" id="particles"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge fade-in">
+      <span class="hero-badge-dot"></span>
+      AI4A02 · Agentic AI với Google Antigravity
+    </div>
+    <div class="hero-session fade-in fade-in-delay-1">Buổi 1 / 12 — Session 1 of 12</div>
+    <h1 class="hero-title fade-in fade-in-delay-2">Tổng Quan Hệ Thống<br>Agentic Workspace</h1>
+    <p class="hero-tagline fade-in fade-in-delay-3">
+      Hôm nay bạn không chỉ dùng AI —<br>
+      <strong>bạn bắt đầu thiết kế AI làm việc cho mình.</strong>
+    </p>
+    <div class="hero-cta fade-in fade-in-delay-4">
+      <a href="#three-levels" class="btn btn-primary">Bắt đầu ôn tập ↓</a>
+      <a href="#homework" class="btn btn-ghost">📌 Xem bài tập</a>
+    </div>
+    <div class="hero-stats-bar fade-in fade-in-delay-5">
+      <div class="hero-stat">
+        <div class="hero-stat-num">12</div>
+        <div class="hero-stat-label">Buổi học</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Giai đoạn</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">7</div>
+        <div class="hero-stat-label">Thành tố</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">≥70%</div>
+        <div class="hero-stat-label">Mục tiêu chính xác</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- SECTION 1: THREE LEVELS -->
+<section id="three-levels">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Bài học cốt lõi · Core Concept</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-blue">3 Cấp Độ AI</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2">Hiểu rõ bạn đang ở đâu trong hành trình AI — và bạn đang hướng tới đâu.</p>
+    <div class="levels-wrapper fade-in fade-in-delay-2">
+      <!-- Level 1 -->
+      <div class="level-card glass grad-border-blue fade-in fade-in-delay-1">
+        <div class="level-card-glow"></div>
+        <div class="level-num level-num-1">Cấp 1 · Level 1</div>
+        <div class="level-icon-wrap level-icon-wrap-1">🤖</div>
+        <h3 class="level-title grad-text-blue">Chatbot AI</h3>
+        <div class="level-en">Conversational AI</div>
+        <p class="level-desc">Hỏi → Trả lời. Không nhớ ngữ cảnh, không tự động hóa, không có quy trình liên tục.</p>
+        <div class="level-example level-example-1">💬 Ví dụ: ChatGPT thông thường — hỏi một câu được một câu</div>
+      </div>
+      <!-- Arrow 1→2 -->
+      <div class="level-arrow">
+        <div class="level-arrow-inner">
+          <div class="level-arrow-line"></div>
+          <div class="level-arrow-head">⚡</div>
+          <div class="level-arrow-label">Upgrade</div>
+          <div class="level-arrow-line"></div>
+        </div>
+      </div>
+      <!-- Level 2 -->
+      <div class="level-card glass grad-border-purple fade-in fade-in-delay-2">
+        <div class="level-card-glow"></div>
+        <div class="level-num level-num-2">Cấp 2 · Level 2</div>
+        <div class="level-icon-wrap level-icon-wrap-2">⚡</div>
+        <h3 class="level-title grad-text-purple">Skill AI</h3>
+        <div class="level-en">Specialized AI Skill</div>
+        <p class="level-desc">AI có chuyên môn cụ thể, được huấn luyện cho một nhiệm vụ rõ ràng và lặp lại.</p>
+        <div class="level-example level-example-2">🎯 Ví dụ: Skill viết email, skill tóm tắt CV, skill phân tích feedback</div>
+      </div>
+      <!-- Arrow 2→3 -->
+      <div class="level-arrow">
+        <div class="level-arrow-inner">
+          <div class="level-arrow-line"></div>
+          <div class="level-arrow-head">🚀</div>
+          <div class="level-arrow-label">Upgrade</div>
+          <div class="level-arrow-line"></div>
+        </div>
+      </div>
+      <!-- Level 3 -->
+      <div class="level-card glass fade-in fade-in-delay-3" style="position:relative">
+        <div class="level-card-glow"></div>
+        <div class="level-badge tag tag-gold" style="position:absolute;top:16px;right:16px">🎯 Mục tiêu</div>
+        <div class="level-num level-num-3">Cấp 3 · Level 3</div>
+        <div class="level-icon-wrap level-icon-wrap-3">🏗️</div>
+        <h3 class="level-title grad-text-gold">Agentic Workspace</h3>
+        <div class="level-en">Full AI System</div>
+        <p class="level-desc">Hệ thống AI hoàn chỉnh: nhiều skill phối hợp, quy trình tự động, kiểm soát chất lượng.</p>
+        <div class="level-example level-example-3">🏆 Ví dụ: Workspace sàng lọc CV tự động từ đầu đến cuối</div>
+      </div>
+    </div>
+    <div class="insight-box fade-in fade-in-delay-4">
+      <p>💡 <span class="ib-blue">Chatbot trả lời câu hỏi.</span> &nbsp;·&nbsp; <span class="ib-cyan">Workspace xử lý công việc.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: SEVEN COMPONENTS -->
+<section id="seven-components">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Kiến trúc · Architecture</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-blue">7 Thành Tố</span> Agentic Workspace</h2>
+    <p class="section-sub fade-in fade-in-delay-2">Mọi workspace hiệu quả đều được xây dựng từ 7 thành tố này. Thiếu một thành tố, hệ thống sẽ không hoàn chỉnh.</p>
+    <div class="components-grid">
+      <div class="comp-card glass fade-in fade-in-delay-1">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">01</div>
+          <span class="comp-icon">🎯</span>
+        </div>
+        <div class="comp-title-vi">Mục Tiêu</div>
+        <div class="comp-title-en">Objective</div>
+        <p class="comp-desc">Workspace này giải quyết vấn đề gì? Kết quả mong muốn là gì? Phải rõ ràng và đo lường được.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-2">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">02</div>
+          <span class="comp-icon">📥</span>
+        </div>
+        <div class="comp-title-vi">Dữ Liệu Đầu Vào</div>
+        <div class="comp-title-en">Input</div>
+        <p class="comp-desc">Thông tin nào được đưa vào workspace? File, text, form, email, dữ liệu từ hệ thống khác.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-3">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">03</div>
+          <span class="comp-icon">⚙️</span>
+        </div>
+        <div class="comp-title-vi">Quy Trình Xử Lý</div>
+        <div class="comp-title-en">Process</div>
+        <p class="comp-desc">Các bước AI thực hiện để biến Input thành Output. Thứ tự, điều kiện, phân nhánh.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-4">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">04</div>
+          <span class="comp-icon">📤</span>
+        </div>
+        <div class="comp-title-vi">Kết Quả Đầu Ra</div>
+        <div class="comp-title-en">Output</div>
+        <p class="comp-desc">Workspace tạo ra gì? Báo cáo, email, bảng tóm tắt, quyết định, file xuất ra.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-5">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">05</div>
+          <span class="comp-icon">🧠</span>
+        </div>
+        <div class="comp-title-vi">Kiến Thức Nền</div>
+        <div class="comp-title-en">Knowledge Base</div>
+        <p class="comp-desc">Tài liệu, quy định, tiêu chí, context mà AI cần biết để xử lý đúng. Đây là "bộ nhớ" của workspace.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-6">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge">06</div>
+          <span class="comp-icon">📏</span>
+        </div>
+        <div class="comp-title-vi">Quy Tắc Kiểm Soát</div>
+        <div class="comp-title-en">Rules &amp; Constraints</div>
+        <p class="comp-desc">Giới hạn, ràng buộc, tiêu chuẩn chất lượng. Đảm bảo AI không đi lạc khỏi mục tiêu.</p>
+      </div>
+      <div class="comp-card glass fade-in fade-in-delay-7">
+        <div class="comp-card-accent"></div>
+        <div class="comp-header">
+          <div class="comp-num-badge" style="background:linear-gradient(135deg,#E14D2A,#19376D)">07</div>
+          <span class="comp-icon">👤</span>
+        </div>
+        <div class="comp-title-vi">Điểm Con Người Xét Duyệt</div>
+        <div class="comp-title-en">Human-in-the-Loop</div>
+        <p class="comp-desc">Điểm nào trong quy trình cần con người xem xét, phê duyệt hoặc can thiệp? Không thể bỏ qua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: DESIGN MENTOR -->
+<section id="design-mentor">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Công cụ hỗ trợ · Support Tool</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-purple">Design Mentor</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2">AI đóng vai trò cố vấn thiết kế — không phải người chạy workspace, mà là người giúp bạn xây nó đúng cách.</p>
+    <div class="mentor-layout">
+      <div class="mentor-diagram-wrap fade-in fade-in-delay-2">
+        <div class="mentor-diagram glass-strong">
+          <div style="position:relative;display:inline-block;margin-bottom:24px">
+            <div class="mentor-orb">🤝</div>
+            <div class="mentor-orb-ring"></div>
+            <div class="mentor-orb-ring2"></div>
+          </div>
+          <div class="mentor-diagram-title grad-text-purple">Design Mentor AI</div>
+          <div class="mentor-diagram-sub">Cố vấn thiết kế workspace của bạn</div>
+          <div class="mentor-flows">
+            <div class="mentor-flow"><span class="mentor-flow-icon">🎯</span><span>Xác định Objective rõ ràng</span></div>
+            <div class="mentor-flow"><span class="mentor-flow-icon">🗺️</span><span>Gợi ý cấu trúc 7 thành tố</span></div>
+            <div class="mentor-flow"><span class="mentor-flow-icon">🔍</span><span>Phát hiện lỗ hổng thiết kế</span></div>
+            <div class="mentor-flow"><span class="mentor-flow-icon">✍️</span><span>Hướng dẫn viết Rules hiệu quả</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mentor-features fade-in fade-in-delay-3">
+        <div class="mentor-feature glass">
+          <span class="mentor-feature-icon">🎯</span>
+          <div>
+            <div class="mentor-feature-title">Xác định Objective</div>
+            <div class="mentor-feature-desc">Giúp bạn phát biểu mục tiêu workspace một cách rõ ràng, cụ thể và đo lường được — tránh mơ hồ.</div>
+          </div>
+        </div>
+        <div class="mentor-feature glass">
+          <span class="mentor-feature-icon">🗺️</span>
+          <div>
+            <div class="mentor-feature-title">Gợi ý cấu trúc</div>
+            <div class="mentor-feature-desc">Đề xuất cách tổ chức 7 thành tố phù hợp với use case cụ thể của bạn.</div>
+          </div>
+        </div>
+        <div class="mentor-feature glass">
+          <span class="mentor-feature-icon">🔍</span>
+          <div>
+            <div class="mentor-feature-title">Phát hiện lỗ hổng</div>
+            <div class="mentor-feature-desc">Chỉ ra những điểm yếu trong thiết kế: thiếu Human Checkpoint, Rules quá mơ hồ, Input chưa đủ.</div>
+          </div>
+        </div>
+        <div class="mentor-feature glass">
+          <span class="mentor-feature-icon">✍️</span>
+          <div>
+            <div class="mentor-feature-title">Hướng dẫn viết Rules</div>
+            <div class="mentor-feature-desc">Giúp bạn viết quy tắc kiểm soát rõ ràng, không mơ hồ, AI có thể thực thi được.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: PRACTICE -->
+<section id="practice">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Thực hành · Hands-on</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-cyan">Thực Hành Buổi 1</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2">Những gì bạn đã hoàn thành trong buổi học hôm nay. Đây là nền tảng cho toàn bộ khóa học.</p>
+    <div class="checklist">
+      <div class="check-item glass fade-in fade-in-delay-1">
+        <div class="check-icon-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <div class="check-text">Setup Google Antigravity</div>
+          <div class="check-sub">Cài đặt và cấu hình môi trường làm việc · Environment setup complete</div>
+        </div>
+      </div>
+      <div class="check-item glass fade-in fade-in-delay-2">
+        <div class="check-icon-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <div class="check-text">Mở workspace mẫu</div>
+          <div class="check-sub">Khám phá cấu trúc workspace có sẵn · Explored sample workspace structure</div>
+        </div>
+      </div>
+      <div class="check-item glass fade-in fade-in-delay-3">
+        <div class="check-icon-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <div class="check-text">Chạy kịch bản đầu tiên</div>
+          <div class="check-sub">Thực thi workflow đầu tiên thành công · First workflow executed successfully</div>
+        </div>
+      </div>
+      <div class="check-item glass fade-in fade-in-delay-4">
+        <div class="check-icon-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <div class="check-text">Ghi lại quan sát</div>
+          <div class="check-sub">So sánh trải nghiệm với ChatGPT thông thường · Compared with standard ChatGPT experience</div>
+        </div>
+      </div>
+    </div>
+    <div class="practice-note fade-in fade-in-delay-5">
+      <span class="practice-note-icon">💡</span>
+      <div class="practice-note-text">Bạn vừa trải nghiệm sự khác biệt giữa <strong>dùng AI</strong> và <strong>thiết kế AI làm việc</strong>. Đây là bước đầu tiên quan trọng nhất trong hành trình của bạn.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: HOMEWORK -->
+<section id="homework">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Nhiệm vụ · Assignment</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-gold">Bài Tập Về Nhà</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2">Đây là bài tập quan trọng nhất của khóa học — case study của bạn sẽ đồng hành xuyên suốt 12 buổi.</p>
+    <div class="hw-outer fade-in fade-in-delay-2">
+      <div class="hw-box">
+        <div class="hw-inner">
+          <p class="hw-main">Chọn <span class="hw-highlight">1 quy trình lặp lại</span> trong công việc hoặc học tập để làm <span class="hw-highlight">case study xuyên khóa</span></p>
+          <div class="hw-criteria-title">Tiêu chí lựa chọn · Selection Criteria</div>
+          <div class="hw-criteria-list">
+            <div class="hw-criterion"><span class="hw-criterion-dot"></span><span>Làm <strong>ít nhất 1 lần/tuần</strong> — đủ thường xuyên để tự động hóa có giá trị</span></div>
+            <div class="hw-criterion"><span class="hw-criterion-dot"></span><span>Có <strong>input rõ ràng</strong> — biết chính xác thông tin đầu vào là gì</span></div>
+            <div class="hw-criterion"><span class="hw-criterion-dot"></span><span>Có <strong>output mong muốn</strong> — biết kết quả tốt trông như thế nào</span></div>
+            <div class="hw-criterion"><span class="hw-criterion-dot"></span><span><strong>Tốn thời gian</strong> — đủ để việc tự động hóa tiết kiệm được công sức thực sự</span></div>
+          </div>
+          <div class="hw-criteria-title">Ví dụ theo vai trò · Examples by Role</div>
+          <div class="hw-examples">
+            <div class="hw-example">
+              <div class="hw-example-role">👥 HR</div>
+              <div class="hw-example-task">Sàng lọc CV ứng viên theo tiêu chí</div>
+            </div>
+            <div class="hw-example">
+              <div class="hw-example-role">📣 Marketing</div>
+              <div class="hw-example-task">Tóm tắt feedback khách hàng hàng tuần</div>
+            </div>
+            <div class="hw-example">
+              <div class="hw-example-role">💼 Sales</div>
+              <div class="hw-example-task">Viết brief giới thiệu sản phẩm cho khách</div>
+            </div>
+            <div class="hw-example">
+              <div class="hw-example-role">🗂️ Admin</div>
+              <div class="hw-example-task">Tổng hợp báo cáo từ nhiều nguồn</div>
+            </div>
+            <div class="hw-example">
+              <div class="hw-example-role">📊 Finance</div>
+              <div class="hw-example-task">Phân loại và tóm tắt chi phí hàng tháng</div>
+            </div>
+            <div class="hw-example">
+              <div class="hw-example-role">🎓 Educator</div>
+              <div class="hw-example-task">Chấm điểm và nhận xét bài tập học viên</div>
+            </div>
+          </div>
+          <div style="margin-bottom:28px;padding:18px 20px;background:rgba(252,174,30,0.06);border-radius:14px;border:1px solid rgba(252,174,30,0.18)">
+            <div class="hw-criteria-title" style="margin-bottom:8px">Cách nộp bài · Submission</div>
+            <p style="font-size:0.9rem;color:var(--text2);line-height:1.65">Mô tả quy trình bạn chọn trong <strong style="color:var(--gold)">3–5 câu</strong>: quy trình là gì, input là gì, output mong muốn là gì, tại sao bạn chọn nó.</p>
+          </div>
+          <div class="hw-submit-wrap">
+            <button class="hw-submit" id="hwBtn">📌 Tôi đã chọn quy trình của mình →</button>
+            <span class="hw-submit-note">Nộp trước buổi 2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: ROADMAP -->
+<section id="roadmap">
+  <div class="bg-accent"></div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Hành trình · Journey</div>
+    <h2 class="section-title fade-in fade-in-delay-1"><span class="grad-text-blue">Lộ Trình 12 Buổi</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2">Ba giai đoạn — từ hiểu hệ thống, đến chỉnh sửa, đến tự xây dựng workspace của riêng bạn.</p>
+
+    <div class="roadmap-timeline fade-in fade-in-delay-2">
+
+      <!-- Phase 1 -->
+      <div class="phase-block">
+        <div class="phase-dot-col">
+          <div class="phase-dot active"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="tag tag-blue">Phase 1</span>
+            <span class="phase-name">Operate — Vận Hành</span>
+            <span class="phase-range">Buổi 1–4</span>
+          </div>
+          <p class="phase-desc">Hiểu hệ thống, làm quen với workspace, chạy các kịch bản có sẵn và quan sát cách AI hoạt động.</p>
+          <div class="phase-sessions">
+            <span class="session-pill current">📍 Buổi 1 — Tổng quan</span>
+            <span class="session-pill">Buổi 2</span>
+            <span class="session-pill">Buổi 3</span>
+            <span class="session-pill">Buổi 4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-block">
+        <div class="phase-dot-col">
+          <div class="phase-dot"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="tag tag-purple">Phase 2</span>
+            <span class="phase-name">Modify — Tùy Chỉnh</span>
+            <span class="phase-range">Buổi 5–9</span>
+          </div>
+          <p class="phase-desc">Thêm agent, bổ sung knowledge base, viết rules, xử lý handoff giữa các agent, audit và debug workspace.</p>
+          <div class="phase-sessions">
+            <span class="session-pill">Buổi 5 — Agent</span>
+            <span class="session-pill">Buổi 6 — Knowledge</span>
+            <span class="session-pill">Buổi 7 — Rules</span>
+            <span class="session-pill">Buổi 8 — Handoff</span>
+            <span class="session-pill">Buổi 9 — Debug</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-block">
+        <div class="phase-dot-col">
+          <div class="phase-dot"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="tag tag-cyan">Phase 3</span>
+            <span class="phase-name">Create — Tự Xây Dựng</span>
+            <span class="phase-range">Buổi 10–11</span>
+          </div>
+          <p class="phase-desc">Tự thiết kế và xây dựng workspace hoàn chỉnh cho quy trình thực tế của bạn từ đầu đến cuối.</p>
+          <div class="phase-sessions">
+            <span class="session-pill">Buổi 10 — Xây dựng</span>
+            <span class="session-pill">Buổi 11 — Hoàn thiện</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presentation -->
+      <div class="phase-block">
+        <div class="phase-dot-col">
+          <div class="phase-dot"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="tag tag-gold">Buổi 12</span>
+            <span class="phase-name">Thuyết Trình Dự Án</span>
+            <span class="phase-range">Project Presentation</span>
+          </div>
+          <p class="phase-desc">Trình bày workspace của bạn trước lớp. Demo live, giải thích thiết kế, nhận phản hồi từ giảng viên và bạn học.</p>
+          <div class="phase-sessions">
+            <span class="session-pill">🎤 Demo Live</span>
+            <span class="session-pill">📊 Thuyết trình</span>
+            <span class="session-pill">🏆 Đánh giá</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="roadmap-goal glass fade-in fade-in-delay-4">
+      <span class="roadmap-goal-icon">🏆</span>
+      <div class="roadmap-goal-text">
+        <h3 class="grad-text-blue">Mục tiêu cuối khóa · Final Goal</h3>
+        <p>Xây dựng workspace xử lý quy trình thực tế của bạn với độ chính xác <strong>≥ 70%</strong> — không cần lập trình, chỉ cần thiết kế đúng.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">AI4A02 — Khoá Agentic AI với Google Antigravity</div>
+  <div class="footer-sub">Buổi 1/12 · Session 1 of 12 · Tổng Quan Hệ Thống Agentic Workspace</div>
+  <div class="footer-links">
+    <a href="#hero">↑ Đầu trang</a>
+    <a href="#three-levels">3 Cấp Độ</a>
+    <a href="#seven-components">7 Thành Tố</a>
+    <a href="#design-mentor">Design Mentor</a>
+    <a href="#practice">Thực Hành</a>
+    <a href="#homework">Bài Tập</a>
+    <a href="#roadmap">Lộ Trình</a>
+  </div>
+  <div class="footer-made">Made with ❤️ for AI4A02 students · 2026</div>
+</footer>
+
+<script>
+// ── THEME ──
+const themes = ['dark','light','system'];
+const themeLabels = {dark:'🌙 Dark',light:'☀️ Light',system:'💻 System'};
+let currentTheme = localStorage.getItem('ai4a02-theme') || 'dark';
+
+function applyTheme(t) {
+  if (t === 'system') {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', t);
+  }
+  document.getElementById('themeBtn').textContent = themeLabels[t];
+}
+function cycleTheme() {
+  currentTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+  localStorage.setItem('ai4a02-theme', currentTheme);
+  applyTheme(currentTheme);
+}
+applyTheme(currentTheme);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (currentTheme === 'system') applyTheme('system');
+});
+
+// ── PARTICLES ──
+(function() {
+  const container = document.getElementById('particles');
+  if (!container) return;
+  const colors = ['#19376D','#E14D2A','#FD841F','#FCAE1E','#3b5998'];
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = [
+      'left:' + Math.random() * 100 + '%',
+      'top:' + (40 + Math.random() * 60) + '%',
+      'background:' + colors[Math.floor(Math.random() * colors.length)],
+      'width:' + (2 + Math.random() * 3) + 'px',
+      'height:' + (2 + Math.random() * 3) + 'px',
+      'animation-duration:' + (4 + Math.random() * 8) + 's',
+      'animation-delay:' + (Math.random() * 6) + 's',
+      'box-shadow:0 0 6px currentColor'
+    ].join(';');
+    container.appendChild(p);
+  }
+})();
+
+// ── INTERSECTION OBSERVER (fade-in) ──
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+// ── ACTIVE NAV ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navObserver.observe(s));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── HOMEWORK BUTTON ──
+document.getElementById('hwBtn').addEventListener('click', function() {
+  this.textContent = '✅ Tuyệt vời! Hẹn gặp bạn ở buổi 2 →';
+  this.style.background = 'linear-gradient(135deg,#4CAF50,#66BB6A)';
+  this.style.boxShadow = '0 0 40px rgba(76,175,80,0.5),0 0 80px rgba(76,175,80,0.2)';
+  this.style.color = '#fff';
+});
+
+// ── NAV SCROLL SHADOW ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  if (window.scrollY > 60) {
+    nav.style.boxShadow = '0 4px 40px rgba(0,0,0,0.4)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+}, { passive: true });
+
+// ── STAGGER COMP CARDS on scroll ──
+const compCards = document.querySelectorAll('.comp-card');
+const compObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      compObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05 });
+compCards.forEach(c => compObserver.observe(c));
+</script>
+</body>
+</html>

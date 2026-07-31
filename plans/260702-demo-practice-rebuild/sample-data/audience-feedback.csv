@@ -1,0 +1,31 @@
+STT,Ngay,Nguon,Noi_Dung_Phan_Hoi,Diem_Hai_Long,Chu_De_Lien_Quan,Hanh_Dong_De_Xuat
+1,2024-01-10,LinkedIn comment,Bài viết về xu hướng marketing rất hay! Mình đang áp dụng AI content cho công ty và thấy hiệu quả rõ rệt.,5,Marketing,Tiếp tục chia sẻ thêm về ứng dụng AI trong marketing
+2,2024-01-12,Facebook comment,Cám ơn chị Minh Anh đã chia sẻ. Mình mới vào nghề nên học được rất nhiều từ page của chị.,5,Thương hiệu cá nhân,Tạo thêm nội dung dành riêng cho người mới bắt đầu
+3,2024-01-18,Email,Chị ơi cho em hỏi khóa học Digital Marketing của chị có mở lớp mới không ạ? Em muốn đăng ký cho team 5 người.,4,Đào tạo,Cân nhắc mở thêm lớp đào tạo doanh nghiệp (in-house training)
+4,2024-01-25,DM,Mình thấy bài về Google Analytics rất chi tiết. Nhưng có thể thêm phần hướng dẫn cài đặt GA4 cho WordPress được không?,4,Phân tích dữ liệu,Tạo bài hướng dẫn cài đặt GA4 cho các nền tảng phổ biến
+5,2024-02-03,Survey,Nội dung rất chất lượng nhưng đôi khi bài viết hơi dài. Mình thường đọc trên điện thoại nên thích bài ngắn gọn hơn.,3,Content Marketing,Tạo phiên bản rút gọn hoặc carousel cho bài viết dài
+6,2024-02-08,LinkedIn comment,Case study email marketing quá hay! Anh có thể chia sẻ template email được không? Rất muốn áp dụng cho shop của mình.,5,Email Marketing,Tạo bộ template email miễn phí để chia sẻ cho cộng đồng
+7,2024-02-15,Facebook comment,Bài về Valentine dễ thương quá! Thấy chị thật sự đam mê với nghề. Cảm ơn chị đã truyền cảm hứng!,5,Câu chuyện nghề,Đăng thêm bài chia sẻ câu chuyện cá nhân để kết nối cảm xúc
+8,2024-02-22,Email,Tôi là giảng viên đại học và muốn mời chị đến chia sẻ cho sinh viên ngành marketing. Chị có nhận lời không?,4,Đào tạo,Xây dựng gói nội dung cho buổi guest lecture tại trường đại học
+9,2024-03-01,DM,Chị ơi em đang làm SEO cho công ty nhưng không biết bắt đầu từ đâu. Có thể tư vấn riêng cho em được không ạ?,4,SEO,Tạo khóa mini hoặc ebook hướng dẫn SEO cơ bản
+10,2024-03-06,LinkedIn comment,Checklist SEO rất hữu ích! Tuy nhiên mình thấy thiếu phần về Core Web Vitals. Có thể bổ sung được không?,4,SEO,Cập nhật checklist SEO bổ sung Core Web Vitals và E-E-A-T
+11,2024-03-10,Survey,Font chữ trong infographic hơi nhỏ khó đọc trên điện thoại. Nội dung thì rất tốt.,3,Thiết kế,Tăng cỡ font trong infographic và test trên mobile trước khi đăng
+12,2024-03-15,Facebook comment,Video về Facebook Ads rất thực tế! Mình đã làm theo và giảm được 30% chi phí quảng cáo. Thank you!,5,Quảng cáo số,Tạo thêm video hướng dẫn tối ưu quảng cáo theo từng ngành
+13,2024-03-20,LinkedIn comment,Bài chia sẻ về hành trình xây LinkedIn rất motivating. Cám ơn anh đã thật sự minh bạch về con số!,5,Thương hiệu cá nhân,Tiếp tục cập nhật hành trình với số liệu thực tế hàng tháng
+14,2024-03-28,Email,Xin chào Minh Anh. Mình muốn hợp tác viết bài cho blog công ty mình về digital marketing. Phí thế nào?,4,Hợp tác,Xây dựng bảng giá dịch vụ content/ghost writing
+15,2024-04-05,DM,Carousel về công cụ AI rất hay nhưng thiếu ChatGPT cho marketing. Có thể thêm được không?,3,Công cụ,Tạo series riêng về cách dùng ChatGPT/Claude cho marketing
+16,2024-04-12,Survey,Mong chị đăng bài đều hơn. Có tuần không thấy bài nào thì hơi tiếc vì nội dung chị làm rất chất.,4,Tần suất,Lên lịch đăng bài cố định và dùng tool scheduling
+17,2024-04-18,Facebook comment,Bài viết về Tết bình thường thôi chị ơi. Mình nghĩ chị nên tập trung vào nội dung chuyên sâu hơn.,2,Marketing,Tập trung vào nội dung chuyên môn sâu thay vì tổng hợp chung chung
+18,2024-04-25,LinkedIn comment,Data Studio dashboard tutorial rất dễ theo. Mình đã làm được dashboard đầu tiên nhờ bài này!,5,Phân tích dữ liệu,Tạo thêm template dashboard cho các ngành khác nhau
+19,2024-05-02,Email,Em là sinh viên năm cuối ngành marketing. Blog của chị giúp em rất nhiều trong bài luận tốt nghiệp. Cám ơn chị!,5,Giáo dục,Tạo mục tài liệu tham khảo dành cho sinh viên
+20,2024-05-10,DM,Nội dung hay nhưng mình thấy thiếu case study về thị trường Việt Nam. Phần lớn ví dụ là từ nước ngoài.,3,Case study,Tăng tỷ lệ case study từ doanh nghiệp Việt Nam trong nội dung
+21,2024-05-15,Survey,Mình muốn có nhóm mastermind hoặc cộng đồng riêng để hỏi đáp trực tiếp với chị.,4,Cộng đồng,Cân nhắc tạo nhóm premium hoặc buổi Q&A hàng tháng
+22,2024-05-20,LinkedIn comment,So sánh Google Ads vs Meta Ads rất chi tiết và công bằng. Ít thấy ai phân tích kỹ như vậy.,5,Quảng cáo số,Tạo thêm bài so sánh các công cụ/nền tảng marketing khác
+23,2024-05-28,Facebook comment,Chị ơi mình ở tỉnh nên khó tham gia event offline. Có thể tổ chức online không ạ?,3,Sự kiện,Tổ chức webinar hoặc livestream định kỳ cho người ở xa
+24,2024-06-04,Email,Rất thích bài về 7 điều xây dựng thương hiệu cá nhân. Chị có kế hoạch viết ebook không?,4,Thương hiệu cá nhân,Viết ebook miễn phí về xây dựng thương hiệu cá nhân cho marketer
+25,2024-06-10,DM,Template email nurture tuyệt vời! Mình áp dụng luôn cho shop bán hàng online. Tỷ lệ mở email tăng 40%.,5,Email Marketing,Tạo thêm template cho các ngành/mục đích khác nhau
+26,2024-06-15,Survey,Nên có thêm bài viết bằng tiếng Anh để tiếp cận thị trường quốc tế.,3,Ngôn ngữ,Cân nhắc đăng song ngữ hoặc tạo kênh tiếng Anh riêng
+27,2024-06-18,Facebook comment,Bài Canva vs Figma chưa sâu lắm. Mình nghĩ cần so sánh thêm về pricing và tính năng cụ thể hơn.,2,Công cụ,Làm lại bài review kỹ hơn với bảng so sánh chi tiết
+28,2024-06-22,LinkedIn comment,Mình theo dõi chị từ khi mới 500 followers. Thấy chị phát triển nhanh quá! Nội dung ngày càng chất lượng.,5,Thương hiệu cá nhân,Ghi nhận và cảm ơn follower đầu tiên — tạo bài tri ân cộng đồng
+29,2024-06-26,Email,Công ty mình muốn thuê chị tư vấn chiến lược digital marketing. Chị có nhận dự án consulting không?,4,Tư vấn,Xây dựng gói dịch vụ tư vấn marketing cho doanh nghiệp
+30,2024-06-30,DM,Bài tổng kết 6 tháng quá chi tiết! Cám ơn chị đã chia sẻ cả những thất bại. Điều này rất hiếm trên mạng xã hội.,5,Minh bạch,Duy trì báo cáo định kỳ 3-6 tháng để tạo trust với cộng đồng

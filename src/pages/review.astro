@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCourseSessions } from "../lib/course";
+
+const sessions = getCourseSessions();
+const finalRubric = [
+  "Problem rõ, có người dùng hoặc nghiệp vụ cụ thể.",
+  "Workflow chạy được từ input đến artifact.",
+  "Có agent/skill/rules/knowledge được dùng đúng vai trò.",
+  "Có ít nhất 3 bằng chứng PDCA hoặc cải tiến.",
+  "Có audit note: rủi ro, giới hạn, dữ liệu nhạy cảm.",
+  "Demo live hoặc fallback output đủ thuyết phục."
+];
+---
+
+<BaseLayout title="Review Board">
+  <section class="page-header">
+    <p class="eyebrow">Artifact tracker</p>
+    <h1>Theo dõi bài nộp và chuẩn chấm cuối khóa</h1>
+    <p>Trang này giúp giảng viên review nhanh từng buổi và giúp học viên biết artifact nào cần hoàn thiện.</p>
+  </section>
+
+  <section class="tracker-table-wrap">
+    <table class="tracker-table">
+      <thead>
+        <tr>
+          <th>Buổi</th>
+          <th>Mission</th>
+          <th>Artifact</th>
+          <th>Tiêu chí đạt</th>
+          <th>Review</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sessions.map((session) => (
+          <tr>
+            <td>{session.number.toString().padStart(2, "0")}</td>
+            <td><a href={`/sessions/${session.slug}/`}>{session.topic}</a></td>
+            <td>{session.artifact || "Artifact thực hành"}</td>
+            <td>
+              <ul>
+                {session.guidance.successCriteria.map((item) => <li>{item}</li>)}
+              </ul>
+            </td>
+            <td><a href={`/instructor/sessions/${session.slug}/`}>Mở rubric</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel panel-success">
+    <h2>Rubric cuối khóa</h2>
+    <ul>
+      {finalRubric.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+</BaseLayout>

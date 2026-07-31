@@ -1,0 +1,515 @@
+SOURCE: MindX_AG_Lesson 10.pdf
+PAGES: 30
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 10
+QUY HOẠCH KIẾN TRÚC & 
+XÂY DỰNG HỆ THỐNG AI CHO
+CÔNG VIỆC THỰC TẾ
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Thiết kế kỹ thuật hệ thống theo mô hình 7 thành tố
+Thực hành đóng gói bộ kỹ năng, tri thức và quy tắc vận hành an toàn
+.
+MỤC TIÊU
+HỌC TẬP
+Tư duy kiến trúc sư hệ thống
+làm chủ phương pháp SCOPE để phân rã các quy trình nghiệp vụ phức tạp.
+Phổ biến Barem điểm và khởi động dự án cuối khóa
+
+=== PAGE 3 ===
+Phần 1:
+TƯ DUY KIẾN TRÚC SƯ HỆ THỐNG
+
+=== PAGE 4 ===
+Thực trạng vận hành khi thiếu quy hoạch kiến trúc dẫn đến hàng loạt rủi ro nghiêm trọng:
+⚠  Dữ Liệu Đầu Vào Hỗn Loạn
+Dữ liệu thô từ đối tác/khách hàng gửi về lộn xộn, sai lệch
+định dạng, trống ô (Null), nhập sai cột – không có cơ chế
+kiểm soát nào.
+🤖  AI Ảo Giác (Hallucination)
+Ném trực tiếp dữ liệu bẩn cho AI →  AI xử lý sai, đưa ra kết
+quả ảo giác hoặc ghi đè dữ liệu rác vào Database nội bộ.
+🔢  Sai Lệch Số Liệu Tài Chính
+AI tính toán số học trực tiếp bằng ngôn ngữ tự nhiên →  Dễ
+bị sai lệch số liệu tài chính lớn, gây thiệt hại nghiêm trọng.
+💥  Hệ Thống Sập Hoàn Toàn
+Khi gặp tệp tin hỏng hoặc giá trị không hợp lệ →  Hệ thống bị
+Crash, con người vẫn phải dọn dẹp thủ công.
+Vấn đề: Sự tự phát của AI trong doanh nghiệp
+
+=== PAGE 5 ===
+Định nghĩa Agentic Workspace
+Một không gian làm việc số khép kín, nơi các AI Agent chuyên
+biệt được phân cấp nhiệm vụ rõ ràng và phối hợp hành động tự
+trị thông qua các quy tắc bàn giao nghiêm ngặt.
+🛡  Nguyên lý chống nhiễm độc dữ liệu
+Tách biệt hoàn toàn giữa dữ liệu đầu vào thô chưa được kiểm chứng
+và cơ sở dữ liệu cốt lõi của công ty. Không bao giờ để dữ liệu bẩn
+chạm vào hệ thống nội bộ.
+🔄  Khả năng tự chữa lành (Self-Healing)
+Khi phát hiện lỗi dữ liệu, AI không dừng hoạt động mà tự động cách ly
+dòng lỗi, lập báo cáo sự cố và tự động soạn email phản hồi đối tác yêu
+cầu hiệu chỉnh dữ liệu.
+Giải pháp: Mô hình hệ thống Agentic tự phòng thủ
+
+=== PAGE 6 ===
+Bộ khung 5 bước phân tích yêu cầu doanh nghiệp bắt buộc phải thực hiện trước khi triển khai bất kỳ hệ thống AI nào.
+Phương pháp phân rã nghiệp vụ: Khung SCOPE
+P 
+– 
+Process
+O 
+– 
+Objectives
+C
+– Constraints
+S 
+– 
+Situation
+Bản vẽ sơ đồ luồng
+thông tin từ đầu vào
+đến đầu ra
+KPI định lượng rõ
+ràng (Ví dụ: Giảm từ
+3 ngày xuống 3 phút)
+Xác định dữ liệu rác
+thường gặp, giới hạn
+bảo mật và hạn mức
+chi tiêu
+Mô tả hiện trạng quy
+trình, phòng ban liên
+quan và điểm nghẽn
+thời gian
+E 
+–
+Evaluation
+Tiêu chuẩn kiểm
+toán kết quả đầu ra
+đảm bảo độ chính
+xác 100%
+
+=== PAGE 7 ===
+📍  S – Situation: Phân Tích Bối Cảnh
+& Điểm Đau
+Các câu hỏi cần trả lời:
+Quy trình hiện tại đang làm thủ công mất bao nhiêu
+giờ?
+Ai đang là người quá tải trong quy trình?
+Dữ liệu đang nằm rải rác ở những kênh nào? (Zalo,
+Excel, Drive...)
+Điểm nghẽn thời gian lớn nhất nằm ở bước nào?
+🚧  C – Constraints: Phòng Chống
+ Rác Đầu Vào
+Các câu hỏi cần trả lời:
+Dữ liệu đối tác gửi đến thường bị lỗi gì? (Cột Đơn giá để
+trống, cột Đơn vị tính ghi sai quy chuẩn, file bị lỗi font...)
+Giới hạn ngân sách trần cho phép tối đa của từng hạng
+mục là bao nhiêu?
+Thông tin nào tuyệt đối bảo mật, không được phép AI xử
+lý tự động?
+Bỏ qua bước Constraints là nguyên nhân số 1 khiến
+hệ thống AI bị nhiễm độc dữ liệu.
+Chi tiết SCOPE – Phần 1: Situation & Constraints
+
+=== PAGE 8 ===
+🎯  O – Objectives
+KPI phải đo lường được bằng số liệu:
+Số giờ lao động tiết kiệm được của
+nhân viên
+Tỷ lệ xử lý thành công không có sai
+sót (%)
+Thời gian phản hồi đối tác rút ngắn
+⚙  P – Process
+Phân rã luồng xử lý thành các khối chức năng:
+1.Tiếp nhận dữ liệu đầu vào
+2.Lọc sạch & kiểm định
+3.So khớp tri thức nội bộ
+4.Xử lý sự cố & cách ly lỗi
+5.Phê duyệt bởi con người
+6.Bàn giao đầu ra sạch
+✅  E – Evaluation
+Kiểm toán đầu ra bao gồm:
+Cách thức hệ thống tự kiểm tra chênh
+lệch số liệu
+Tính lịch sự và đầy đủ thông tin của
+email phản hồi lỗi gửi nhà cung cấp
+Log ghi nhận toàn bộ hành động của
+AI để kiểm tra lại
+Phê duyệtXử lýSo khớpLọc sạchTiếp nhận
+Chi tiết SCOPE – Phần 2: Objectives, Process & Evaluation
+
+=== PAGE 9 ===
+Phần 2:
+THIẾT KẾ KỸ THUẬT HỆ THỐNG THEO MÔ HÌNH
+7 THÀNH TỐ
+
+=== PAGE 10 ===
+Sơ đồ liên kết dòng dữ liệu tuần hoàn giữa 7 thành tố cốt lõi tạo nên một hệ thống AI tự phòng thủ hoàn chỉnh.
+Nguyên tắc vận hành: Bộ não AI Agent đọc hướng dẫn từ Skill →  tra cứu Knowledge Base →  sử dụng Tools tính toán →
+ gửi kết quả nháp lên Human Checkpoint →  xuất Output sạch.
+Kiến trúc 7 thành tố của hệ thống Agentic Workspace
+
+=== PAGE 11 ===
+1
+Input – Dữ Liệu Đầu Vào
+Xác định rõ tệp tin tiếp nhận: Excel,
+Word, CSV
+Quy chuẩn hóa danh mục tiêu đề
+các cột bắt buộc phải có
+AI dễ dàng trích xuất thông tin khi
+cấu trúc được định nghĩa rõ ràng
+2
+AI Agent – Bộ Não Điều Phối
+Định hình Persona (Vai trò xã hội
+của Agent)
+Ví dụ: "Chuyên gia Kế toán nghiêm
+cẩn, tập trung phân tích logic, chi tiết
+và không khoan nhượng với dữ liệu
+rác"
+Persona quyết định cách Agent
+phản ứng với mọi tình huống
+3
+Tools – Công Cụ Thực Thi
+Chuyên Dụng
+Không để AI tự tính toán số lớn
+bằng ngôn ngữ tự nhiên
+Trang bị Tool chạy code Python
+(Pandas) để xử lý dữ liệu
+Biểu thức chính quy (Regex) để làm
+sạch chuỗi ký tự
+Chi tiết thành tố 1, 2, 3: Input – AI Agent – Tools
+
+=== PAGE 12 ===
+📚  Thành Tố 4: Knowledge – Tri Thức
+Tĩnh Nội Bộ
+Là các file dữ liệu tĩnh được phê duyệt chính thức:
+Bảng định mức ngân sách trần sự kiện
+Quy chế chi tiêu nội bộ doanh nghiệp
+Danh mục nhà cung cấp được phê duyệt
+Đây là "mỏ neo tri thức" giúp AI luôn có căn cứ chính
+xác để đối chiếu thực tế, triệt tiêu hoàn toàn sự bịa đặt
+thông tin (Hallucination).
+🧠  Thành Tố 5: Memory/Skill – Bộ Kỹ
+Năng Vĩnh Viễn
+Tài liệu định dạng cấu hình hành vi dài hạn, thường đóng gói
+trong file Markdown (.md):
+Toàn bộ các kịch bản ứng phó với từng loại lỗi
+Quy định định dạng tiền tệ chuẩn
+Quy chuẩn so khớp từ ngữ đồng nghĩa (VD: "đơn vị" = "unit"
+= "ĐVT")
+Hành vi mặc định khi gặp dữ liệu không xác định
+Chi tiết thành tố 4 & 5: Knowledge & Memory/Skill
+
+=== PAGE 13 ===
+Thành Tố 6: Human-in-the-Loop (HITL)
+Không để AI tự quyết định các việc rủi ro cao:
+Chi tiền vượt ngân sách đã phê duyệt
+Gửi thư từ chối đối tác lớn
+Thay đổi dữ liệu master trong hệ thống
+AI tự động gom lỗi, lập báo cáo, soạn sẵn dự thảo email. Con
+người chỉ cần Approve hoặc Reject với 1 click chuột.
+Thành Tố 7: Output/Handoff – Đầu Ra Sạch
+Đầu ra sau khi qua bộ lọc validation và duyệt chi:
+Dữ liệu đã được kiểm định 100% độ chính xác
+Cấu trúc Handoff được quy định rõ ràng
+Hệ thống kế tiếp hoặc Agent kế tiếp thừa hưởng ngay lập
+tức mà không cần xử lý lại từ đầu
+Chi Tiết Thành Tố 6 & 7: Human Checkpoint & Output/Handoff
+
+=== PAGE 14 ===
+Tiêu Chí ❌  Trước (Không có kiến trúc) ✅  Sau (Agentic Workspace)
+Dữ liệu đầu vào Ném thẳng dữ liệu bẩn cho AI xử lý Qua lớp Input Validation trước khi AI tiếp cận
+Tính toán số học AI tự tính bằng ngôn ngữ tự nhiên →  Sai lệch Python/Pandas xử lý →  Chính xác 100%
+Khi gặp lỗi Hệ thống Crash, con người dọn dẹp thủ công AI cách ly lỗi, tự soạn email, Self-Healing
+Quyết định rủi ro cao AI tự quyết định không kiểm soát Human-in-the-Loop duyệt trước khi thực thi
+Tri thức tham chiếu AI bịa đặt thông tin (Hallucination) Knowledge Base làm mỏ neo tri thức chính xác
+Tổng quan so sánh: Trước & sau khi áp dụng kiến trúc
+
+=== PAGE 15 ===
+Minh họa cách 7 thành tố phối hợp trong một kịch bản thực tế tại doanh nghiệp:
+1📥  Tiếp Nhận
+File Excel báo giá từ nhà cung cấp gửi qua email 
+→  Input Layer tiếp nhận
+ 2 🔍  Kiểm Định
+Regex kiểm tra định dạng, Pandas phát hiện ô trống, cột sai
+→  Cách ly dòng lỗi
+3📊  Đối Chiếu
+AI Agent tra cứu Knowledge Base (Bảng định mức ngân sách
+trần) để so sánh giá
+4 ⚠  Xử Lý Lỗi
+Nếu vượt ngân sách hoặc có lỗi →  AI soạn email phản hồi, gửi
+lên HITL duyệt
+5✅  Phê Duyệt
+Con người xem xét báo cáo AI soạn sẵn 
+→  Approve/Reject 1 click
+6 📤  Bàn Giao
+Dữ liệu sạch được chuẩn hóa →  Handoff sang hệ thống kế toán tự động
+Kết quả: Giảm thời gian xử lý từ 3 ngày xuống còn 3 phút. Tỷ lệ sai sót: 0%.
+Ứng dụng thực tế: Hệ thống xử lý báo giá nhà cung cấp
+
+=== PAGE 16 ===
+INPUT VALIDATION & PREVENTION
+Hệ thống bảo vệ dữ liệu hai lớp giúp loại bỏ hoàn toàn dữ liệu bẩn trước khi chúng xâm nhập vào database chính, đảm bảo tính toàn
+vẹn của toàn bộ luồng tự động hóa.
+Tầng 1: Input Validation
+Kiểm định chất lượng dữ liệu đầu vào
+Tự động chạy bộ lọc chuỗi Regex để loại bỏ toàn bộ ký tự
+lạ bẩn như đ, VND, ., , ra khỏi trường số liệu
+Phân loại dòng dữ liệu lỗi thành 3 nhóm sự cố sống còn
+Tầng 2: Prevention
+Ngăn ngừa lỗi lây nhiễm vào hệ thống
+Cách ly toàn bộ các dòng lỗi vào "Error Stack" (Vùng đệm
+sự cố)
+Tuyệt đối chặn đứng, không cho phép ghi các dòng lỗi vào
+database chính
+Cơ chế lọc rác hai tầng
+
+=== PAGE 17 ===
+Hệ thống phân loại tự động nhận diện và gán nhãn từng dòng lỗi vào đúng nhóm sự cố để xử lý phù hợp.
+🚫  LỖI_BỎ_TRỐNG
+Thiếu thông tin tại các cột bắt buộc
+trong bảng dữ liệu. Dòng không thể xử lý
+khi thiếu trường quan trọng như mã
+hàng, tên hạng mục hoặc đơn vị tính.
+⚠  LỖI_KIỂU_DỮ_LIỆU
+Đơn giá được ghi bằng chữ thay vì số. Ví
+dụ điển hình: "Liên hệ", "Thỏa thuận", "Tùy
+chọn" — không thể tính toán tự động.
+❌  LỖI_GIÁ_TRỊ_RỖNG
+Giá trị đơn giá hoặc số lượng bằng 0
+hoặc số âm. Dữ liệu phi logic, không
+phản ánh thực tế nghiệp vụ và có thể
+gây sai lệch tính toán nghiêm trọng.
+Bất kỳ dòng nào thuộc một trong 3 nhóm trên đều bị cách ly ngay lập tức vào Error Stack — tuyệt đối không được ghi
+vào database chính.
+3 nhóm sự cố sống còn
+
+=== PAGE 18 ===
+KHUNG MICRO
+Phương pháp đóng gói kỹ năng sắc bén giúp định hình chính xác năng lực, danh tính và hành vi của từng AI Agent trong hệ thống tự động hóa.
+1 M — Mission (Sứ mệnh)
+Mục tiêu tối cao mà Agent này được sinh ra để giải quyết. Xác định rõ bài toán nghiệp vụ cụ thể mà Agent chịu trách nhiệm xử lý từ đầu đến cuối.
+2 I — Identity (Danh tính)
+Đóng vai trò là chuyên gia nào? Tính cách, tôn chỉ làm việc, phong cách giao tiếp và chuẩn mực đạo đức nghề nghiệp của Agent.
+3 C — Capabilities (Năng lực)
+Các công cụ kỹ thuật và kỹ năng chuyên môn được trang bị. Ví dụ: Trích xuất Regex, Đọc bảng tính Pandas, gọi API ngoài.
+4 R — Rules (Quy tắc hành vi)
+Các quy định nghiêm ngặt bắt buộc tuân thủ. Ví dụ: Cấm tự ý thay đổi đơn giá, cấm tự ý phê duyệt vượt hạn mức ngân sách.
+5 O — Outputs (Kết quả đầu ra)
+Định dạng báo cáo bàn giao chuẩn mực: cấu trúc cột, định dạng file, ngôn ngữ trình bày và tiêu chí chấp nhận kết quả đầu ra.
+Đóng gói nhân sự AI tiêu chuẩn
+
+=== PAGE 19 ===
+TƯ DUY OIPO
+Thiết kế Workflow thông suốt và kế thừa dữ liệu — đảm bảo mỗi bước trong quy trình tự động hóa đều được định nghĩa rõ ràng, có thể kiểm tra và tái sử dụng.
+Kết quảQuy trìnhĐầu vàoMục tiêu
+O — Objective
+Kết quả cuối cùng của quy trình tự động hóa giải quyết bài toán gì
+cho doanh nghiệp? Phải được phát biểu rõ ràng, đo lường được.
+I — Input
+Quy định rõ định dạng tệp tin, cấu trúc cột cần cung cấp tại điểm khởi đầu
+quy trình. Không có Input chuẩn thì không có Output tin cậy.
+P — Process
+Sự phân chia nhiệm vụ, luồng đi của thông tin qua các Agent. Cài
+đặt các nhánh điều kiện khi phát hiện lỗi.O — Output
+Xuất báo cáo trạng thái hoàn thành và dữ liệu định dạng sạch sẽ, chuẩn hóa.
+Quy hoạch luồng công việc tự động
+
+=== PAGE 20 ===
+Viết quy tắc vận hành tường minh giúp AI Agent hiểu đúng, thực thi đúng và không gây ra hành vi ngoài ý muốn trong môi trường
+sản xuất thực tế.
+C — Concise (Ngắn gọn)
+Quy tắc phải ngắn gọn, dễ hiểu.
+Tránh viết dài dòng, vòng vo. Mỗi
+quy tắc chỉ nên truyền đạt một ý
+duy nhất.
+L — Logical (Logic)
+Có điều kiện If/Then rõ ràng. Ví dụ:
+"Nếu đơn giá > ngân sách trần →
+gắn cờ ⚠  và đề xuất hành động."
+E — Explicit (Rõ ràng)
+Không mơ hồ, không đa nghĩa. Mỗi
+từ ngữ trong quy tắc phải có một và
+chỉ một cách hiểu duy nhất.
+A — Actionable (Khả thi)
+AI có thể tự thực thi được mà không
+cần hỏi lại con người. Quy tắc phải
+đủ cụ thể để máy tính hiểu và hành
+động.
+R — Relevant (Liên quan)
+Liên quan trực tiếp đến nghiệp vụ.
+Không viết quy tắc chung chung.
+Mỗi quy tắc phải phục vụ một mục
+tiêu nghiệp vụ cụ thể.
+Thiết lập Rules theo khung CLEAR
+
+=== PAGE 21 ===
+Xác định rõ cấu trúc dữ liệu khi Agent A bàn giao cho Agent B — tránh tình trạng trôi nổi thông tin hoặc lỗi cấu trúc làm ngắt quãng luồng
+tự động hóa.
+Handoff Contract là thỏa thuận ngầm về cấu trúc dữ liệu giữa hai Agent. Nếu Agent A xuất ra dữ liệu không đúng schema đã cam kết,
+Agent B phải từ chối tiếp nhận và kích hoạt cảnh báo ngay lập tức.
+Handoff an toàn giữa các Agent
+
+=== PAGE 22 ===
+Bối cảnh & Điểm đau (Pain Point): Phòng Tổ chức Sự kiện thường xuyên phải nhận các bảng báo giá thiết bị (âm
+thanh, ánh sáng, nhân sự) từ nhiều nhà cung cấp khác nhau dưới dạng file Excel. Việc đối soát thủ công từng dòng
+đơn giá với định mức ngân sách trần đã phê duyệt của công ty rất mất thời gian. Hơn nữa, nhà cung cấp thường
+gửi file bị lỗi định dạng (ô trống, đơn giá ghi bằng chữ "Thương lượng", hoặc giá bằng 0) dẫn đến việc hệ thống đối
+soát tự động thông thường bị sập hoặc ghi nhận sai số liệu.
+Chi tiết yêu cầu hệ thống:
+Đọc & So khớp tri thức: Đọc dữ liệu đầu vào từ file báo giá của Nhà cung cấp (gồm 20 dòng) Tại đây
+và tự động so khớp tên hạng mục với bảng Ngân sách trần sự kiện của công ty để lấy định mức giá trần
+tương ứng. File ngân sách: Tại đây
+Tính toán chênh lệch: Sử dụng công cụ tính toán để tính chênh lệch đơn giá giữa báo giá của nhà cung cấp
+và ngân sách trần. Gắn nhãn trạng thái cụ thể cho từng hạng mục: Hợp lệ ✅  hoặc Vượt ngân sách ⚠ .
+Bộ lọc chặn lỗi chủ động (Input Validation & Prevention): Tự động phát hiện và cách ly hoàn toàn các
+dòng bị lỗi đơn giá (như đơn giá chứa chữ, trống ô hoặc giá trị bằng 0). Tuyệt đối không ghi các dòng lỗi
+này vào bảng đối soát cuối cùng để bảo vệ tính toàn vẹn của dữ liệu hệ thống. File lỗi: Tại đây
+Tự chữa lành (Self-Healing): Lập bảng danh sách sự cố lỗi chi tiết (chỉ rõ số dòng, hạng mục bị lỗi và loại
+lỗi). Đồng thời, tự động soạn thảo bản nháp Email phản hồi gửi cho nhà cung cấp với văn phong lịch sự, liệt
+kê chi tiết các dòng lỗi cần họ điều chỉnh lại.
+Đề bài: Event Ops Auditor Agent
+
+=== PAGE 23 ===
+Khởi động hệ thống bằng cách nạp đúng bộ kỹ năng và bản vẽ kiến trúc vào ngữ cảnh làm việc của AI trước
+khi thực thi bất kỳ tác vụ nào.
+01
+Mở trình soạn thảo AI
+Khởi động GG Antigravity — chọn model phù hợp với khả năng xử
+lý file Excel và sinh code tự động hóa.
+02
+Tạo Skill & bản vẽ spec
+Đưa Event_Automation_Skill.md và
+Event_Automation_Workspace_Spec.md vào ngữ cảnh làm việc
+để Agent hiểu đúng domain nghiệp vụ.
+03
+Kích hoạt bộ não Agent bằng Prompt SCOPE
+Sử dụng phương pháp SCOPE (Situation - Constraints - Objectives
+- Process - Evaluation) để phân tích yêu cầu và viết Workspace
+Spec chi tiết.
+04
+Xuất sơ đồ kiến trúc Mermaid
+Thiết kế sơ đồ theo mô hình 7 thành tố: Trigger →  Input
+Validation →  Agent Logic →  Knowledge →  Tools →  Output
+Validation →  Monitoring.
+Nhấn mạnh vào cơ chế "Chặn lỗi từ trong thiết kế" (Prevention) ngay từ bước viết Workspace Spec — đây là nền tảng của toàn bộ kiến
+trúc an toàn.
+Bước 1 & 2: Thiết lập bộ Skill & Spec kiến trúc
+
+=== PAGE 24 ===
+Kịch bản lý tưởng: AI Agent nhận file báo giá sạch, tự động đối soát với ngân sách trần và xuất bảng kết quả chuẩn mực 7 cột.
+Đính kèm file ngân sách & báo giá sạch
+Nạp Ngan_sach_Su_kien.xlsx và Bao_Gia_Chuan.xlsx (20
+dòng thiết bị) vào ngữ cảnh AI.
+Đọc & phân tích toàn bộ 20 dòng báo giá
+Agent đóng vai "Chuyên gia Kế toán & Vận hành Sự kiện",
+quét toàn bộ dữ liệu đầu vào.
+Đối soát & tính chênh lệch đơn giá
+So khớp cột 'Hạng mục chi tiết' của báo giá với cột 'Hạng
+mục' trong file ngân sách. Tính: Chênh lệch = Đơn giá NCC
+− Ngân sách trần.
+Xuất bảng kết quả 7 cột chuẩn mực
+STT | Hạng mục chi tiết | Đơn giá NCC | Ngân sách trần |
+Chênh lệch | Trạng thái (Hợp lệ ✅  / Vượt ngân sách ⚠ ) |
+Hành động đề xuất
+Bước 3: Đối soát báo giá chuẩn
+
+=== PAGE 25 ===
+Quy trình xử lý lỗi
+1 Quét & cô lập dòng lỗi
+Quét toàn bộ 20 dòng từ Bao_Gia_Loi.xlsx. Cô lập các dòng có
+đơn giá chứa chữ "Chưa có giá", "Tùy chọn", giá trị rỗng hoặc
+bằng 0.
+2 Chặn lỗi chủ động
+Tuyệt đối KHÔNG ghi các dòng lỗi vào danh sách duyệt chi hệ
+thống. Đây là nguyên tắc Prevention cốt lõi.
+3 Xuất bảng sự cố chi tiết
+Báo cáo "Danh sách sự cố dữ liệu rác": Dòng nào, hạng mục
+nào, lỗi cụ thể là gì.
+4 Tự động soạn Email phản hồi NCC
+Giọng văn cực kỳ chuyên nghiệp và lịch sự, liệt kê chi tiết các
+dòng lỗi cần hiệu chỉnh trước khi gửi lại hệ thống.
+📋  Mẫu Email tự động soạn
+Kính gửi: Nhà cung cấp thiết bị sự kiện
+Chủ đề: Yêu cầu hiệu chỉnh báo giá — Phát hiện dữ liệu không hợp lệ
+Hệ thống của chúng tôi đã tự động phát hiện [X] dòng dữ liệu trong
+tệp báo giá gửi ngày [ngày] chưa đáp ứng tiêu chuẩn định dạng. Kính
+đề nghị Quý đối tác xem xét và cập nhật lại các hạng mục sau:
+Dòng [N]: Hạng mục [tên] — Lỗi: Đơn giá chứa ký tự không hợp lệ
+Dòng [M]: Hạng mục [tên] — Lỗi: Giá trị rỗng / bằng 0
+Trân trọng cảm ơn sự hợp tác của Quý đối tác.
+Bước 4: Chặn dữ liệu rác & Kích hoạt self-heal
+
+=== PAGE 26 ===
+Kiến trúc sư Giải pháp Agentic AI cấp cao tổng hợp 3 bài học đắt giá nhất về Thiết kế Kiến trúc hệ thống theo mô hình 7 thành tố so với việc chỉ viết
+code tự động hóa thông thường.
+🏗  Bài học 1: Kiến trúc thắng
+Code
+Mô hình 7 thành tố (Trigger →  Input
+Validation →  Agent Logic →  Knowledge
+→  Tools →  Output Validation →
+Monitoring) tạo ra một hệ thống có thể
+kiểm tra, mở rộng và bảo trì — điều mà
+code tự động hóa thông thường không
+thể làm được. Khi một thành tố hỏng,
+bạn biết chính xác nơi cần sửa.
+🛡  Bài học 2: Prevention là đầu
+tư, không phải chi phí
+Chặn lỗi tại cửa ngõ (Input Validation +
+Prevention) tiết kiệm gấp 10 lần so với
+việc xử lý hậu quả sau khi dữ liệu bẩn đã
+lan vào database chính. Một dòng dữ
+liệu rác trong hệ thống doanh nghiệp
+lớn có thể gây ra hàng loạt báo cáo sai,
+quyết định sai và tổn thất tài chính thực
+sự.
+🔗  Bài học 3: Handoff Contract
+là xương sống của Multi-Agent
+Trong hệ thống nhiều Agent, thỏa thuận
+cấu trúc dữ liệu giữa các Agent
+(Handoff Contract) quan trọng hơn bất
+kỳ thuật toán nào. Không có Handoff
+Contract rõ ràng, luồng tự động hóa sẽ
+vỡ tại điểm giao tiếp giữa các Agent —
+và lỗi này cực kỳ khó debug trong môi
+trường production.
+Áp dụng đúng mô hình 7 thành tố + CLEAR Rules + MICRO Agent Packaging = Hệ thống Agentic AI ổn định, an toàn và sẵn sàng cho doanh
+nghiệp lớn.
+Tổng kết
+
+=== PAGE 27 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 28 ===
+ĐỀ BÀI THỰC HÀNH KHỞI ĐỘNG DỰ ÁN (HR TalentOps Agentic System)
+Tên đề tài: Hệ thống Tự động hóa Tuyển dụng & Đánh giá Ứng viên tự động.
+Bối cảnh & Điểm đau (Pain Point): Bộ phận Tuyển dụng (HR) bị quá tải khi phải tiếp nhận hàng trăm CV
+ứng viên mỗi tuần cho nhiều vị trí công việc khác nhau. Quy trình lọc CV thủ công mất từ 3–5 ngày, dẫn
+đến việc gửi bài test năng lực cho ứng viên bị chậm trễ, khiến tỷ lệ ứng viên tự ý bỏ ngang quy trình
+tuyển dụng tăng cao (lên tới 25%).
+Chi tiết yêu cầu hệ thống:
+Tiếp nhận & Sàng lọc CV sơ bộ: Thiết lập Agent tiếp nhận file CV ứng viên, trích xuất các thông
+tin chính (kinh nghiệm, kỹ năng, học vấn) và đối chiếu với Bản mô tả công việc (JD) trong kho tri
+thức để chấm điểm và đánh giá độ phù hợp sơ bộ.
+Tự động hóa bài kiểm tra năng lực: Đối với những ứng viên vượt qua vòng lọc CV, hệ thống tự
+động gửi email đính kèm đề test chuyên môn. Khi ứng viên nộp bài, Agent chuyên môn sẽ tự
+động đọc bài làm, chấm điểm dựa trên đáp án mẫu và quy chế chấm điểm có sẵn trong tri
+thức.
+Human Checkpoint (HITL): Thiết lập một điểm kiểm soát bắt buộc của con người. Hệ thống tự
+động tổng hợp hồ sơ của các ứng viên đạt điểm test yêu cầu vào một bảng báo cáo gửi cho HR
+Manager để duyệt bước tiếp theo (gọi phỏng vấn hoặc từ chối).
+Bàn giao & Giao tiếp (Output): Dựa trên quyết định phê duyệt của HR Manager tại bước Human
+Checkpoint, hệ thống tự động soạn sẵn email gửi cho ứng viên (Thư mời phỏng vấn kèm lịch
+hẹn hoặc Thư cảm ơn/từ chối lịch sự).
+Hướng dẫn chi tiết tại đây: Tại đây
+
+=== PAGE 29 ===
+BTVN: CHUẨN BỊ DỰ ÁN CUỐI KHÓA
+Đề bài cuối khóa: Link
+
+=== PAGE 30 ===
+THANK YOU!

@@ -1,0 +1,322 @@
+SOURCE: MindX_AG_Slide 3.pdf
+PAGES: 25
+
+=== PAGE 1 ===
+AGENTIC AI
+Lesson 3
+ĐÓNG GÓI CHUYÊN MÔN (SKILL)
+
+=== PAGE 2 ===
+Buổi học này,
+bạn cần nắm rõ: Thiết kế Skill theo workflow thực tế
+Chuyển đổi các bước trong quy trình làm việc (workflow) thực tế thành cấu
+trúc Expertise Skill hoàn chỉnh, đảm bảo khả năng tái sử dụng cao.
+MỤC TIÊU
+HỌC TẬP
+Cấu trúc Expertise Skill
+Bóc tách thành công cấu trúc Expertise Skill để "dạy" AI suy nghĩ và giải quyết
+vấn đề như một chuyên gia trong lĩnh vực chuyên môn cụ thể.
+Áp dụng Design Mentor
+Vận dụng phương pháp Design Mentor để xây dựng luồng ủy quyền công
+việc cho AI, đảm bảo các tác vụ được xử lý tự động và có tính hệ thống.
+
+=== PAGE 3 ===
+Phần 1:
+Expertise Skill
+
+=== PAGE 4 ===
+Bạn có thấy quen thuộc?
+
+=== PAGE 5 ===
+Bạn có thấy quen thuộc?
+
+=== PAGE 6 ===
+Câu hỏi 1:
+Tình huống: Một khách hàng nhắn tin cho fanpage ABC: "Áo này mình mới mua 3 ngày trước, chưa mặc nhưng phát
+hiện bị rách chỉ ở nách. Mình cao 1m60 nặng 55kg thì đổi sang áo mới size L luôn được không?"
+Dựa vào cấu trúc lệnh của Chatbot ABC, điều gì có khả năng cao nhất sẽ xảy ra?
+A. Bot sẽ tự động kết hợp 2 kịch bản: Vừa tiếp nhận yêu cầu đổi trả (do dưới 7 ngày), vừa tư vấn
+size L phù hợp.
+B. Bot sẽ lúng túng, trả lời chung chung hoặc lập tức xin số điện thoại để Quản lý gọi lại.
+C. Bot sẽ yêu cầu khách hàng cung cấp mã đơn hàng trước khi giải quyết.
+
+=== PAGE 7 ===
+Câu hỏi 2:
+Đoạn lệnh của Chatbot ABC thiếu hụt yếu tố cốt lõi nào khiến nó chỉ dừng ở mức "Chatbot" (làm theo lệnh) chứ
+không thể tiến hóa thành một "Nhân viên số" có khả năng xử lý công việc độc lập?
+A. Thiếu số lượng kịch bản: Cần bổ sung thêm hàng trăm câu lệnh "Nếu - Thì" nữa để bao quát
+mọi tình huống.
+B. Thiếu một quy trình chuyên môn (workflow): Không có các bước đánh giá, phân tích và
+suy luận tuần tự để giải quyết vấn đề tận gốc.
+C. Thiếu các quy tắc cấm kỵ khắt khe hơn để bot không nói sai.
+
+=== PAGE 8 ===
+Sự tiến hóa của AI
+AI đã trải qua một hành trình tiến hóa vượt bậc từ Chatbot đơn giản tới Expertise Skill
+Chatbot
+Prompt
+Agent
+SkillTrả lời câu hỏi
+đơn giản, phản
+ứng theo kịch bản
+cố định.
+Làm theo yêu cầu
+cụ thể, linh hoạt
+hơn nhưng không
+ổn định.
+Thực hiện nhiều
+bước liên tiếp,
+có khả năng lập
+kế hoạch.
+Làm việc như
+chuyên gia — có
+quy trình, kiến thức
+và output chuẩn.
+Skill= bước tiến tiếp theo của AI - không chỉ làm theo lệnh mà còn có khả năng phân tích, hiểu
+mục tiêu, chọn được cách làm đúng.
+
+=== PAGE 9 ===
+Vì sao Skill xuất hiện?
+Vấn đề của Prompt
+1.Nhập mới mỗi lần
+Không có bộ nhớ quy trình nên
+mỗi khi dùng phải nhập lại từ
+đầu.
+2.Không ổn định
+Kết quả thay đổi theo cách diễn
+đạt, không đảm bảo chất lượng
+đồng đều
+3.Không scale được
+Không thể chia sẻ hay nhân
+rộng cho cả team một cách hiệu
+quả
+Giải pháp là: Chuẩn hóa
+Skill ra đời để giải quyết triệt để những hạn chế của
+Prompt truyền thống. Thay vì viết lại mỗi lần, bạn chỉ
+cần xây dựng Skill một lần và tái sử dụng mãi mãi.
+
+=== PAGE 10 ===
+Skill là gì?
+Skill WORKFLOW KNOWLEDGE OUTPUT
+Cách làm - Quy trình
+từng bước rõ ràng, logic
+xử lý được định nghĩa
+sẵn để AI thực thi nhất
+quán.
+Kiến thức - Tài liệu
+nghiệp vụ, quy tắc
+chuyên môn, ngữ cảnh
+cần thiết để AI hiểu đúng
+vấn đề.
+Kết quả chuẩn - Định
+dạng đầu ra được xác
+định trước, đảm bảo chất
+lượng và tính nhất quán.
+👉  AI = Nhân viên có SOP (Standard operating procedure) - Skill chính là bộ SOP giúp AI làm việc
+như một chuyên gia thực thụ.
+
+=== PAGE 11 ===
+Cấu trúc của một Skill
+Mỗi Skill được tổ chức theo cấu trúc thư mục chuẩn, giúp AI dễ dàng tìm kiếm và sử dụng thông tin.
+SKILL.md
+Chứa thông tin mô tả và
+hướng dẫn xử lý.
+Quy định rõ vai trò và từng
+bước làm việc. AI dựa vào
+đây để biết phải làm gì từ A
+đến Z.
+bắt buộc phải có
+scripts/
+Chứa các đoạn code ngắn
+(như Python). 
+Giống như cấp thêm phần
+mềm nội bộ giúp AI tính
+toán phức tạp hoặc lấy dữ
+liệu nhanh hơn.
+references/
+Chứa các quy định, chính
+sách, kiến thức ngành. 
+Khi AI cần thông tin sâu để
+làm đúng chuyên môn, nó
+sẽ tự tra cứu ở đây.
+assets/
+Chứa các file mẫu,
+template.
+Đảm bảo kết quả đầu ra
+(output) của AI luôn đồng
+nhất và đúng format tiêu
+chuẩn.
+Đọc thêm về Skill: Tại đây
+
+=== PAGE 12 ===
+Giải thích chi tiết về SKILL.md
+80%
+20%
+SKILL.md
+Code & Scripts
+Process + Output định nghĩa
+Tự động hóa bổ sung
+80%
+Sức mạnh nằm ở SKILL.md
+Xác định Cách làm (Process): Bóc tách chuyên môn thành các bước xử lý logic
+rành mạch.
+Định nghĩa Tiêu chuẩn (Output): Mô tả rõ ràng hình hài của kết quả đầu ra.
+Bản chất: Sử dụng ngôn ngữ tự nhiên để cung cấp kiến thức chuyên gia vào AI 
+20%
+Công cụ bổ trợ từ Code & Scripts
+Vai trò: Tự động hóa và tăng tốc độ xử lý các tác vụ khó.
+Bản chất: Chỉ là công cụ. Nếu quy trình (SKILL.md) sai lệch, Code chỉ khiến AI
+làm sai nhanh hơn.
+👉 Cần đầu tư thời gian vào SKILL.md trước
+
+=== PAGE 13 ===
+Ví dụ thực tế: HR skill (Bước tạo giao diện)
+
+=== PAGE 14 ===
+Ví dụ thực tế: HR skill (Bước tạo giao diện)
+
+=== PAGE 15 ===
+Vì sao sử dụng AI thông thường kém hiệu quả?
+AI không có ý thức hay tư duy kinh doanh. 
+Nó là một cỗ máy toán học, tạo ra câu trả lời
+bằng cách dự đoán từ tiếp theo dựa trên xác suất
+thống kê.
+Bản chất vận hành: 
+ Khi nhận một yêu cầu chung chung, AI buộc phải
+chọn những đáp án mang tính
+trung bình chung chung, hoặc tự phỏng đoán sai
+lệch (ảo giác - hallucination).
+Người dùng mắc lỗi sai vặt
+GIẢI PHÁP: CUNG CẤP WORKFLOW
+Khi cung cấp quy trình từng bước,
+bạn đang thu hẹp xác suất. 
+Mỗi bước AI hoàn thành sẽ tạo ra dữ
+liệu nền tảng chính xác để nó tính
+toán bước tiếp theo, loại bỏ rủi ro
+"đoán mò".
+
+=== PAGE 16 ===
+Phần 2:
+Design Mentor (Ủy quyền cho AI)
+
+=== PAGE 17 ===
+Tiêu chí Cách yêu cầu thông thường Design mentor
+Bản chất giao việc Tập trung vào Kết quả
+Ví dụ: "Viết 1 bài PR áo thun thật hay."
+Chuyển giao Quy trình
+Ví dụ: "Viết 1 bài PR sản phẩm, tuân thủ 3
+bước: Nêu vấn đề →  Đưa giải pháp →  Kêu
+gọi hành động. 
+Vị thế kiểm soát Bạn phụ thuộc vào AI AI tuân thủ luật chơi của bạn
+Chất lượng đầu ra Ngẫu nhiên Chuẩn xác, có thể tái sử dụng
+Giá trị sử dụng Chỉ sử dụng cá nhân Dễ dàng nhân rộng cho team
+DESIGN MENTOR là gì?
+Là phương pháp tiếp cận có hệ thống để "đào tạo" AI - thay vì chỉ ra lệnh, bạn dạy AI cách làm việc đúng từ đầu.
+Giống như việc đào tạo thực tập sinh, bạn không thể ném cho họ 1 nhiệm vụ, và bắt họ phải tự làm.
+
+=== PAGE 18 ===
+3 câu hỏi cho DESIGN MENTOR
+Trả lời 3 câu hỏi để xây dựng nền tảng cho SKILL
+LÀM THEO BƯỚC NÀO? XỬ LÝ NHƯ THẾ NÀO? KẾT QUẢ RA SAO?
+Viết công việc thành 3-5 bước
+tuần tự. Phải bắt đầu bằng ĐỘNG
+TỪ
+Ví dụ:
+Bước 1: [Đọc/Phân tích/Thu
+thập] từ [Nguồn dữ liệu nào]
+Bước 2: [Tổng hợp/So sánh]
+để tìm ra [Cái gì]
+Bước 3: [Viết/Tạo] ra [Bản
+nháp/Báo cáo]
+Gắn quy tắc chuyên môn (Rule)
+cho các bước ở trên. Cung cấp các
+điều kiện NẾU...THÌ... hoặc các
+Ràng buộc.
+Ví dụ:
+Giọng văn / Tiêu chuẩn
+chuyên môn phải là: [Điền tiêu
+chuẩn...]
+NẾU [Gặp trường hợp A], THÌ
+[Phải xử lý thế này...]
+Tuyệt đối KHÔNG ĐƯỢC: [Từ
+cấm kỵ / Hành động sai lầm...]
+Đưa ra kết quả tiêu chuẩn. Tuyệt
+đối không dùng từ chung chung
+như "Viết cho tôi một bài".
+Ví dụ:
+Hình thức trình bày: [Bảng 3
+cột / Danh sách gạch đầu
+dòng / Báo cáo PDF]
+Cấu trúc bắt buộc gồm các
+phần: [1. Tiêu đề... 2. Nội dung...
+3. Chốt lại...]
+(Tùy chọn) Ví dụ tham khảo:
+[Paste một đoạn mẫu bạn cho
+là chuẩn vào đây]
+
+=== PAGE 19 ===
+Ví dụ thực tế: HR skill (Bước tạo SKILL)
+
+=== PAGE 20 ===
+Ví dụ thực tế: HR skill (Bước tạo SKILL)
+
+=== PAGE 21 ===
+TỔNG KẾT: Nguyên tắc xây dựng SKILL
+RÕ BƯỚC (Quy trình
+- Workflow)
+RÕ LUẬT (Logic xử lý
+- Rules)
+RÕ ĐÍCH (Đầu ra -
+Output)
+Hành động: Chia nhỏ công việc thành dòng chảy tuyến tính.
+Lưu ý: Đánh số thứ tự (1, 2, 3) + Bắt đầu bằng Động từ.
+Hành động: Truyền đạt bối cảnh và nguyên tắc chuyên môn..
+Lưu ý:  Điều kiện xử lý (NẾU... THÌ...) + Ràng buộc cấm kỵ.
+Hành động: Đóng khung hình hài kết quả cuối cùng.
+Lưu ý: Định dạng chuẩn + Cung cấp ví dụ mẫu
+
+=== PAGE 22 ===
+Phần 3:
+THỰC HÀNH
+
+=== PAGE 23 ===
+ĐỀ BÀI THỰC HÀNH
+Bối cảnh:
+Bạn là Operations Analyst tại một công ty. Mỗi tháng, bạn sẽ nhận được file dữ liệu export từ hệ thống ERP
+chứa thông tin vận hành như: nhân viên, bộ phận, doanh số/sản lượng, trạng thái công việc theo ngày. Hiện
+tại, quy trình đang làm thủ công: Mở file ExcelLàm sạch dữ liệu+Lọc theo từng bộ phận+Tạo file riêng cho
+từng manager+Tổng hợp số liệu và viết báo cáo. 
+Việc này tốn nhiều thời gian, dễ sai sót và khó scale khi dữ liệu lớn.
+Yêu cầu:
+Dùng Antigravity để: Tạo Skill để xử lý tác vụ này, 
+File dữ liệu từ ERP: Tại đây
+Sau đó sử dụng 2 câu prompt liên quan bất kỳ để kiểm tra Skill
+
+=== PAGE 24 ===
+BÀI TẬP VỀ NHÀ – EDUCATION
+Bối cảnh:
+Bạn là Nhân viên đào tạo (Training/Academic) tại một trung
+tâm giáo dục.
+Hiện tại, bạn cần tổng hợp dữ liệu về học viên để phục vụ báo
+cáo nội bộ, nhưng:
+Không có sẵn file dữ liệu 
+Dữ liệu nằm rải rác trên internet hoặc nhiều nguồn khác
+nhau 
+Việc thu thập thủ công rất mất thời gian 
+Sau khi có dữ liệu, bạn còn phải:
+Chuẩn hóa thành bảng Excel 
+Làm sạch dữ liệu 
+Phân tích theo từng giảng viên 
+Viết báo cáo 
+Quy trình này hiện tại chưa có hệ thống, phụ thuộc nhiều vào
+thao tác thủ công.
+Yêu cầu:
+Xây Skill có khả năng:
+Tự tìm dữ liệu (điểm học viên / khóa học) 
+Chuẩn hóa thành bảng 
+Làm sạch dữ liệu 
+Tạo report theo giảng viên 
+Tự kiểm tra với 2 câu prompt bất kỳ
+
+=== PAGE 25 ===
+THANK YOU!

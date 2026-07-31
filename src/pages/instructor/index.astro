@@ -1,0 +1,155 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCourseSessions, getPhaseGroups } from "../../lib/course";
+
+const groups = getPhaseGroups(getCourseSessions());
+---
+
+<BaseLayout title="Instructor Guides">
+  <!-- Password Gate -->
+  <div id="instructor-gate" class="password-gate">
+    <div class="password-dialog">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--accent-primary); margin-bottom: var(--space-md);">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <h2>Khu vực dành cho giảng viên</h2>
+      <p>Vui lòng nhập mật khẩu để truy cập.</p>
+      <form id="password-form">
+        <input type="password" id="instructor-password" placeholder="Mật khẩu" autocomplete="off" />
+        <button type="submit" class="button button-primary">Truy cập</button>
+      </form>
+      <p id="password-error" class="password-error" hidden>Mật khẩu không đúng. Vui lòng thử lại.</p>
+    </div>
+  </div>
+
+  <!-- Content (hidden by default) -->
+  <div id="instructor-content" hidden>
+    <section class="page-header">
+      <p class="eyebrow">Instructor mode</p>
+      <h1>Kịch bản đứng lớp cho từng buổi</h1>
+      <p>
+        Khu vực này dành cho giảng viên: timing 3 giờ, demo script, lỗi cần quan sát,
+        rubric review, backup plan và việc cần làm sau buổi học.
+      </p>
+    </section>
+
+    {groups.map((group) => (
+      <section class="content-section">
+        <div class="section-heading">
+          <p class="eyebrow">{group.phase}</p>
+          <h2>{group.sessions.length} instructor guides</h2>
+        </div>
+        <div class="guide-grid">
+          {group.sessions.map((session) => (
+            <article class="guide-card">
+              <span class="eyebrow">Session {session.number.toString().padStart(2, "0")}</span>
+              <h3>{session.topic}</h3>
+              <p>{session.guidance.learnerOutcome}</p>
+              <div class="card-actions">
+                <a class="button button-primary" href={`/instructor/sessions/${session.slug}/`}>Mở guide</a>
+                <a class="button" href={`/sessions/${session.slug}/`}>Student view</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .password-gate {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+  }
+
+  .password-dialog {
+    text-align: center;
+    max-width: 400px;
+    padding: var(--space-2xl);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-base);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .password-dialog h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .password-dialog p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0 0 var(--space-lg);
+  }
+
+  #password-form {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  #instructor-password {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+  }
+
+  #instructor-password:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-primary-glow);
+  }
+
+  .password-error {
+    color: var(--danger) !important;
+    font-size: 0.85rem !important;
+    margin-top: var(--space-md) !important;
+  }
+</style>
+
+<script is:inline>
+  const PASS_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // sha256("password")
+  const SESSION_KEY = 'instructor_auth';
+
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function unlock() {
+    document.getElementById('instructor-gate').style.display = 'none';
+    document.getElementById('instructor-content').hidden = false;
+    sessionStorage.setItem(SESSION_KEY, '1');
+  }
+
+  // Check session
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    unlock();
+  }
+
+  document.getElementById('password-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('instructor-password').value;
+    const hash = await sha256(input);
+    if (hash === PASS_HASH) {
+      unlock();
+    } else {
+      document.getElementById('password-error').hidden = false;
+      document.getElementById('instructor-password').value = '';
+      document.getElementById('instructor-password').focus();
+    }
+  });
+</script>

@@ -1,0 +1,1029 @@
+---
+import AccordionSection from "../../components/AccordionSection.astro";
+import CopyPanel from "../../components/CopyPanel.astro";
+import VideoEmbed from "../../components/VideoEmbed.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+import ArtifactSubmitBlock from "../../components/ArtifactSubmitBlock.astro";
+import ContextualHelp from "../../components/ContextualHelp.astro";
+import { buildClassroomPlan } from "../../lib/classroom-plan";
+import { getCourseSessions, getPhaseGroups } from "../../lib/course";
+import { classroomMarkdownToHtml } from "../../lib/markdown";
+import PDCADiagram from "../../components/diagrams/PDCADiagram.astro";
+import OIPODiagram from "../../components/diagrams/OIPODiagram.astro";
+import MICRODiagram from "../../components/diagrams/MICRODiagram.astro";
+
+export function getStaticPaths() {
+  const sessions = getCourseSessions();
+  return sessions.map((session, index) => ({
+    params: { slug: session.slug },
+    props: {
+      session,
+      allSessions: sessions,
+      previousSession: sessions[index - 1],
+      nextSession: sessions[index + 1]
+    }
+  }));
+}
+
+const { session, allSessions, previousSession, nextSession } = Astro.props;
+const guidance = session.guidance;
+const plan = buildClassroomPlan(session);
+const sessionId = `s${session.number}`;
+const hasVideos = guidance.videos.length > 0;
+const phaseGroups = getPhaseGroups(allSessions);
+
+/* Sidebar outline steps */
+const sidebarSteps = [
+  { id: "section-prep", label: "Chuẩn bị", icon: "📋" },
+  { id: "section-theory", label: "Lý thuyết", icon: "🎯" },
+  { id: "section-video", label: "Video", icon: "🎬" },
+  { id: "section-practice", label: "Thực hành", icon: "💻" },
+  { id: "section-review", label: "Kiểm tra", icon: "✅" },
+  { id: "section-prompts", label: "Prompts", icon: "⚡" },
+];
+---
+
+<BaseLayout title={session.topic} description={guidance.bigIdea}>
+  <div class="session-layout" data-session-page={session.number}>
+    <!-- MAIN CONTENT -->
+    <div class="session-main">
+      <Breadcrumb crumbs={[
+        { label: "Trang chủ", href: "/" },
+        { label: "Lộ trình", href: "/sessions/" },
+        { label: `Buổi ${session.number}: ${session.topic}` }
+      ]} />
+      <!-- Compact hero -->
+      <header class="session-hero">
+        <div class="hero-text">
+          <div class="hero-meta">
+            <span class="phase-badge" data-phase={session.phase}>{session.phase}</span>
+            <span class="eyebrow">Session {session.number.toString().padStart(2, "0")}</span>
+          </div>
+          <h1>{session.topic}</h1>
+          <p class="hero-subtitle">{guidance.bigIdea}</p>
+
+          <div class="hero-brief">
+            <div class="brief-item">
+              <span class="brief-label">🎯 Kết quả cuối buổi</span>
+              <span class="brief-value">{guidance.learnerOutcome}</span>
+            </div>
+            <div class="brief-item">
+              <span class="brief-label">📦 Artifact</span>
+              <span class="brief-value">{session.artifact || "Theo lesson"}</span>
+            </div>
+            <div class="brief-item">
+              <span class="brief-label">⏱️ Ước tính</span>
+              <span class="brief-value">3 giờ · {guidance.successCriteria.length} checkpoint</span>
+            </div>
+            {previousSession && (
+            <div class="brief-item">
+              <span class="brief-label">🔗 Yêu cầu trước</span>
+              <span class="brief-value">Buổi {previousSession.number}: {previousSession.topic}</span>
+            </div>
+            )}
+            {nextSession && (
+            <div class="brief-item">
+              <span class="brief-label">➡️ Chuẩn bị cho</span>
+              <span class="brief-value">Buổi {nextSession.number}: {nextSession.topic}</span>
+            </div>
+            )}
+          </div>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#section-prep">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Bắt đầu học
+            </a>
+            {hasVideos && (
+              <a class="button button-secondary" href="#section-video">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Xem video ({guidance.videos.length})
+              </a>
+            )}
+          </div>
+        </div>
+
+        <aside class="hero-image">
+          <img src={session.heroImage} alt={`Minh hoạ: ${session.topic}`} width="480" height="270" />
+        </aside>
+      </header>
+
+      <!-- Quick stats -->
+      <div class="stats-bar">
+        <div class="stat-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          3 giờ
+        </div>
+        <div class="stat-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          {guidance.successCriteria.length} checkpoint
+        </div>
+        <div class="stat-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          {hasVideos ? `${guidance.videos.length} video` : "Chưa có video"}
+        </div>
+      </div>
+
+      <!-- Artifact submission block (P2) -->
+      <ArtifactSubmitBlock sessionNumber={session.number} artifactName={session.artifact || "Theo lesson"} />
+
+      <!-- Step 1: Chuẩn bị -->
+      <section class="step-section" id="section-prep">
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <div>
+            <h2>Chuẩn bị trước lớp</h2>
+            <p>Hoàn thành trước khi vào lớp để theo kịp bài</p>
+          </div>
+        </div>
+        <ul class="interactive-checklist">
+          {plan.student.beforeClass.map((item, i) => (
+            <li>
+              <input type="checkbox" id={`${sessionId}-prep-${i}`} />
+              <label for={`${sessionId}-prep-${i}`}>{item}</label>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <!-- Step 2: Lý thuyết -->
+      <section class="step-section" id="section-theory">
+        <div class="step-header">
+          <span class="step-number">2</span>
+          <div>
+            <h2>Lý thuyết & Mục tiêu</h2>
+            <p>Nội dung cốt lõi của buổi học</p>
+          </div>
+        </div>
+
+        <div class="theory-cards">
+          <div class="theory-card theory-mission">
+            <span class="theory-label">Big Idea</span>
+            <p>{guidance.bigIdea}</p>
+          </div>
+          <div class="theory-card theory-output">
+            <span class="theory-label">Kết quả mong đợi</span>
+            <p>{guidance.learnerOutcome}</p>
+          </div>
+        </div>
+
+        <div class="theory-criteria">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Tiêu chí đạt
+          </h3>
+          <ul>
+            {guidance.successCriteria.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+
+        {session.number === 2 && <PDCADiagram />}
+        {session.number === 4 && <OIPODiagram />}
+        {session.number === 5 && <MICRODiagram />}
+      </section>
+
+      <!-- Step 3: Video hướng dẫn -->
+      <section class="step-section" id="section-video">
+        <div class="step-header">
+          <span class="step-number">3</span>
+          <div>
+            <h2>Video hướng dẫn</h2>
+            <p>{hasVideos ? `${guidance.videos.length} video ngắn — xem trước hoặc xem lại sau buổi học` : "Video sẽ được bổ sung sau"}</p>
+          </div>
+        </div>
+        {hasVideos ? <VideoEmbed videos={guidance.videos} /> : <p class="video-soon">Video hướng dẫn sẽ được bổ sung sau. Bạn vẫn học đầy đủ qua Lý thuyết, Thực hành và Prompts bên dưới.</p>}
+      </section>
+
+      <!-- Step 4: Thực hành -->
+      <section class="step-section" id="section-practice">
+        <div class="step-header">
+          <span class="step-number">4</span>
+          <div>
+            <h2>Thực hành</h2>
+            <p>Làm theo từng bước trong lớp</p>
+          </div>
+        </div>
+
+        <div class="rich-text" set:html={classroomMarkdownToHtml(plan.practice)} />
+
+        <!-- Tips & Mistakes -->
+        <div class="tips-row">
+          <AccordionSection
+            id={`${sessionId}-tips`}
+            title="💡 Tips hữu ích"
+            icon=""
+          >
+            <ul class="tip-list tip-success">
+              {guidance.tips.map((tip) => <li>{tip}</li>)}
+            </ul>
+          </AccordionSection>
+
+          <AccordionSection
+            id={`${sessionId}-mistakes`}
+            title="⚠️ Lỗi hay gặp"
+            icon=""
+          >
+            <ul class="tip-list tip-warning">
+              {guidance.commonMistakes.map((mistake) => <li>{mistake}</li>)}
+            </ul>
+          </AccordionSection>
+        </div>
+
+        {plan.student.stuckHelp.length > 0 && (
+          <AccordionSection
+            id={`${sessionId}-stuck`}
+            title="🆘 Khi bị kẹt"
+            icon=""
+          >
+            <ul class="tip-list tip-info">
+              {plan.student.stuckHelp.map((item) => <li>{item}</li>)}
+            </ul>
+          </AccordionSection>
+        )}
+      </section>
+
+      <!-- Contextual help after practice (P3) -->
+      <ContextualHelp sessionNumber={session.number} stepLabel="thực hành" prompts={["Giải thích bước thực hành này", "Tôi bị kẹt, giúp tôi", "Cho ví dụ thực tế về " + session.topic]} />
+
+      <!-- Step 5: Kiểm tra & Nộp bài -->
+      <section class="step-section" id="section-review">
+        <div class="step-header">
+          <span class="step-number">5</span>
+          <div>
+            <h2>Kiểm tra & Nộp bài</h2>
+            <p>Tự kiểm tra rồi nộp artifact</p>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Checkpoint tự kiểm</h3>
+        <ul class="interactive-checklist">
+          {plan.student.checkpoints.map((item, i) => (
+            <li>
+              <input type="checkbox" id={`${sessionId}-check-${i}`} />
+              <label for={`${sessionId}-check-${i}`}>{item}</label>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="subsection-title" style="margin-top: var(--space-xl);">Bài nộp (Artifact)</h3>
+        <div class="submit-card">
+          <ul>
+            {plan.student.submit.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+
+        <div class="rich-text" style="margin-top: var(--space-md);" set:html={classroomMarkdownToHtml(plan.assignment)} />
+      </section>
+
+      <!-- Copy Prompts -->
+      <section class="step-section" id="section-prompts">
+        <div class="step-header">
+          <span class="step-number" style="background: var(--bg-inset); color: var(--text-secondary);">⚡</span>
+          <div>
+            <h2>Copy Prompts</h2>
+            <p>Copy prompt để dùng ngay trong Antigravity</p>
+          </div>
+        </div>
+        <div class="copy-grid">
+          <CopyPanel id={`mission-${session.slug}`} title="Mission prompt" text={plan.student.missionPrompt} />
+          <CopyPanel id={`practice-${session.slug}`} title="Bài thực hành" text={plan.practiceCopy} />
+          <CopyPanel id={`assignment-${session.slug}`} title="Bài về nhà" text={plan.assignmentCopy} />
+        </div>
+      </section>
+
+      <!-- Bottom navigation -->
+      <nav class="lesson-nav" aria-label="Lesson navigation">
+        {previousSession ? (
+          <a href={`/sessions/${previousSession.slug}/`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Session {previousSession.number}: {previousSession.topic}
+          </a>
+        ) : <span />}
+        {nextSession ? (
+          <a href={`/sessions/${nextSession.slug}/`}>
+            Session {nextSession.number}: {nextSession.topic}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        ) : <span />}
+      </nav>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="session-sidebar" id="session-sidebar">
+      <!-- Session Identity -->
+      <div class="sidebar-session-info">
+        <span class="sidebar-phase-badge" data-phase={session.phase}>{session.phase}</span>
+        <h2 class="sidebar-session-title">
+          <span class="sidebar-session-num">{session.number.toString().padStart(2, "0")}</span>
+          {session.topic}
+        </h2>
+      </div>
+
+      <!-- Progress ring -->
+      <div class="sidebar-progress">
+        <div class="progress-ring-wrapper">
+          <svg class="progress-ring" width="44" height="44" viewBox="0 0 44 44">
+            <circle class="progress-ring-bg" cx="22" cy="22" r="18" fill="none" stroke-width="3" />
+            <circle class="progress-ring-fill" cx="22" cy="22" r="18" fill="none" stroke-width="3"
+              stroke-dasharray="113.1" stroke-dashoffset="113.1" />
+          </svg>
+          <span class="progress-ring-text">0%</span>
+        </div>
+        <span class="progress-ring-label">Tiến độ</span>
+      </div>
+
+      <button class="bookmark-btn" data-bookmark={`session-${session.number}`} aria-pressed="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Lưu buổi
+      </button>
+      <!-- Lesson outline (steps navigation) -->
+      <nav class="sidebar-outline" aria-label="Nội dung bài học">
+        <span class="sidebar-label">Nội dung bài</span>
+        {sidebarSteps.map((step, i) => (
+          <a href={`#${step.id}`} class="outline-item" data-step={step.id}>
+            <span class="outline-num">{i + 1}</span>
+            <span class="outline-text">{step.label}</span>
+            {step.id === "section-video" && hasVideos && (
+              <span class="outline-badge">{guidance.videos.length}</span>
+            )}
+          </a>
+        ))}
+      </nav>
+
+      <!-- All sessions collapsible -->
+      <div class="sidebar-sessions-nav">
+        <span class="sidebar-label">Tất cả buổi học</span>
+        {phaseGroups.map((group) => (
+          <div class="phase-group">
+            <span class="phase-group-label" data-phase={group.phase}>{group.phase}</span>
+            {group.sessions.map((s) => (
+              <a
+                href={`/sessions/${s.slug}/`}
+                class:list={["session-link", { active: s.number === session.number }]}
+              >
+                <span class="session-link-num">{s.number.toString().padStart(2, "0")}</span>
+                <span class="session-link-title">{s.topic}</span>
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <!-- Prev/Next quick nav -->
+      <div class="sidebar-nav-buttons">
+        {previousSession ? (
+          <a href={`/sessions/${previousSession.slug}/`} class="nav-btn nav-prev" title={previousSession.topic}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Buổi {previousSession.number}
+          </a>
+        ) : <span />}
+        {nextSession ? (
+          <a href={`/sessions/${nextSession.slug}/`} class="nav-btn nav-next" title={nextSession.topic}>
+            Buổi {nextSession.number}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        ) : <span />}
+      </div>
+    </aside>
+
+    <!-- Mobile sidebar toggle -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Mở menu bài học">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ===== TWO-COLUMN SESSION LAYOUT ===== */
+  .session-layout {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 0;
+    min-height: calc(100dvh - 64px);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .session-sidebar {
+    position: sticky;
+    top: 64px;
+    height: calc(100dvh - 64px);
+    overflow-y: auto;
+    padding: var(--space-lg) var(--space-md);
+    background: var(--bg-base);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .session-sidebar::-webkit-scrollbar { width: 4px; }
+  .session-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Sidebar session identity */
+  .sidebar-session-info {
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-phase-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+    margin-bottom: var(--space-xs);
+  }
+
+  .sidebar-session-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .sidebar-session-num {
+    color: var(--accent-primary);
+    margin-right: 4px;
+    font-weight: 800;
+  }
+
+  /* Progress ring */
+  .sidebar-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-inset);
+    border-radius: var(--radius-md);
+  }
+
+  .progress-ring-wrapper {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .progress-ring {
+    transform: rotate(-90deg);
+  }
+
+  .progress-ring-bg {
+    stroke: var(--border);
+  }
+
+  .progress-ring-fill {
+    stroke: var(--accent-primary);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  .progress-ring-text {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+  }
+
+  .progress-ring-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  /* Sidebar labels */
+  .sidebar-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0 var(--space-xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  /* Step outline navigation */
+  .sidebar-outline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .outline-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 150ms ease;
+    position: relative;
+  }
+
+  .outline-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .outline-item.active {
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .outline-item.completed .outline-num {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+
+  .outline-num {
+    flex-shrink: 0;
+    display: grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: all 150ms ease;
+  }
+
+  .outline-text {
+    flex: 1;
+  }
+
+  .outline-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: var(--accent-primary);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  /* All sessions list */
+  .sidebar-sessions-nav {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-md);
+    flex: 1;
+  }
+
+  .phase-group {
+    margin-bottom: var(--space-sm);
+  }
+
+  .phase-group-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 4px 10px;
+  }
+
+  .session-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 400;
+    text-decoration: none;
+    transition: all 150ms ease;
+    line-height: 1.35;
+  }
+
+  .session-link:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .session-link.active {
+    background: var(--accent-primary-bg);
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .session-link-num {
+    flex-shrink: 0;
+    width: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .session-link.active .session-link-num {
+    color: var(--accent-primary);
+  }
+
+  .session-link-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Prev/Next buttons */
+  .sidebar-nav-buttons {
+    display: flex;
+    gap: var(--space-xs);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: var(--bg-inset);
+    transition: all 150ms ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--bg-hover);
+    color: var(--accent-primary);
+    text-decoration: none;
+  }
+
+  /* Mobile sidebar toggle */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--accent-primary-glow);
+    place-items: center;
+    transition: transform 200ms ease;
+  }
+
+  .sidebar-toggle:hover {
+    transform: scale(1.1);
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .session-main {
+    padding: var(--space-xl) var(--space-lg) var(--space-2xl) 0;
+    overflow-x: hidden;
+  }
+
+  /* Hero */
+  .session-hero {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .session-hero h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+  }
+
+  .hero-brief {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    border-left: 3px solid var(--accent-primary);
+    background: var(--accent-primary-bg);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  .brief-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent-primary);
+  }
+
+  .brief-value {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .hero-image {
+    flex-shrink: 0;
+    width: 280px;
+  }
+
+  .hero-image img {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    height: auto;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) 0;
+    margin-bottom: var(--space-lg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg-base);
+  }
+
+  /* Step sections */
+  .step-section {
+    margin-bottom: var(--space-2xl);
+    scroll-margin-top: 80px;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .step-number {
+    flex-shrink: 0;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    background: var(--accent-primary);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 50%;
+  }
+
+  .step-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .step-header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 2px 0 0;
+  }
+
+  /* Theory cards */
+  .theory-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .theory-card {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  .theory-mission {
+    background: var(--accent-primary-bg);
+    border-color: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  }
+
+  .theory-output {
+    background: color-mix(in srgb, var(--accent-teal) 8%, white);
+    border-color: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  }
+
+  .theory-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-primary);
+    display: block;
+    margin-bottom: var(--space-sm);
+  }
+
+  .theory-output .theory-label { color: var(--accent-teal); }
+
+  .theory-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .theory-criteria {
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-base);
+  }
+
+  .theory-criteria h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .theory-criteria ul { margin: 0; padding-left: 1.2em; }
+  .theory-criteria li { font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 4px; }
+
+  /* Tips row */
+  .tips-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .tip-list { margin: 0; padding-left: 1.2em; }
+  .tip-list li { font-size: 0.86rem; margin-bottom: 6px; line-height: 1.5; }
+  .tip-success li { color: var(--success); }
+  .tip-warning li { color: var(--warning-text, #b35c00); }
+  .tip-info li { color: var(--accent-indigo); }
+
+  /* Submit card */
+  .submit-card {
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 25%, transparent);
+    border-radius: var(--radius-lg);
+    background: var(--accent-primary-bg);
+  }
+  .submit-card ul { margin: 0; padding-left: 1.2em; }
+  .submit-card li { font-size: 0.86rem; color: var(--text-primary); margin-bottom: 4px; }
+
+  .subsection-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-md);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .session-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .session-sidebar {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      width: 280px;
+      z-index: 90;
+      transform: translateX(100%);
+      transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .session-sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+      display: grid;
+    }
+
+    .session-main {
+      padding: var(--space-lg) var(--space-md);
+    }
+
+    .hero-image {
+      display: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .session-hero {
+      flex-direction: column;
+    }
+
+    .session-hero h1 { font-size: 1.4rem; }
+    .theory-cards,
+    .tips-row {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-bar {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+<script>
+  /* Sidebar toggle for mobile */
+  const toggle = document.getElementById("sidebar-toggle");
+  const sidebar = document.getElementById("session-sidebar");
+
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+    });
+
+    sidebar.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 1024) {
+          sidebar.classList.remove("open");
+        }
+      });
+    });
+  }
+
+  /* Scroll spy for sidebar outline */
+  const outlineItems = document.querySelectorAll(".outline-item");
+  const sections = document.querySelectorAll(".step-section");
+
+  if (sections.length > 0 && outlineItems.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            outlineItems.forEach((item) => item.classList.remove("active"));
+            const active = document.querySelector(
+              `.outline-item[data-step="${entry.target.id}"]`
+            );
+            if (active) active.classList.add("active");
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px" }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+</script>

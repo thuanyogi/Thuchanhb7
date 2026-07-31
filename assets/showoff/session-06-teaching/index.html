@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Buổi 6 — RAG + CLEAR + BI Dashboard | MindX × Google Antigravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1E3A8A;--blue-d:#1a3070;--blue-l:#EFF6FF;--blue-m:#3B82F6;
+  --red:#E03131;--red-l:#FFF5F5;
+  --purple:#7C3AED;--teal:#06B6D4;--pink:#F43F5E;
+  --black:#111;--g700:#3D3D3D;--g500:#6B6B6B;--g300:#C4C4C4;
+  --g100:#F7F7F7;--white:#fff;--border:#E8E8E8;
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#fff;}
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateX(60px);}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.slide.exit{opacity:0;transform:translateX(-60px);}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 40px;border-bottom:1px solid var(--border);background:#fff;flex-shrink:0;}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-badge{background:var(--blue);color:#fff;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;}
+.tb-title{font-size:13px;font-weight:600;color:var(--g700);}
+.tb-right{display:flex;align-items:center;gap:16px;}
+.slide-counter{font-size:13px;font-weight:700;color:var(--g500);}
+.slide-counter span{color:var(--blue);font-weight:900;}
+.progress-bar{width:140px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .4s ease;}
+
+/* BODY */
+.sbody{flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:36px 60px;}
+
+/* NAVBAR */
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 40px;border-top:1px solid var(--border);background:#fff;flex-shrink:0;}
+.dot-nav{display:flex;gap:8px;align-items:center;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .25s;}
+.dot.active{background:var(--blue);width:24px;border-radius:4px;}
+.dot:hover{background:var(--g300);}
+.dot.active:hover{background:var(--blue);}
+.nav-btns{display:flex;gap:10px;}
+.btn{display:flex;align-items:center;gap:6px;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;}
+.btn-prev{background:var(--g100);color:var(--g700);}
+.btn-prev:hover{background:var(--border);}
+.btn-next{background:var(--blue);color:#fff;}
+.btn-next:hover{background:var(--blue-d);}
+.btn:disabled{opacity:.35;cursor:default;}
+.key-hint{font-size:11px;color:var(--g300);}
+
+/* SHARED STYLES */
+.s-label{font-size:11px;font-weight:800;color:var(--blue);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;}
+.s-h2{font-size:clamp(26px,3.2vw,48px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin-bottom:8px;}
+.s-h2 em{color:var(--blue);font-style:normal;}
+.s-h2 em.red{color:var(--red);}
+.s-desc{font-size:14px;color:var(--g500);margin-bottom:28px;max-width:640px;line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+
+/* HERO */
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--blue-l);color:var(--blue);border:1px solid rgba(30,58,138,.2);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:1.5px;margin-bottom:24px;width:fit-content;}
+.hero-h1{font-size:clamp(38px,5vw,72px);font-weight:900;letter-spacing:-3px;line-height:1;margin-bottom:18px;}
+.hero-h1 .acc{color:var(--blue);}
+.hero-h1 .sub{font-size:clamp(22px,2.5vw,38px);letter-spacing:-1.5px;color:var(--g500);font-weight:700;}
+.hero-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+.chip{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid var(--border);background:#fff;color:var(--g700);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.chip.blue{background:var(--blue);color:#fff;border-color:var(--blue);}
+.chip.red{background:var(--red);color:#fff;border-color:var(--red);}
+.prog-row{display:flex;align-items:center;gap:14px;}
+.prog-dots{display:flex;gap:5px;}
+.pd{width:26px;height:5px;border-radius:3px;background:var(--border);}
+.pd.done{background:var(--blue);}
+.pd.cur{background:var(--black);}
+
+/* RAG */
+.rag-def{background:var(--black);color:#fff;border-radius:16px;padding:24px 30px;display:flex;gap:20px;align-items:flex-start;margin-top:18px;}
+.rag-icon{font-size:36px;flex-shrink:0;}
+.rag-body h3{font-size:16px;font-weight:800;color:#fff;margin-bottom:6px;}
+.rag-body p{font-size:12px;color:#aaa;line-height:1.6;}
+.rag-chain{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.rag-step{background:rgba(255,255,255,.1);color:#fff;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,.15);}
+.rag-arrow{color:rgba(255,255,255,.4);font-size:12px;}
+
+/* CLEAR TABLE */
+.clear-wrap{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.05);}
+.clear-row{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);}
+.clear-row:last-child{border-bottom:none;}
+.clear-row:hover{background:rgba(30,58,138,.02);}
+.cletter{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;flex-shrink:0;margin-right:14px;}
+.cl-c{background:var(--blue-l);color:var(--blue);}
+.cl-l{background:#FFF8F0;color:#D97706;}
+.cl-e{background:#F0FFF4;color:#16A34A;}
+.cl-a{background:#F5F3FF;color:var(--purple);}
+.cl-r{background:var(--red-l);color:var(--red);}
+.c-word{font-size:15px;font-weight:800;width:160px;flex-shrink:0;}
+.c-sub{font-size:11px;color:var(--g500);font-weight:500;}
+.c-q{font-size:12px;color:var(--g500);flex:1;}
+.c-tip{font-size:11px;color:var(--g500);font-style:italic;padding-left:12px;border-left:2px solid var(--border);max-width:260px;}
+
+/* PREP */
+.prep-hero{background:var(--black);color:#fff;border-radius:14px;padding:20px 28px;display:flex;gap:18px;align-items:center;margin-bottom:18px;}
+.prep-icon{font-size:36px;flex-shrink:0;}
+.prep-hero h3{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.prep-hero p{font-size:12px;color:#999;line-height:1.5;}
+.prep-box-title{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.prep-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.prep-num{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.prep-item h4{font-size:12px;font-weight:700;margin-bottom:1px;}
+.prep-item p{font-size:11px;color:var(--g500);}
+.prep-item code{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--g100);padding:1px 4px;border-radius:3px;}
+.cki{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:500;margin-bottom:7px;}
+.cki-box{width:16px;height:16px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;}
+
+/* DEMO */
+.demo5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.dstep{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;}
+.dnum{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.dstep h4{font-size:12px;font-weight:700;margin-bottom:6px;line-height:1.3;}
+.dstep p{font-size:11px;color:var(--g500);margin-bottom:8px;line-height:1.45;}
+.code-sm{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--g100);border-radius:6px;padding:7px 9px;color:var(--g500);line-height:1.5;}
+.wow{background:var(--blue);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;margin-left:5px;}
+
+/* BEFORE AFTER */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+.ba-box{border-radius:12px;padding:18px;border:1.5px solid;}
+.ba-before{background:var(--red-l);border-color:rgba(224,49,49,.3);}
+.ba-after{background:#F0FFF4;border-color:rgba(22,163,74,.25);}
+.ba-title{font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:10px;}
+.ba-before .ba-title{color:var(--red);}
+.ba-after .ba-title{color:#16A34A;}
+.ba-box li{font-size:12px;color:var(--g700);margin-bottom:5px;padding-left:2px;}
+
+/* PROMPT SAMPLE */
+.prompt-box{background:var(--black);border-radius:14px;padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#d4d4d4;}
+.kw{color:#79c0ff;font-weight:700;}
+.val{color:#7ee787;}
+.cmt{color:#6a737d;}
+
+/* CRITERIA */
+.crit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.crit{border-radius:12px;padding:20px;border:1px solid;}
+.crit.c1{background:#FFF5F5;border-color:rgba(224,49,49,.2);}
+.crit.c2{background:#F0FFF4;border-color:rgba(22,163,74,.2);}
+.crit.c3{background:#F0F4FF;border-color:rgba(30,58,138,.2);}
+.crit-n{font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:8px;}
+.c1 .crit-n{color:var(--red);}
+.c2 .crit-n{color:#16A34A;}
+.c3 .crit-n{color:var(--blue);}
+.crit h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+.crit p{font-size:12px;color:var(--g500);line-height:1.5;}
+.crit code{font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;}
+
+/* COLOR SWATCH */
+.color-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.swatch{border-radius:10px;padding:12px 18px;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.sw-label{font-size:10px;opacity:.8;margin-top:2px;}
+
+/* INSIGHT */
+.insight-full{background:var(--blue);border-radius:24px;padding:40px 48px;text-align:center;color:#fff;margin-top:4px;position:relative;overflow:hidden;}
+.insight-full::after{content:'💡';position:absolute;font-size:160px;opacity:.06;bottom:-20px;right:-10px;line-height:1;}
+.insight-full h2{font-size:clamp(22px,2.8vw,36px);font-weight:900;margin-bottom:10px;line-height:1.15;}
+.insight-full p{font-size:14px;opacity:.85;max-width:560px;margin:0 auto;line-height:1.6;}
+
+/* ERR TABLE */
+.etbl{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.etbl th{background:var(--black);color:#fff;padding:10px 14px;font-size:10px;font-weight:700;text-align:left;letter-spacing:.5px;}
+.etbl td{padding:10px 14px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.etbl tr:last-child td{border:none;}
+.etbl tr:hover td{background:var(--g100);}
+.tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;}
+.tag-b{background:var(--blue-l);color:var(--blue);}
+.tag-r{background:var(--red-l);color:var(--red);}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 1: COVER ══ -->
+<div class="slide active" id="s1">
+  <div class="topbar">
+    <div class="tb-left"><div class="tb-badge">BUỔI 6</div><span class="tb-title">MindX × Google Antigravity</span></div>
+    <div class="tb-right">
+      <span class="slide-counter"><span id="cur">1</span> / <span id="tot">14</span></span>
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:7.14%"></div></div>
+    </div>
+  </div>
+  <div class="sbody" style="padding:48px 80px;">
+    <div class="hero-eyebrow">📊 PHASE 2 — MODIFY · LESSON 6 OF 11</div>
+    <h1 class="hero-h1">Tri Thức<br/><span class="acc">RAG + CLEAR</span><br/><span class="sub">BI Dashboard Thời Gian Thực</span></h1>
+    <div class="hero-chips">
+      <span class="chip blue">RAG — Tri thức nội bộ</span>
+      <span class="chip red">Khung CLEAR</span>
+      <span class="chip">BI Dashboard Real-time</span>
+      <span class="chip">Python Server</span>
+      <span class="chip">Brand Guideline</span>
+    </div>
+    <div class="prog-row">
+      <div class="prog-dots">
+        <div class="pd done"></div><div class="pd done"></div><div class="pd done"></div>
+        <div class="pd done"></div><div class="pd done"></div><div class="pd cur"></div>
+        <div class="pd"></div><div class="pd"></div><div class="pd"></div>
+        <div class="pd"></div><div class="pd"></div>
+      </div>
+      <span style="font-size:12px;color:var(--g500);">Buổi 6 / 11 · Phase 2 — Modify</span>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav" id="dots"></div><div style="display:flex;gap:16px;align-items:center;"><span class="key-hint">← → để chuyển slide</span><div class="nav-btns"><button class="btn btn-prev" id="prev" disabled>← Trước</button><button class="btn btn-next" id="next">Tiếp →</button></div></div></div>
+</div>
+
+<!-- ══ SLIDE 2: MỤC TIÊU ══ -->
+<div class="slide" id="s2">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">MỤC TIÊU</div><span class="tb-title">3 điều bạn sẽ làm được sau buổi học</span></div><div class="tb-right"><span class="slide-counter"><span>2</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:14.28%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Mục tiêu học tập</div>
+    <h2 class="s-h2">3 Điều Bạn Sẽ <em>Làm Được</em></h2>
+    <p class="s-desc">Kết thúc buổi học, không chỉ hiểu lý thuyết — bạn sẽ có Dashboard chạy thật.</p>
+    <div class="three-col">
+      <div class="card"><div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;margin-bottom:8px;">MỤC TIÊU 01</div><div style="font-size:22px;margin-bottom:10px;">🧠</div><h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">RAG — Tri Thức Nội Bộ</h3><p style="font-size:12px;color:var(--g500);">Giải thích cơ chế RAG và chứng minh vai trò dữ liệu nội bộ trong việc đảm bảo độ chính xác của AI.</p></div>
+      <div class="card"><div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;margin-bottom:8px;">MỤC TIÊU 02</div><div style="font-size:22px;margin-bottom:10px;">📝</div><h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">Khung CLEAR</h3><p style="font-size:12px;color:var(--g500);">Áp dụng CLEAR để thiết kế câu lệnh prompt, trích xuất báo cáo đạt yêu cầu từ AI.</p></div>
+      <div class="card"><div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;margin-bottom:8px;">MỤC TIÊU 03</div><div style="font-size:22px;margin-bottom:10px;">📊</div><h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">BI Dashboard Thực Chiến</h3><p style="font-size:12px;color:var(--g500);">Xây dựng hoàn chỉnh Dashboard BI real-time bằng AI, thay thế quy trình thủ công.</p></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 3: VẤN ĐỀ THỰC TẾ ══ -->
+<div class="slide" id="s3">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">VẤN ĐỀ</div><span class="tb-title">Tại sao báo cáo truyền thống không còn đủ?</span></div><div class="tb-right"><span class="slide-counter"><span>3</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:21.42%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Bối cảnh vấn đề</div>
+    <h2 class="s-h2">3 Vấn Đề Quản Lý <em class="red">Gặp Mỗi Tuần</em></h2>
+    <p class="s-desc">Hậu quả: Lãng phí thời gian, quyết định chậm trễ, khó kiểm soát chất lượng báo cáo.</p>
+    <div class="three-col" style="margin-bottom:18px;">
+      <div class="card" style="border-color:rgba(224,49,49,.2);background:#FFF5F5;"><div style="font-size:24px;margin-bottom:10px;">⏰</div><h4 style="font-weight:700;margin-bottom:6px;">Khủng hoảng phút chót</h4><p style="font-size:12px;color:var(--g500);">Sát giờ họp giao ban → số liệu Excel không khớp → rà soát từng ô thủ công.</p></div>
+      <div class="card" style="border-color:rgba(245,158,11,.2);background:#FFFBEB;"><div style="font-size:24px;margin-bottom:10px;">⏳</div><h4 style="font-weight:700;margin-bottom:6px;">Lãng phí nguồn lực</h4><p style="font-size:12px;color:var(--g500);">3–4 tiếng/tuần chỉ để copy/paste, căn chỉnh biểu đồ, làm slide từ đầu.</p></div>
+      <div class="card" style="border-color:rgba(234,88,12,.2);background:#FFF7ED;"><div style="font-size:24px;margin-bottom:10px;">🎨</div><h4 style="font-weight:700;margin-bottom:6px;">Thiếu tính đồng bộ</h4><p style="font-size:12px;color:var(--g500);">Mỗi người nộp một format khác → sai màu sắc, sai tiêu chuẩn thương hiệu.</p></div>
+    </div>
+    <div style="background:var(--black);border-radius:12px;padding:18px 24px;color:#fff;display:flex;align-items:center;gap:16px;">
+      <span style="font-size:24px;">🚀</span>
+      <div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;">Giải pháp: AI Trợ Lý BI</div><div style="font-size:12px;color:#999;">Bất kỳ quản lý nào cũng có thể tạo Dashboard phân tích số liệu chuẩn xác mà không phụ thuộc vào IT.</div></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 4: RAG ══ -->
+<div class="slide" id="s4">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">RAG</div><span class="tb-title">Retrieval-Augmented Generation — Tri thức nội bộ</span></div><div class="tb-right"><span class="slide-counter"><span>4</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:28.57%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Phần 1 — RAG</div>
+    <h2 class="s-h2"><em>RAG</em> — Hệ Thống Tri Thức Nội Bộ</h2>
+    <p class="s-desc">Thay vì AI dùng kiến thức internet chung chung → RAG cho AI truy cập tài liệu riêng của công ty bạn.</p>
+    <div class="two-col">
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--red);letter-spacing:1px;margin-bottom:10px;">❌ KHÔNG CÓ RAG</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:12px 16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;font-size:13px;font-weight:600;">AI vẽ màu ngẫu nhiên 🎨</div>
+          <div style="padding:12px 16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;font-size:13px;font-weight:600;">Vi phạm Brand Guideline</div>
+          <div style="padding:12px 16px;background:var(--red-l);border:1px solid rgba(224,49,49,.2);border-radius:10px;font-size:13px;font-weight:600;">Không biết luật nội bộ</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:#16A34A;letter-spacing:1px;margin-bottom:10px;">✅ CÓ RAG</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:12px 16px;background:#F0FFF4;border:1px solid rgba(22,163,74,.2);border-radius:10px;font-size:13px;font-weight:600;">AI tuân thủ Brand Guideline tuyệt đối</div>
+          <div style="padding:12px 16px;background:#F0FFF4;border:1px solid rgba(22,163,74,.2);border-radius:10px;font-size:13px;font-weight:600;">Màu sắc đúng quy chuẩn công ty</div>
+          <div style="padding:12px 16px;background:#F0FFF4;border:1px solid rgba(22,163,74,.2);border-radius:10px;font-size:13px;font-weight:600;">Chống Hallucination — không sai luật</div>
+        </div>
+      </div>
+    </div>
+    <div class="rag-def" style="margin-top:16px;">
+      <div class="rag-icon">🧠</div>
+      <div class="rag-body">
+        <h3>Luồng hoạt động RAG</h3>
+        <div class="rag-chain" style="margin-top:8px;">
+          <span class="rag-step">📂 Nạp tài liệu nội bộ</span>
+          <span class="rag-arrow">→</span>
+          <span class="rag-step">🔍 AI rà soát & đối chiếu</span>
+          <span class="rag-arrow">→</span>
+          <span class="rag-step">✅ Trả lời theo luật công ty</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 5: CLEAR ══ -->
+<div class="slide" id="s5">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">CLEAR</div><span class="tb-title">5 thành phần giao tiếp chuẩn xác với AI</span></div><div class="tb-right"><span class="slide-counter"><span>5</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:35.71%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Phần 2 — Khung CLEAR</div>
+    <h2 class="s-h2"><em>CLEAR</em> — Giao Tiếp Không Trượt Phát Nào</h2>
+    <p class="s-desc">RAG giúp AI có Tri thức. CLEAR giúp AI làm Đúng. Thiếu một thành phần → kết quả sai hoặc thiếu.</p>
+    <div class="clear-wrap">
+      <div class="clear-row"><div class="cletter cl-c">C</div><div class="c-word">Context<div class="c-sub">Bối cảnh</div></div><div class="c-q">Gắn cho AI chức danh chuyên gia + bối cảnh cụ thể → AI dùng đúng tông giọng chuyên nghiệp.</div><div class="c-tip">"Bạn là Fullstack AI Engineer & Data Analyst của Công ty TNHH Alpha"</div></div>
+      <div class="clear-row"><div class="cletter cl-l">L</div><div class="c-word">Logic<div class="c-sub">Luật xử lý</div></div><div class="c-q">Chỉ rõ cách AI lọc, nhóm, cộng/trừ/nhân/chia số liệu theo đúng nghiệp vụ.</div><div class="c-tip">"Polling mỗi 2 giây, tính: Tổng DT, Tổng CP, Lợi nhuận, Đơn hàng"</div></div>
+      <div class="clear-row"><div class="cletter cl-e">E</div><div class="c-word">Expectations<div class="c-sub">Hình thức đầu ra</div></div><div class="c-q">Miêu tả chính xác "giao diện" và định dạng → không phải sửa lại sau khi AI làm xong.</div><div class="c-tip">"Glassmorphism Dark Mode: 4 KPI, biểu đồ cột, tròn, đường, bảng Top"</div></div>
+      <div class="clear-row"><div class="cletter cl-a">A</div><div class="c-word">Action<div class="c-sub">Nhiệm vụ chính</div></div><div class="c-q">Dùng động từ mạnh, trực diện. Giao đúng 1 nhiệm vụ cụ thể duy nhất.</div><div class="c-tip">"Viết code Python tạo server port 9090, tự động mở trình duyệt"</div></div>
+      <div class="clear-row"><div class="cletter cl-r">R</div><div class="c-word">Restrictions<div class="c-sub">Ranh giới cấm</div></div><div class="c-q">AI KHÔNG ĐƯỢC làm gì? Đặt quy tắc cứng → chặn AI tự suy diễn, lan man, sai chuẩn.</div><div class="c-tip">"TUYỆT ĐỐI tuân thủ brand_guideline.txt: DT #1E3A8A, CP #EF4444"</div></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 6: PROMPT MẪU ══ -->
+<div class="slide" id="s6">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">PROMPT MẪU</div><span class="tb-title">CLEAR đầy đủ — Dashboard Alpha Corp</span></div><div class="tb-right"><span class="slide-counter"><span>6</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:42.85%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Ví dụ thực tế — Prompt chuẩn CLEAR</div>
+    <h2 class="s-h2">Prompt CLEAR — <em>Alpha Corp</em></h2>
+    <p class="s-desc">Copy & Paste đúng prompt này → AI tạo Dashboard hoàn chỉnh, không cần viết thêm gì.</p>
+    <div class="two-col">
+      <div class="prompt-box">
+        <span class="kw">[C - Context]</span><br/>
+        <span class="val">Bạn là Fullstack AI Engineer</span><br/>
+        <span class="val">và Data Analyst của Công ty TNHH Alpha.</span><br/><br/>
+        <span class="kw">[L - Logic]</span><br/>
+        <span class="val">Web Dashboard đọc sales_data.xlsx.</span><br/>
+        <span class="val">Polling mỗi 2 giây cập nhật KPI:</span><br/>
+        <span class="val">DT, CP, Lợi nhuận, Đơn hàng.</span><br/><br/>
+        <span class="kw">[E - Expectations]</span><br/>
+        <span class="val">Glassmorphism, Dark mode: 4 KPI,</span><br/>
+        <span class="val">cột, tròn, đường, bảng Top. Tiếng Việt.</span><br/><br/>
+        <span class="kw">[A - Action]</span><br/>
+        <span class="val">Python server port 9090, tự mở Chrome.</span><br/><br/>
+        <span class="kw">[R - Restrictions]</span><br/>
+        <span class="val">Tuân thủ brand_guideline.txt:</span><br/>
+        <span class="val">DT #1E3A8A, CP #EF4444. TUYỆT ĐỐI.</span>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--g500);letter-spacing:1px;margin-bottom:10px;">DASHBOARD ĐẦU RA MONG ĐỢI</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px;"><span>📊</span><span style="font-size:13px;font-weight:600;">4 Thẻ KPI: DT / CP / Lợi nhuận / Đơn hàng</span></div>
+          <div style="padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px;"><span>📈</span><span style="font-size:13px;font-weight:600;">Biểu đồ cột: Doanh thu vs Chi phí</span></div>
+          <div style="padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px;"><span>🍩</span><span style="font-size:13px;font-weight:600;">Biểu đồ tròn: Khu vực địa lý</span></div>
+          <div style="padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px;"><span>📉</span><span style="font-size:13px;font-weight:600;">Biểu đồ đường: Xu hướng lợi nhuận</span></div>
+          <div style="padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px;"><span>🏆</span><span style="font-size:13px;font-weight:600;">Bảng Top Danh mục sản phẩm</span></div>
+        </div>
+        <div style="margin-top:12px;padding:12px 14px;background:var(--blue-l);border-radius:8px;border:1px solid rgba(30,58,138,.2);">
+          <span style="font-size:12px;font-weight:600;color:var(--blue);">Màu bắt buộc: DT = <span style="background:#1E3A8A;color:#fff;padding:0 6px;border-radius:4px;">#1E3A8A</span> · CP = <span style="background:#EF4444;color:#fff;padding:0 6px;border-radius:4px;">#EF4444</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 7: CHUẨN BỊ ══ -->
+<div class="slide" id="s7">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">CHUẨN BỊ</div><span class="tb-title">Học viên cần làm TRƯỚC buổi học</span></div><div class="tb-right"><span class="slide-counter"><span>7</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Chuẩn bị bắt buộc — Gửi về Group tối hôm trước</div>
+    <h2 class="s-h2">Học Viên <em>Phải Chuẩn Bị</em><br/>Trước Buổi Học</h2>
+    <div class="prep-hero">
+      <div class="prep-icon">⚠️</div>
+      <div><h3>Không chuẩn bị = Không thể thực hành!</h3><p>Mạng lớp chậm, cài Python + pip packages trong lớp mất 30-40 phút. Ai không chuẩn bị sẽ bỏ lỡ toàn bộ phần thực hành.</p></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="prep-box-title">Phần mềm bắt buộc cài trước</div>
+        <div class="prep-item"><div class="prep-num">1</div><div><h4>Python 3.10+</h4><p>Kiểm tra: <code>python --version</code></p></div></div>
+        <div class="prep-item"><div class="prep-num">2</div><div><h4>Pip packages</h4><p><code>pip install flask pandas openpyxl</code></p></div></div>
+        <div class="prep-item"><div class="prep-num">3</div><div><h4>WinRAR / 7-Zip</h4><p>Nén file nộp bài có mật khẩu</p></div></div>
+        <div class="prep-item"><div class="prep-num">4</div><div><h4>Google Antigravity hoạt động</h4><p>Thử đăng nhập trước buổi học</p></div></div>
+      </div>
+      <div class="card">
+        <div class="prep-box-title">Checklist gửi về Group</div>
+        <div class="cki"><div class="cki-box"></div><span><code style="font-family:'JetBrains Mono';font-size:10px;background:var(--g100);padding:1px 4px;border-radius:3px;">python --version</code> → thấy 3.x.x</span></div>
+        <div class="cki"><div class="cki-box"></div><span>Flask, pandas, openpyxl đã cài</span></div>
+        <div class="cki"><div class="cki-box"></div><span>WinRAR hoặc 7-Zip đã cài</span></div>
+        <div class="cki"><div class="cki-box"></div><span>Đã tải đủ 4 file từ link giảng viên</span></div>
+        <div class="cki"><div class="cki-box"></div><span>Google Antigravity hoạt động</span></div>
+        <div class="cki"><div class="cki-box"></div><span>Tạo thư mục <code style="font-family:'JetBrains Mono';font-size:10px;background:var(--g100);padding:1px 4px;border-radius:3px;">Desktop/BuoiHoc6/</code></span></div>
+        <div class="cki"><div class="cki-box"></div><span>≥ 4GB RAM trống, pin đầy đủ</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 8: FILE CẦN CHUẨN BỊ ══ -->
+<div class="slide" id="s8">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">FILES</div><span class="tb-title">4 file dữ liệu cần tải về trước</span></div><div class="tb-right"><span class="slide-counter"><span>8</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:57.14%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">File dữ liệu — Giảng viên gửi link trước 1 ngày</div>
+    <h2 class="s-h2">4 File Cần <em>Tải Về</em> Trước</h2>
+    <p class="s-desc">Lưu tất cả trong <code style="font-family:'JetBrains Mono';font-size:13px;background:var(--g100);padding:2px 6px;border-radius:4px;">Desktop/BuoiHoc6/</code> — KHÔNG để trong OneDrive/Google Drive đang sync.</p>
+    <div class="two-col">
+      <div>
+        <div style="font-size:11px;font-weight:800;color:var(--blue);letter-spacing:1.5px;margin-bottom:12px;">CHO DEMO (GIẢNG VIÊN)</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+          <div style="padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;"><span style="font-size:20px;">📊</span><div><div style="font-size:13px;font-weight:700;">sales_data.xlsx</div><div style="font-size:11px;color:var(--g500);">Dữ liệu bán hàng Công ty Alpha</div></div></div>
+          <div style="padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;"><span style="font-size:20px;">🎨</span><div><div style="font-size:13px;font-weight:700;">brand_guideline.txt</div><div style="font-size:11px;color:var(--g500);">DT: <span style="background:#1E3A8A;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#1E3A8A</span> · CP: <span style="background:#EF4444;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#EF4444</span></div></div></div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--red);letter-spacing:1.5px;margin-bottom:12px;">CHO THỰC HÀNH (HỌC VIÊN)</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;"><span style="font-size:20px;">💰</span><div><div style="font-size:13px;font-weight:700;">ngan_sach_phong_ban.xlsx</div><div style="font-size:11px;color:var(--g500);">Dữ liệu ngân sách Công ty Beta Solutions</div></div></div>
+          <div style="padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;"><span style="font-size:20px;">🟣</span><div><div style="font-size:13px;font-weight:700;">brand_guideline_beta.txt</div><div style="font-size:11px;color:var(--g500);">NS: <span style="background:#7C3AED;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#7C3AED</span> · CT: <span style="background:#06B6D4;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#06B6D4</span> · Vượt: <span style="background:#F43F5E;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#F43F5E</span></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:800;color:var(--g500);letter-spacing:1.5px;margin-bottom:12px;">NỘI DUNG FILE BRAND (TẠO SẴN)</div>
+        <div class="prompt-box" style="font-size:11px;margin-bottom:12px;">
+          <span class="cmt"># brand_guideline.txt (Alpha)</span><br/>
+          <span class="val">ALPHA CORP BRAND GUIDELINE</span><br/>
+          <span class="kw">DT:</span> <span class="val">Xanh Navy #1E3A8A</span><br/>
+          <span class="kw">CP:</span> <span class="val">Đỏ San Hô #EF4444</span><br/>
+          <span class="val">Format: VNĐ, phân cách dấu chấm</span>
+        </div>
+        <div class="prompt-box" style="font-size:11px;">
+          <span class="cmt"># brand_guideline_beta.txt (Beta)</span><br/>
+          <span class="val">BETA SOLUTIONS BRAND GUIDELINE</span><br/>
+          <span class="kw">NS:</span> <span class="val">Tím Hoàng Gia #7C3AED</span><br/>
+          <span class="kw">CT:</span> <span class="val">Xanh Ngọc #06B6D4</span><br/>
+          <span class="kw">Vượt NS:</span> <span class="val">Hồng San Hô #F43F5E</span><br/>
+          <span class="val">Format: Triệu/Tỷ VNĐ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 9: DEMO 5 BƯỚC ══ -->
+<div class="slide" id="s9">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">DEMO LIVE</div><span class="tb-title">Alpha Corp Dashboard — 5 bước xây dựng</span></div><div class="tb-right"><span class="slide-counter"><span>9</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:64.28%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Demo buổi học — Giảng viên thực hiện</div>
+    <h2 class="s-h2">5 Bước — Alpha Corp <em>Dashboard</em></h2>
+    <p class="s-desc">Học viên quan sát. Bước 4 là khoảnh khắc WOW nhất — demo chia đôi màn hình.</p>
+    <div class="demo5">
+      <div class="dstep"><div class="dnum">1</div><h4>Khởi Tạo Design Mentor Skill</h4><p>Prompt AI tạo <code style="font-family:'JetBrains Mono';font-size:10px;">Design_Mentor_Skill.md</code> với chuẩn Glassmorphism + Dark Mode.</p><div class="code-sm">"Tạo Design_Mentor_Skill.md bao gồm: Glass, Dark, KPI..."</div></div>
+      <div class="dstep"><div class="dnum">2</div><h4>Nạp RAG & Kỹ Năng</h4><p>New Chat → kéo thả 3 file: Skill.md + data.xlsx + brand.txt vào khung chat.</p><div class="code-sm">Design_Mentor_Skill.md
+sales_data.xlsx
+brand_guideline.txt</div></div>
+      <div class="dstep"><div class="dnum">3</div><h4>Gửi Prompt CLEAR</h4><p>Copy & Paste prompt CLEAR đầy đủ → AI generate toàn bộ code Python + HTML.</p><div class="code-sm">[C] Fullstack Engineer...
+[L] Polling 2s, KPI...
+[E] Glassmorphism...
+[A] Server 9090...
+[R] Brand colors...</div></div>
+      <div class="dstep"><div class="dnum">4</div><h4>Phép Thuật Auto-Update <span class="wow">⭐ WOW</span></h4><p>Chia đôi màn hình. Thay số Excel → Ctrl+S → đếm "1... 2..." → biểu đồ tự vọt!</p><div class="code-sm">Excel → Ctrl+S
+2 giây sau →
+Chart tự update!
+(Không F5)</div></div>
+      <div class="dstep"><div class="dnum">5</div><h4>Đóng Gói & Chia Sẻ</h4><p>AI viết export_dashboard.py → HTML tĩnh → ZIP mật khẩu → gửi qua Group.</p><div class="code-sm">python export.py
+→ dashboard.html
+→ .zip (pass)
+→ Zalo/Email</div></div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 10: BEFORE/AFTER ══ -->
+<div class="slide" id="s10">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">BEFORE/AFTER</div><span class="tb-title">Học viên tự chứng kiến sức mạnh RAG</span></div><div class="tb-right"><span class="slide-counter"><span>10</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:71.42%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Kiểm chứng — Phải làm TRƯỚC bài thực hành chính</div>
+    <h2 class="s-h2">Before / After — <em>Sức Mạnh RAG</em></h2>
+    <p class="s-desc">Học viên tự làm 2 bước để tự mình chứng kiến sự khác biệt khi có và không có tri thức.</p>
+    <div class="ba-grid">
+      <div class="ba-box ba-before">
+        <div class="ba-title">❌ BEFORE — Không có tri thức (RAG)</div>
+        <ul class="ba-list" style="padding-left:16px;list-style:disc;">
+          <li>Mở New Chat, KHÔNG nạp brand guideline & Skill</li>
+          <li>Chỉ nạp ngan_sach_phong_ban.xlsx</li>
+          <li>Prompt: "Vẽ cho tôi dashboard từ file này"</li>
+          <li>AI vẽ màu ngẫu nhiên — xanh, đỏ, tím, vàng</li>
+          <li>Số tiền không format chuẩn VNĐ</li>
+          <li>Dashboard generic, không phản ánh thương hiệu</li>
+        </ul>
+      </div>
+      <div class="ba-box ba-after">
+        <div class="ba-title">✅ AFTER — Có đầy đủ RAG + Skill</div>
+        <ul class="ba-list" style="padding-left:16px;list-style:disc;">
+          <li>Mở New Chat, nạp đủ 3 file: dữ liệu + brand + Skill</li>
+          <li>Dùng prompt CLEAR đầy đủ cho Beta Solutions</li>
+          <li>Biểu đồ đúng màu Tím #7C3AED và Xanh Ngọc #06B6D4</li>
+          <li>Format số tiền chuẩn Triệu/Tỷ VNĐ</li>
+          <li>Dashboard chuyên nghiệp, đồng bộ thương hiệu hoàn toàn</li>
+          <li>AI làm theo nội quy — không hallucinate màu sắc</li>
+        </ul>
+      </div>
+    </div>
+    <div class="insight-full" style="margin-top:16px;">
+      <h2 style="font-size:18px;">Kết luận: AI có khả năng học theo nội quy doanh nghiệp (RAG) + áp dụng kỹ năng chuyên môn (Skill)</h2>
+      <p>Sản phẩm tùy biến cao — không phải giao diện rập khuôn.</p>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 11: ĐỀ BÀI THỰC HÀNH ══ -->
+<div class="slide" id="s11">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">THỰC HÀNH</div><span class="tb-title">Beta Solutions Dashboard — Đề bài chính thức</span></div><div class="tb-right"><span class="slide-counter"><span>11</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:78.57%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Phần 3 — Thực hành (75 phút)</div>
+    <h2 class="s-h2">Dashboard <em>Beta Solutions</em></h2>
+    <p class="s-desc"><strong>Vai trò:</strong> Trưởng phòng Tài chính kiêm Fullstack Developer. File: ngan_sach_phong_ban.xlsx + brand_guideline_beta.txt</p>
+    <div class="crit-grid">
+      <div class="crit c1">
+        <div class="crit-n">GIAO DIỆN</div>
+        <div style="font-size:20px;margin-bottom:8px;">🖥️</div>
+        <h3>Dashboard Nền Tối</h3>
+        <p>3 thẻ KPI: Tổng ngân sách, Tổng chi tiêu, Giao dịch vượt NS. Biểu đồ cột ghép + biểu đồ tròn.</p>
+      </div>
+      <div class="crit c2">
+        <div class="crit-n">TÍNH NĂNG</div>
+        <div style="font-size:20px;margin-bottom:8px;">🔄</div>
+        <h3>Tương Tác + Real-time</h3>
+        <p>Nút bấm lọc Quý (Q1/Q2/Q3/Q4) + lọc Phòng ban. Polling 2 giây khi Excel thay đổi.</p>
+      </div>
+      <div class="crit c3">
+        <div class="crit-n">MÀU SẮC BẮT BUỘC</div>
+        <div style="font-size:20px;margin-bottom:8px;">🎨</div>
+        <h3>Brand Colors Beta</h3>
+        <p>NS: <span style="background:#7C3AED;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#7C3AED</span> · CT: <span style="background:#06B6D4;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#06B6D4</span> · Vượt: <span style="background:#F43F5E;color:#fff;padding:0 4px;border-radius:3px;font-size:10px;">#F43F5E</span></p>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--black);color:#fff;border-radius:10px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:18px;">📦</span>
+      <span style="font-size:13px;font-weight:600;">Nộp bài: <code style="font-family:'JetBrains Mono';font-size:11px;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:4px;">BetaDashboard_[TenHocVien].zip</code> chứa dashboard.html + mật khẩu ZIP tùy chọn</span>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 12: LỖI PHỔ BIẾN ══ -->
+<div class="slide" id="s12">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">LỖI PHỔ BIẾN</div><span class="tb-title">Nhận diện sớm — can thiệp kịp thời</span></div><div class="tb-right"><span class="slide-counter"><span>12</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:85.71%"></div></div></div></div>
+  <div class="sbody">
+    <div class="s-label">Lỗi thường gặp & cách xử lý</div>
+    <h2 class="s-h2">Nhận Diện Lỗi <em>Sớm</em></h2>
+    <p class="s-desc">Giảng viên tuần tra trong lớp. Thấy dấu hiệu này → can thiệp ngay.</p>
+    <table class="etbl">
+      <thead><tr><th>Lỗi</th><th>Dấu hiệu</th><th>Can thiệp ngay</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-r">PYTHON</span> Chưa cài</td><td><code style="font-family:'JetBrains Mono';font-size:11px;">command not found</code></td><td>Cài Python trước, pip install flask pandas openpyxl</td></tr>
+        <tr><td><span class="tag tag-r">PORT</span> 9090 bị chiếm</td><td><code style="font-family:'JetBrains Mono';font-size:11px;">OSError: Address already in use</code></td><td>Đổi sang port 9091 hoặc kill process cũ</td></tr>
+        <tr><td><span class="tag tag-r">BRAND</span> Màu sai</td><td>Dashboard dùng màu mặc định</td><td>Kiểm tra brand_guideline_beta.txt đã nạp chưa</td></tr>
+        <tr><td><span class="tag tag-r">POLLING</span> Không cập nhật</td><td>Biểu đồ không tự thay đổi</td><td>Prompt AI viết lại đoạn polling interval</td></tr>
+        <tr><td><span class="tag tag-r">EXCEL</span> File bị khóa</td><td>Python báo lỗi đọc file</td><td>Đóng Excel, chạy lại Python server</td></tr>
+        <tr><td><span class="tag tag-b">HTML</span> Tĩnh trống</td><td>Mở file HTML không hiện gì</td><td>AI chưa bundle data, yêu cầu sửa export script</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 13: CHECKLIST + BTVH ══ -->
+<div class="slide" id="s13">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">NGHIỆM THU</div><span class="tb-title">7 tiêu chí nghiệm thu + Bài tập về nhà</span></div><div class="tb-right"><span class="slide-counter"><span>13</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:92.85%"></div></div></div></div>
+  <div class="sbody">
+    <div class="two-col">
+      <div>
+        <div class="s-label">Checklist nghiệm thu</div>
+        <h2 class="s-h2" style="font-size:28px;margin-bottom:14px;">7 Tiêu Chí <em>Pass</em></h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+          <div class="cki"><div class="cki-box"></div><span>Dashboard chạy double-click</span></div>
+          <div class="cki"><div class="cki-box"></div><span>3 thẻ KPI đúng số liệu</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Màu Tím #7C3AED đúng</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Màu Xanh #06B6D4 đúng</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Nút lọc Quý hoạt động</span></div>
+          <div class="cki"><div class="cki-box"></div><span>Real-time polling 2s OK</span></div>
+          <div class="cki"><div class="cki-box"></div><span>File ZIP có mật khẩu</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="s-label">Bài tập về nhà</div>
+        <h2 class="s-h2" style="font-size:28px;margin-bottom:14px;"><em>BTVH</em></h2>
+        <div style="background:var(--black);border-radius:14px;padding:20px 24px;color:#fff;margin-bottom:14px;">
+          <div style="font-size:16px;font-weight:800;margin-bottom:8px;">Tạo 1 Dashboard từ công việc thực tế</div>
+          <div style="font-size:13px;color:#aaa;line-height:1.6;">Chọn báo cáo bạn đang làm thủ công. Export data → tạo brand_guideline → dùng CLEAR + RAG → export HTML tĩnh → ZIP + pass → nộp Group.</div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--blue);letter-spacing:1.5px;margin-bottom:8px;">TIÊU CHÍ CHẤM BTVH</div>
+        <div class="cki" style="margin-bottom:6px;"><div class="cki-box"></div><span>≥ 3 KPI từ dữ liệu thực công ty</span></div>
+        <div class="cki" style="margin-bottom:6px;"><div class="cki-box"></div><span>≥ 2 loại biểu đồ</span></div>
+        <div class="cki" style="margin-bottom:6px;"><div class="cki-box"></div><span>Màu theo brand guideline công ty bạn</span></div>
+        <div class="cki"><div class="cki-box"></div><span>File nộp là ZIP có mật khẩu</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next">Tiếp →</button></div></div>
+</div>
+
+<!-- ══ SLIDE 14: TỔNG KẾT ══ -->
+<div class="slide" id="s14">
+  <div class="topbar"><div class="tb-left"><div class="tb-badge">TỔNG KẾT</div><span class="tb-title">Buổi 6 — 4 điểm mấu chốt</span></div><div class="tb-right"><span class="slide-counter"><span>14</span>/14</span><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div></div>
+  <div class="sbody" style="justify-content:center;text-align:center;gap:28px;">
+    <div class="insight-full" style="max-width:720px;margin:0 auto;">
+      <h2>AI Tuân Thủ Luật Của Bạn Khi → Bạn Nạp Luật Vào AI</h2>
+      <p>RAG + CLEAR + Brand Guideline = Dashboard chuyên nghiệp, đồng bộ thương hiệu, không hallucinate.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:720px;margin:0 auto;">
+      <div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:12px;text-align:left;"><div style="font-size:20px;margin-bottom:8px;">🧠</div><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px;">RAG</div><div style="font-size:13px;font-weight:700;">Tri thức nội bộ</div><div style="font-size:11px;color:var(--g500);margin-top:3px;">Chống hallucination</div></div>
+      <div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:12px;text-align:left;"><div style="font-size:20px;margin-bottom:8px;">📝</div><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px;">CLEAR</div><div style="font-size:13px;font-weight:700;">Giao tiếp chuẩn xác</div><div style="font-size:11px;color:var(--g500);margin-top:3px;">Không trượt phát nào</div></div>
+      <div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:12px;text-align:left;"><div style="font-size:20px;margin-bottom:8px;">📊</div><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px;">BI DASHBOARD</div><div style="font-size:13px;font-weight:700;">Real-time 2 giây</div><div style="font-size:11px;color:var(--g500);margin-top:3px;">5 phút thay vì 4 tiếng</div></div>
+      <div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:12px;text-align:left;"><div style="font-size:20px;margin-bottom:8px;">🔐</div><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:4px;">BẢO MẬT</div><div style="font-size:13px;font-weight:700;">Local + ZIP pass</div><div style="font-size:11px;color:var(--g500);margin-top:3px;">Chia sẻ an toàn</div></div>
+    </div>
+    <div style="font-size:13px;color:var(--g500);">Buổi 7 → Handoff & Checkpoints · Buổi 8 → Org Audit</div>
+  </div>
+  <div class="nav-bar"><div class="dot-nav"></div><div class="nav-btns"><button class="btn btn-prev">← Trước</button><button class="btn btn-next" disabled>Kết thúc ✓</button></div></div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+const TOTAL=14;let cur=0;
+const slides=document.querySelectorAll('.slide');
+const prevBtns=document.querySelectorAll('.btn-prev');
+const nextBtns=document.querySelectorAll('.btn-next');
+document.querySelectorAll('.dot-nav').forEach(nav=>{
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.dataset.i=i;d.addEventListener('click',()=>goTo(i));nav.appendChild(d);}
+});
+function updateAll(){
+  document.getElementById('cur').textContent=cur+1;
+  document.getElementById('prog').style.width=((cur+1)/TOTAL*100).toFixed(2)+'%';
+  slides.forEach((s,i)=>{s.classList.remove('active','exit');if(i===cur)s.classList.add('active');});
+  document.querySelectorAll('.dot').forEach(d=>{d.classList.toggle('active',+d.dataset.i===cur);});
+  prevBtns.forEach(b=>b.disabled=cur===0);
+  nextBtns.forEach(b=>{if(cur===TOTAL-1){b.disabled=true;b.textContent='Kết thúc ✓';}else{b.disabled=false;b.textContent='Tiếp →';}});
+}
+function goTo(i){if(i<0||i>=TOTAL||i===cur)return;slides[cur].classList.add('exit');setTimeout(()=>slides[cur].classList.remove('exit'),400);cur=i;updateAll();}
+prevBtns.forEach(b=>b.addEventListener('click',()=>goTo(cur-1)));
+nextBtns.forEach(b=>b.addEventListener('click',()=>goTo(cur+1)));
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')goTo(cur+1);if(e.key==='ArrowLeft')goTo(cur-1);});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60){dx<0?goTo(cur+1):goTo(cur-1);}});
+updateAll();
+</script>
+</body>
+</html>

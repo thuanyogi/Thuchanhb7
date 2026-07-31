@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Buổi 5 — AI Agent | MindX × Google Antigravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E03131;--red-d:#C92A2A;--red-l:#FFE3E3;
+  --black:#0F0F0F;--g800:#1F1F1F;--g600:#4A4A4A;--g400:#888;--g100:#F7F7F7;
+  --white:#fff;--border:#EBEBEB;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#fff;color:var(--black);}
+
+/* Each section is exactly 100vh for screenshot */
+section{
+  width:100%;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 80px;
+  position:relative;overflow:hidden;
+}
+
+/* ── THEME TOGGLE ── */
+.theme-toggle{
+  position:fixed;top:20px;right:20px;z-index:999;
+  display:flex;gap:6px;background:rgba(255,255,255,.9);
+  border:1px solid var(--border);border-radius:20px;
+  padding:6px 10px;backdrop-filter:blur(10px);
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+.theme-btn{
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;
+  border:none;cursor:pointer;background:transparent;color:var(--g600);
+  transition:all .2s;
+}
+.theme-btn.active{background:var(--black);color:#fff;}
+body.dark{background:#0F0F0F;color:#fff;}
+body.dark section{background:#0F0F0F!important;}
+body.dark .card{background:#1A1A1A!important;border-color:#2A2A2A!important;}
+
+/* ── SECTION 1: HERO ── */
+#hero{
+  background:#fff;
+  border-bottom:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--red-l);color:var(--red);
+  border:1.5px solid rgba(224,49,49,.25);
+  padding:7px 18px;border-radius:30px;
+  font-size:12px;font-weight:800;letter-spacing:1.5px;
+  margin-bottom:40px;width:fit-content;
+}
+.hero-h1{
+  font-size:88px;font-weight:900;
+  letter-spacing:-4px;line-height:.95;
+  margin-bottom:32px;
+}
+.hero-h1 .line2{color:var(--red);}
+.hero-h1 .line3{font-size:52px;letter-spacing:-2px;color:var(--g400);font-weight:700;}
+.hero-tags{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
+.htag{
+  padding:10px 20px;border-radius:10px;
+  font-size:14px;font-weight:600;
+  border:1.5px solid var(--border);
+  background:#fff;color:var(--g600);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.htag.red{background:var(--red);color:#fff;border-color:var(--red);}
+.hero-progress{display:flex;align-items:center;gap:16px;}
+.progress-track{
+  display:flex;gap:6px;
+}
+.pdot{
+  width:28px;height:6px;border-radius:3px;
+  background:var(--border);
+}
+.pdot.done{background:var(--red);}
+.pdot.cur{background:var(--black);}
+.progress-label{font-size:13px;color:var(--g400);font-weight:500;}
+
+/* Decorative red square */
+.deco-sq{
+  position:absolute;
+  background:var(--red);border-radius:20px;
+  opacity:.08;
+}
+
+/* ── SECTION 2: MICRO ── */
+#micro{background:var(--g100);}
+.micro-table{width:100%;border-collapse:separate;border-spacing:0;}
+.micro-table tr{transition:background .2s;}
+.micro-table tr:hover td{background:rgba(224,49,49,.04);}
+.micro-table td{
+  padding:22px 24px;
+  border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.micro-table tr:last-child td{border-bottom:none;}
+.mletter-cell{
+  width:72px;
+}
+.mletter{
+  width:64px;height:64px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;
+}
+.ml-m{background:var(--red-l);color:var(--red);}
+.ml-i{background:#FFF0D9;color:#D48806;}
+.ml-c{background:#D3F9D8;color:#2F9E44;}
+.ml-r{background:#D0EBFF;color:#1971C2;}
+.ml-o{background:#E5DBFF;color:#6741D9;}
+.m-word{font-size:22px;font-weight:800;width:200px;}
+.m-en{font-size:13px;color:var(--g400);font-weight:500;margin-top:2px;}
+.m-desc{font-size:16px;color:var(--g600);}
+.m-tip{
+  font-size:12px;color:var(--g400);
+  font-style:italic;padding-left:16px;
+  border-left:3px solid var(--border);
+  max-width:320px;
+}
+.section-tagline{
+  font-size:18px;font-weight:700;color:var(--red);
+  text-align:right;margin-top:20px;
+}
+
+/* ── SECTION 3: PIPELINE ── */
+#pipeline{background:#fff;}
+.pipeline-wrap{
+  display:flex;align-items:stretch;gap:0;
+  border:1.5px solid var(--border);border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,.06);
+}
+.pipe-col{
+  flex:1;padding:32px 24px;
+  border-right:1.5px solid var(--border);
+  background:#fff;position:relative;
+  transition:background .25s;
+}
+.pipe-col:last-child{border-right:none;background:var(--red);}
+.pipe-col:last-child .pipe-name,.pipe-col:last-child .pipe-desc{color:#fff;}
+.pipe-col:last-child .pipe-tag{background:rgba(255,255,255,.2);color:#fff;}
+.pipe-col:hover:not(:last-child){background:var(--red-l);}
+.pipe-tag{
+  font-size:10px;font-weight:800;letter-spacing:2px;
+  background:var(--red-l);color:var(--red);
+  padding:3px 10px;border-radius:10px;
+  margin-bottom:20px;display:inline-block;
+}
+.pipe-icon-wrap{
+  width:56px;height:56px;border-radius:14px;
+  background:var(--g100);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:16px;
+}
+.pipe-col:last-child .pipe-icon-wrap{background:rgba(255,255,255,.15);}
+.pipe-name{font-size:20px;font-weight:800;margin-bottom:6px;}
+.pipe-desc{font-size:13px;color:var(--g600);line-height:1.5;}
+.pipe-connector{
+  display:flex;align-items:center;justify-content:center;
+  width:40px;flex-shrink:0;
+  color:var(--g400);font-size:20px;
+  background:#fff;border-top:1.5px solid var(--border);border-bottom:1.5px solid var(--border);
+}
+.insight-strip{
+  margin-top:28px;padding:20px 28px;
+  background:var(--black);color:#fff;border-radius:14px;
+  display:flex;align-items:center;gap:14px;
+}
+.insight-strip .bulb{font-size:24px;}
+.insight-strip p{font-size:15px;font-weight:600;line-height:1.4;}
+.insight-strip em{color:var(--red-l);font-style:normal;}
+
+/* ── SECTION 4: FINANCE AGENT ── */
+#finance-agent{background:var(--g100);}
+.fa-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+.fa-left{}
+.fa-card{
+  background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,.07);
+  border:1.5px solid var(--border);
+}
+.fa-card-header{
+  background:var(--red);color:#fff;padding:22px 28px;
+}
+.fa-card-header h3{font-size:18px;font-weight:800;}
+.fa-card-header p{font-size:12px;opacity:.8;margin-top:4px;}
+.fa-rows{}
+.fa-row{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:18px 24px;border-bottom:1px solid var(--border);
+}
+.fa-row:last-child{border-bottom:none;}
+.fa-tag{
+  width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;flex-shrink:0;
+}
+.fa-row-body{}
+.fa-row-label{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--g400);text-transform:uppercase;margin-bottom:3px;}
+.fa-row-val{font-size:14px;font-weight:600;}
+.fa-right{display:flex;flex-direction:column;gap:16px;}
+.sheet-preview{
+  background:#fff;border-radius:16px;overflow:hidden;
+  border:1.5px solid var(--border);
+  box-shadow:0 4px 20px rgba(0,0,0,.06);
+}
+.sheet-header{
+  background:var(--g100);border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;align-items:center;gap:8px;
+}
+.sheet-dots{display:flex;gap:5px;}
+.sheet-dot{width:10px;height:10px;border-radius:50%;}
+.sheet-title{font-size:11px;font-weight:600;color:var(--g400);margin-left:8px;}
+.sheet-table{width:100%;border-collapse:collapse;}
+.sheet-table th{
+  background:var(--g100);padding:9px 10px;
+  font-size:10px;font-weight:700;color:var(--g400);text-align:left;
+  border-bottom:1px solid var(--border);
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.sheet-table td{padding:10px 10px;font-size:11px;border-bottom:1px solid var(--border);}
+.sheet-table tr:last-child td{border-bottom:none;}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;}
+.badge-r{background:var(--red-l);color:var(--red);}
+.badge-g{background:#D3F9D8;color:#2F9E44;}
+.code-block{
+  background:var(--black);border-radius:14px;padding:20px 22px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;
+  color:#e8e8e8;
+}
+.code-block .cmd{color:#7ee787;}
+.code-block .output{color:#79c0ff;}
+.code-block .cmt{color:#6a737d;}
+
+/* ── SECTION 5: PRACTICE ── */
+#practice{background:#fff;}
+.practice-hero{
+  background:var(--black);border-radius:24px;
+  padding:40px 48px;margin-bottom:32px;
+  display:flex;align-items:center;gap:32px;
+}
+.practice-icon{font-size:56px;flex-shrink:0;}
+.practice-hero h2{font-size:32px;font-weight:900;color:#fff;margin-bottom:8px;}
+.practice-hero p{font-size:15px;color:#aaa;line-height:1.5;}
+.crit-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.crit{border-radius:18px;padding:28px;}
+.crit.c1{background:#FFF5F5;border:1.5px solid rgba(224,49,49,.2);}
+.crit.c2{background:#F0FFF4;border:1.5px solid rgba(47,158,68,.2);}
+.crit.c3{background:#F0F4FF;border:1.5px solid rgba(25,113,194,.2);}
+.crit-num{font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:12px;}
+.c1 .crit-num{color:var(--red);}
+.c2 .crit-num{color:#2F9E44;}
+.c3 .crit-num{color:#1971C2;}
+.crit-icon{font-size:32px;margin-bottom:12px;}
+.crit h3{font-size:18px;font-weight:800;margin-bottom:8px;}
+.crit p{font-size:13px;color:var(--g600);line-height:1.6;}
+.crit code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;font-size:11px;font-family:'JetBrains Mono',monospace;}
+
+/* ── SECTION 6: INSIGHT ── */
+#insight{
+  background:var(--red);
+  align-items:center;text-align:center;
+}
+.insight-wrap{max-width:800px;margin:0 auto;}
+.insight-badge{
+  display:inline-block;
+  background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);
+  border:1.5px solid rgba(255,255,255,.25);
+  padding:8px 20px;border-radius:30px;
+  font-size:12px;font-weight:800;letter-spacing:2px;
+  margin-bottom:40px;
+}
+.insight-quote{
+  font-size:56px;font-weight:900;color:#fff;
+  letter-spacing:-2px;line-height:1.05;
+  margin-bottom:40px;
+}
+.insight-quote em{color:rgba(255,255,255,.5);font-style:normal;}
+.insight-quote .highlight{
+  text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);
+  text-underline-offset:8px;
+}
+.insight-chain{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  margin-bottom:48px;flex-wrap:wrap;
+}
+.chain-item{
+  background:rgba(255,255,255,.12);color:#fff;
+  padding:10px 20px;border-radius:10px;
+  font-size:14px;font-weight:700;
+  border:1.5px solid rgba(255,255,255,.2);
+}
+.chain-arrow{color:rgba(255,255,255,.5);font-size:18px;}
+.insight-source{
+  font-size:13px;color:rgba(255,255,255,.6);
+}
+
+/* ── SHARED ── */
+.s-label{font-size:11px;font-weight:800;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;}
+.s-h2{font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:10px;}
+.s-h2 em{color:var(--red);font-style:normal;}
+.s-desc{font-size:16px;color:var(--g600);margin-bottom:44px;max-width:640px;}
+.s-en{font-size:13px;color:var(--g400);font-weight:500;margin-bottom:40px;}
+
+/* Lang badge */
+.lang-badge{
+  position:absolute;top:28px;left:80px;
+  display:flex;gap:6px;
+}
+.lb{
+  font-size:10px;font-weight:800;letter-spacing:1px;
+  padding:3px 8px;border-radius:6px;
+}
+.lb-vi{background:var(--red);color:#fff;}
+.lb-en{background:var(--g100);color:var(--g600);}
+
+/* Progress bar */
+.nav-hint{
+  position:fixed;bottom:20px;right:20px;
+  background:rgba(255,255,255,.9);border:1px solid var(--border);
+  border-radius:12px;padding:8px 14px;
+  font-size:11px;color:var(--g400);font-weight:600;
+  backdrop-filter:blur(10px);
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  display:flex;gap:8px;align-items:center;
+}
+</style>
+</head>
+<body>
+
+<!-- Theme toggle -->
+<div class="theme-toggle">
+  <button class="theme-btn active" onclick="setTheme('light')">☀️ Light</button>
+  <button class="theme-btn" onclick="setTheme('dark')">🌙 Dark</button>
+</div>
+<div class="nav-hint">↑↓ Cuộn để xem &nbsp;·&nbsp; 6 sections</div>
+
+<!-- ══════════════════════════════════
+     SECTION 1: HERO
+══════════════════════════════════ -->
+<section id="hero">
+  <!-- decorative -->
+  <div class="deco-sq" style="width:300px;height:300px;top:-80px;right:-80px;border-radius:40px;"></div>
+  <div class="deco-sq" style="width:120px;height:120px;bottom:60px;right:200px;opacity:.05;"></div>
+
+  <div class="lang-badge"><span class="lb lb-vi">VI</span><span class="lb lb-en">EN</span></div>
+
+  <div class="hero-eyebrow">
+    📘 PHASE 2 — MODIFY &nbsp;·&nbsp; BUỔI 5 / 11 &nbsp;·&nbsp; MINDX × GOOGLE ANTIGRAVITY
+  </div>
+
+  <h1 class="hero-h1">
+    Triển Khai<br/>
+    <span class="line2">AI Agent</span><br/>
+    <span class="line3">Như Nhân Sự Chuyên Trách</span>
+  </h1>
+
+  <div class="hero-tags">
+    <span class="htag red">Khung MICRO</span>
+    <span class="htag">MCP + API</span>
+    <span class="htag">Finance Agent</span>
+    <span class="htag">Python → Google Sheet</span>
+    <span class="htag">Thực chiến 3 giờ</span>
+  </div>
+
+  <div class="hero-progress">
+    <div class="progress-track">
+      <div class="pdot done"></div><div class="pdot done"></div>
+      <div class="pdot done"></div><div class="pdot done"></div>
+      <div class="pdot cur"></div><div class="pdot"></div>
+      <div class="pdot"></div><div class="pdot"></div>
+      <div class="pdot"></div><div class="pdot"></div>
+      <div class="pdot"></div>
+    </div>
+    <span class="progress-label">Buổi 5 / 11 &nbsp;·&nbsp; Phase 2 — Modify</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 2: MICRO FRAMEWORK
+══════════════════════════════════ -->
+<section id="micro">
+  <div class="lang-badge"><span class="lb lb-vi">VI</span><span class="lb lb-en">EN</span></div>
+  <div class="s-label">Khung MICRO · MICRO Framework</div>
+  <h2 class="s-h2"><em>MICRO</em> — JD Cho Nhân Viên AI</h2>
+  <p class="s-en">The 5-component standard for building a well-functioning AI Agent</p>
+
+  <div style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.06);">
+    <table class="micro-table" style="width:100%;">
+      <tr>
+        <td class="mletter-cell"><div class="mletter ml-m">M</div></td>
+        <td class="m-word">Mission<div class="m-en">Sứ mệnh</div></td>
+        <td class="m-desc">Nhiệm vụ cụ thể của Agent là gì? Làm gì, cho ai, mục tiêu gì?<br/><span style="font-size:12px;color:var(--g400);">What exactly should the agent do, for whom, and why?</span></td>
+        <td class="m-tip">"Nhân viên giỏi nhất team bạn làm gì?" → Đó là Mission</td>
+      </tr>
+      <tr>
+        <td><div class="mletter ml-i">I</div></td>
+        <td class="m-word">Input<div class="m-en">Đầu vào</div></td>
+        <td class="m-desc">Dữ liệu đầu vào Agent nhận được — bắt buộc và tùy chọn.<br/><span style="font-size:12px;color:var(--g400);">All data the agent needs before starting work.</span></td>
+        <td class="m-tip">"Thiếu thông tin này, agent có làm được không?" → Bắt buộc</td>
+      </tr>
+      <tr>
+        <td><div class="mletter ml-c">C</div></td>
+        <td class="m-word">Constraints<div class="m-en">Giới hạn</div></td>
+        <td class="m-desc">Quy tắc và giới hạn — Agent KHÔNG được làm gì?<br/><span style="font-size:12px;color:var(--g400);">Rules and limits — what the agent must NOT do.</span></td>
+        <td class="m-tip">"Điều tệ nhất agent có thể làm sai?" → Viết thành Constraint</td>
+      </tr>
+      <tr>
+        <td><div class="mletter ml-r">R</div></td>
+        <td class="m-word">Role<div class="m-en">Vai trò</div></td>
+        <td class="m-desc">Vai trò, danh tính, persona, tone, chuyên môn của Agent.<br/><span style="font-size:12px;color:var(--g400);">Who the agent is — persona, expertise, communication tone.</span></td>
+        <td class="m-tip">"JD như vậy có ai apply không?" → Role phải đủ cụ thể</td>
+      </tr>
+      <tr>
+        <td><div class="mletter ml-o">O</div></td>
+        <td class="m-word">Output<div class="m-en">Đầu ra</div></td>
+        <td class="m-desc">Kết quả cụ thể Agent tạo ra — format, cấu trúc, tiêu chí.<br/><span style="font-size:12px;color:var(--g400);">Exact result format and quality criteria expected.</span></td>
+        <td class="m-tip">"Nhận output này, dùng được ngay không?" → Tốt = dùng ngay</td>
+      </tr>
+    </table>
+  </div>
+  <div class="section-tagline">AI Agent = Nhân Sự AI ·· AI Agent = Your Digital Staff</div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 3: PIPELINE MCP+API
+══════════════════════════════════ -->
+<section id="pipeline">
+  <div class="lang-badge"><span class="lb lb-vi">VI</span><span class="lb lb-en">EN</span></div>
+  <div class="s-label">MCP + API · Full Integration Pipeline</div>
+  <h2 class="s-h2">AI Không Chỉ <em>"Nghĩ"</em><br/>AI Còn <em>"Làm"</em></h2>
+  <p class="s-desc">Model Context Protocol + API — pipeline hoàn chỉnh từ AI Agent đến hệ thống thực tế.</p>
+
+  <div class="pipeline-wrap">
+    <div class="pipe-col">
+      <span class="pipe-tag">INPUT · MCP</span>
+      <div class="pipe-icon-wrap">🤖</div>
+      <div class="pipe-name">GG Anti Agent</div>
+      <div class="pipe-desc">Phân tích dữ liệu, ra quyết định theo business rules đã định nghĩa.<br/><em style="color:var(--g400);font-size:12px;">Analyzes data, makes decisions per business rules.</em></div>
+    </div>
+    <div class="pipe-connector">→</div>
+    <div class="pipe-col">
+      <span class="pipe-tag">MCP TOOL</span>
+      <div class="pipe-icon-wrap">🐍</div>
+      <div class="pipe-name">Python Script</div>
+      <div class="pipe-desc">MCP gọi Python để thực thi logic. AI có tay để làm việc.<br/><em style="color:var(--g400);font-size:12px;">MCP calls Python — AI now has hands to work with.</em></div>
+    </div>
+    <div class="pipe-connector">→</div>
+    <div class="pipe-col">
+      <span class="pipe-tag">API CALL</span>
+      <div class="pipe-icon-wrap">📡</div>
+      <div class="pipe-name">Apps Script</div>
+      <div class="pipe-desc">Mini backend — nhận POST request, xử lý, trả JSON response.<br/><em style="color:var(--g400);font-size:12px;">Mini backend hosted by Google — no server needed.</em></div>
+    </div>
+    <div class="pipe-connector">→</div>
+    <div class="pipe-col">
+      <span class="pipe-tag">OUTPUT</span>
+      <div class="pipe-icon-wrap" style="background:rgba(255,255,255,.15);">📊</div>
+      <div class="pipe-name">Google Sheet</div>
+      <div class="pipe-desc">Dữ liệu ghi thật, cập nhật thật thời gian thực.<br/><em style="font-size:12px;opacity:.8;">Real data written to real spreadsheet in real-time.</em></div>
+    </div>
+  </div>
+
+  <div class="insight-strip">
+    <span class="bulb">💡</span>
+    <p>AI chỉ có giá trị thực sự khi → <em>đi vào workflow thật</em> → tạo ra <em>output thật</em> &nbsp;·&nbsp; <span style="opacity:.6;">AI only creates real value when it enters real workflows and produces real output.</span></p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 4: FINANCE AGENT DEMO
+══════════════════════════════════ -->
+<section id="finance-agent">
+  <div class="lang-badge"><span class="lb lb-vi">VI</span><span class="lb lb-en">EN</span></div>
+  <div class="s-label">Demo Thực Tế · Live Demo</div>
+  <h2 class="s-h2">Finance Agent —<br/><em>Chạy Thật</em></h2>
+  <p class="s-desc">MICRO → Python → Apps Script → Google Sheet. Kết quả thật trên màn hình.</p>
+
+  <div class="fa-grid">
+    <div class="fa-left">
+      <div class="fa-card">
+        <div class="fa-card-header">
+          <h3>📊 Finance Agent Definition</h3>
+          <p>Khung MICRO đầy đủ — áp dụng vào tài chính doanh nghiệp</p>
+        </div>
+        <div class="fa-rows">
+          <div class="fa-row">
+            <div class="fa-tag ml-m">M</div>
+            <div class="fa-row-body"><div class="fa-row-label">Mission</div><div class="fa-row-val">Quản lý và phân loại chi phí doanh nghiệp</div></div>
+          </div>
+          <div class="fa-row">
+            <div class="fa-tag ml-i">I</div>
+            <div class="fa-row-body"><div class="fa-row-label">Input</div><div class="fa-row-val">Dữ liệu chi tiêu từ các phòng ban</div></div>
+          </div>
+          <div class="fa-row">
+            <div class="fa-tag ml-c">C</div>
+            <div class="fa-row-body"><div class="fa-row-label">Constraints</div><div class="fa-row-val">&gt;500k → kiểm tra &nbsp;|&nbsp; Liên quan khách → cần chứng từ</div></div>
+          </div>
+          <div class="fa-row">
+            <div class="fa-tag ml-r">R</div>
+            <div class="fa-row-body"><div class="fa-row-label">Role</div><div class="fa-row-val">Finance Assistant chuyên trách</div></div>
+          </div>
+          <div class="fa-row">
+            <div class="fa-tag ml-o">O</div>
+            <div class="fa-row-body"><div class="fa-row-label">Output</div><div class="fa-row-val">JSON + Google Sheet cập nhật tự động</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fa-right">
+      <div class="sheet-preview">
+        <div class="sheet-header">
+          <div class="sheet-dots">
+            <div class="sheet-dot" style="background:#FF5F57;"></div>
+            <div class="sheet-dot" style="background:#FEBC2E;"></div>
+            <div class="sheet-dot" style="background:#28C840;"></div>
+          </div>
+          <span class="sheet-title">Admin Expense Tracker — Google Sheet</span>
+        </div>
+        <table class="sheet-table">
+          <thead>
+            <tr><th>Date</th><th>Employee</th><th>Item</th><th>Amount</th><th>Category</th><th>Status</th><th>AI Note</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024-01-15</td><td>Nguyễn Văn A</td><td>Tiếp khách</td><td>750,000</td><td>Entertainment</td>
+              <td><span class="badge badge-r">Cần chứng từ</span></td><td style="font-size:10px;color:#888;">Vượt 500k</td>
+            </tr>
+            <tr>
+              <td>2024-01-15</td><td>Trần Thị B</td><td>Văn phòng phẩm</td><td>120,000</td><td>Office</td>
+              <td><span class="badge badge-g">Approved</span></td><td style="font-size:10px;color:#888;">Trong hạn mức</td>
+            </tr>
+            <tr>
+              <td>2024-01-15</td><td>Lê Văn C</td><td>Di chuyển</td><td>85,000</td><td>Transport</td>
+              <td><span class="badge badge-g">Approved</span></td><td style="font-size:10px;color:#888;">Trong hạn mức</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block">
+        <span class="cmt"># Bước 6: Chạy pipeline đầu đến cuối</span><br/>
+        <span class="cmd">type data.json | python send_to_sheet.py</span><br/><br/>
+        <span class="cmt"># Kết quả trả về:</span><br/>
+        <span class="output">{"success": true, "updatedRows": 3}</span><br/><br/>
+        <span class="cmt"># ✅ Agent + MCP + API chạy thật!</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 5: PRACTICE
+══════════════════════════════════ -->
+<section id="practice">
+  <div class="lang-badge"><span class="lb lb-vi">VI</span><span class="lb lb-en">EN</span></div>
+  <div class="s-label">Thực Hành · Hands-on Assignment</div>
+  <h2 class="s-h2">Đóng Vai <em>Chuyên Gia<br/>Tự Động Hóa</em></h2>
+
+  <div class="practice-hero">
+    <div class="practice-icon">🏢</div>
+    <div>
+      <h2>Công ty ABC — Bài toán copy-paste thủ công</h2>
+      <p>Nhân viên nhập chi tiêu vào <strong style="color:#fff;">Data_Nhan_Vien</strong> → Kế toán copy tay sang <strong style="color:#fff;">Admin Expense Tracker</strong> cuối ngày. Viết Python Script giải quyết triệt để với 3 tiêu chí khắt khe. Sử dụng Google Antigravity để hướng dẫn / thực hiện.<br/><span style="font-size:13px;color:#666;margin-top:6px;display:block;">Use Google Antigravity to guide and implement the solution.</span></p>
+    </div>
+  </div>
+
+  <div class="crit-row">
+    <div class="crit c1">
+      <div class="crit-num">TIÊU CHÍ 01 · CRITERION 01</div>
+      <div class="crit-icon">🔐</div>
+      <h3>Kết Nối An Toàn</h3>
+      <p>OAuth 2.0 qua file <code>credentials.json</code>. Không dùng phương pháp kém bảo mật.<br/><em style="color:#888;font-size:12px;">Secure connection via Google Cloud OAuth 2.0.</em></p>
+    </div>
+    <div class="crit c2">
+      <div class="crit-num">TIÊU CHÍ 02 · CRITERION 02</div>
+      <div class="crit-icon">📝</div>
+      <h3>Ghi Thông Minh</h3>
+      <p>Tự phát hiện dòng trống cuối file và <code>append</code>. Tuyệt đối không ghi đè dữ liệu cũ.<br/><em style="color:#888;font-size:12px;">Auto-detect last row and append — never overwrite old data.</em></p>
+    </div>
+    <div class="crit c3">
+      <div class="crit-num">TIÊU CHÍ 03 · CRITERION 03</div>
+      <div class="crit-icon">🛡️</div>
+      <h3>Chống Trùng Lặp</h3>
+      <p>Tạo cột <code>SyncStatus</code>, đánh dấu "Done". Lần sau chỉ bốc dòng chưa Done.<br/><em style="color:#888;font-size:12px;">Mark synced rows "Done" — only process new rows next run.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SECTION 6: INSIGHT QUOTE
+══════════════════════════════════ -->
+<section id="insight">
+  <div class="insight-wrap">
+    <div class="insight-badge">💡 INSIGHT QUAN TRỌNG NHẤT · KEY INSIGHT</div>
+
+    <div class="insight-quote">
+      "AI chỉ có giá trị<br/>
+      thực sự khi →<br/>
+      đi vào <span class="highlight">workflow thật</span><br/>
+      → tạo ra <span class="highlight">output thật</span>"
+    </div>
+
+    <div class="insight-chain">
+      <span class="chain-item">MICRO</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">MCP</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">API</span>
+      <span class="chain-arrow">→</span>
+      <span class="chain-item">Google Sheet</span>
+    </div>
+
+    <div class="insight-source">
+      MindX × Google Antigravity &nbsp;·&nbsp; Buổi 5 / 11 &nbsp;·&nbsp; Phase 2 — Modify<br/>
+      <span style="font-size:12px;opacity:.6;">Agentic AI with Google Antigravity — Session 5 of 11</span>
+    </div>
+  </div>
+</section>
+
+<script>
+function setTheme(t){
+  document.body.className = t==='dark'?'dark':'';
+  document.querySelectorAll('.theme-btn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.includes(t==='dark'?'Dark':'Light'));
+  });
+}
+</script>
+</body>
+</html>

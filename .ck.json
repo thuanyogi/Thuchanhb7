@@ -1,0 +1,7 @@
+{
+  "project": "antigravity-teaching-workspace",
+  "docsDir": "docs",
+  "plansDir": "plans",
+  "reportsDir": "plans/reports",
+  "planDateFormat": "yyMMdd-HHmm"
+}

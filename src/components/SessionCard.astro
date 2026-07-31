@@ -1,0 +1,58 @@
+---
+import type { CourseSession } from "../lib/course";
+
+interface Props {
+  session: CourseSession;
+}
+
+const { session } = Astro.props;
+---
+
+<article class="session-card">
+  <a href={`/sessions/${session.slug}/`} class="session-card-link">
+    <img
+      src={session.heroImage}
+      alt={`Minh hoạ buổi ${session.number}: ${session.topic}`}
+      loading="lazy"
+      width="640"
+      height="360"
+    />
+    <div class="session-card-body">
+      <div class="hero-meta">
+        <span class="phase-badge" data-phase={session.phase}>{session.phase}</span>
+        <span class="eyebrow" style="margin: 0;">Session {session.number.toString().padStart(2, "0")}</span>
+      </div>
+      <h3>{session.topic}</h3>
+      <p>{session.summary}</p>
+      <dl>
+        <div><dt>Artifact</dt><dd>{session.artifact || "—"}</dd></div>
+        <div><dt>Checklist</dt><dd>{session.guidance.successCriteria.length} items</dd></div>
+      </dl>
+    </div>
+  </a>
+</article>
+
+<style>
+  .session-card dl {
+    margin-top: auto;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+  }
+
+  .session-card dl div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .session-card dd {
+    font-size: 0.85rem;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+</style>
