@@ -26,77 +26,122 @@ KNOWLEDGE_FILE_PATH = os.path.join("knowledge-base", "tieu_chi_cham_diem.txt")
 # ---------------------------------------------------------
 def load_raw_data_from_sheets(sheet_url=DEFAULT_SHEET_URL):
     """
-    Tải dữ liệu trực tiếp từ Google Sheets CSV Export URL.
-    Hỗ trợ cả đọc công khai và tự động xác thực bằng Google Service Account (từ st.secrets) khi Sheet để chế độ riêng tư.
+    Tải dữ liệu từ Google Sheets.
+    - Ưu tiên dùng Google Sheets API v4 nếu có Service Account trong st.secrets (hỗ trợ Sheet riêng tư).
+    - Fallback sang CSV Export URL nếu Sheet để công khai.
+
+    LƯU Ý: CSV Export URL (/export?format=csv) KHÔNG hỗ trợ Bearer Token.
+    Với Sheet riêng tư, BẮT BUỘC phải dùng Sheets API v4.
     """
     if not sheet_url or not sheet_url.strip():
         st.error("Vui lòng nhập đường dẫn Google Sheets hợp lệ.")
         return pd.DataFrame()
 
-    # Tự động chuẩn hóa URL nhập vào sang dạng CSV export
-    csv_url = sheet_url.strip()
-    if "/edit" in csv_url or "docs.google.com/spreadsheets" in csv_url:
-        match_id = re.search(r'/d/([a-zA-Z0-9-_]+)', csv_url)
-        match_gid = re.search(r'[#&?]gid=([0-9]+)', csv_url)
-        if match_id:
-            sheet_id = match_id.group(1)
-            gid = match_gid.group(1) if match_gid else "0"
-            csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
+    # Trích sheet_id và gid từ URL
+    url_clean = sheet_url.strip()
+    match_id = re.search(r'/d/([a-zA-Z0-9-_]+)', url_clean)
+    match_gid = re.search(r'[#&?]gid=([0-9]+)', url_clean)
 
-    headers = {}
-    
-    # 1. Tự động kiểm tra nếu có Google Service Account Credentials trong st.secrets
+    if not match_id:
+        st.error("Không tìm thấy Sheet ID hợp lệ trong URL.")
+        return pd.DataFrame()
+
+    sheet_id = match_id.group(1)
+    gid = match_gid.group(1) if match_gid else "0"
+
+    # --- PHƯƠNG ÁN 1: Google Sheets API v4 với Service Account (Sheet riêng tư) ---
+    # QUAN TRỌNG: CSV Export URL (/export?format=csv) KHÔNG hỗ trợ Bearer Token.
+    # Phải dùng Google Sheets API v4 để truy cập sheet riêng tư.
+    sa_info = None
     if HAS_GOOGLE_AUTH:
-        try:
-            if "gcp_service_account" in st.secrets:
-                sa_info = dict(st.secrets["gcp_service_account"])
-                scopes = [
-                    'https://www.googleapis.com/auth/spreadsheets.readonly',
-                    'https://www.googleapis.com/auth/drive.readonly'
-                ]
-                creds = service_account.Credentials.from_service_account_info(sa_info, scopes=scopes)
-                auth_req = google.auth.transport.requests.Request()
-                creds.refresh(auth_req)
-                headers["Authorization"] = f"Bearer {creds.token}"
-        except Exception:
-            pass
+        if "gcp_service_account" in st.secrets:
+            sa_info = dict(st.secrets["gcp_service_account"])
+        elif "private_key" in st.secrets:
+            sa_info = dict(st.secrets)
 
-    # 2. Gửi yêu cầu HTTP tải dữ liệu CSV
+    if sa_info:
+        try:
+            # Xử lý chuỗi private_key nếu bị dán nhầm ký tự \\n dạng escape
+            if "private_key" in sa_info and isinstance(sa_info["private_key"], str):
+                sa_info["private_key"] = sa_info["private_key"].replace("\\n", "\n")
+
+            scopes = [
+                'https://www.googleapis.com/auth/spreadsheets.readonly',
+                'https://www.googleapis.com/auth/drive.readonly'
+            ]
+            creds = service_account.Credentials.from_service_account_info(sa_info, scopes=scopes)
+            auth_req = google.auth.transport.requests.Request()
+            creds.refresh(auth_req)
+            token = creds.token
+            auth_header = {"Authorization": f"Bearer {token}"}
+
+            # Bước 1: Lấy metadata để chuyển gid → tên sheet
+            meta_url = f"https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}?fields=sheets.properties"
+            meta_resp = requests.get(meta_url, headers=auth_header, timeout=10)
+            meta_resp.raise_for_status()
+            sheets_info = meta_resp.json().get("sheets", [])
+
+            sheet_name = None
+            for s in sheets_info:
+                props = s.get("properties", {})
+                if str(props.get("sheetId", "")) == str(gid):
+                    sheet_name = props.get("title", "")
+                    break
+            if not sheet_name and sheets_info:
+                sheet_name = sheets_info[0]["properties"]["title"]
+
+            if sheet_name:
+                # Bước 2: Gọi Sheets API v4 values để lấy dữ liệu
+                values_url = f"https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}/values/{requests.utils.quote(sheet_name)}"
+                values_resp = requests.get(values_url, headers=auth_header, timeout=15)
+                values_resp.raise_for_status()
+                rows = values_resp.json().get("values", [])
+
+                if len(rows) < 2:
+                    st.warning("Google Sheet trống hoặc chỉ có header.")
+                    return pd.DataFrame()
+
+                headers_row = rows[0]
+                data_rows = rows[1:]
+                df = pd.DataFrame(
+                    [row + [""] * (len(headers_row) - len(row)) for row in data_rows],
+                    columns=headers_row
+                )
+                if 'sdt' in df.columns:
+                    df['sdt'] = df['sdt'].astype(str)
+                st.sidebar.success("✅ Kết nối Google Sheets qua Service Account API v4 thành công!")
+                return df
+
+        except Exception as e:
+            st.error(f"❌ **Lỗi Service Account API v4**: `{e}`")
+            st.info("💡 Đang thử phương án dự phòng (CSV Export)...")
+
+    # --- PHƯƠNG ÁN 2: CSV Export URL (chỉ hoạt động khi Sheet công khai) ---
+    csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
     try:
-        resp = requests.get(csv_url, headers=headers, timeout=15)
-        
-        # Xử lý khi gặp lỗi Unauthorized / Forbidden (HTTP 401 / 403)
+        resp = requests.get(csv_url, timeout=15)
+
         if resp.status_code in [401, 403]:
-            st.error("🔒 **Lỗi kết nối Google Sheets: HTTP Error 401 (Unauthorized)**")
+            st.error("🔒 **Lỗi HTTP 401/403: Google Sheet đang ở chế độ Hạn chế (Restricted)**")
             st.markdown("""
-            > **Giải thích nguyên nhân & Vấn đề nằm ở đâu?**
-            > 
-            > 1. **Vấn đề cốt lõi**: Trang tính Google Sheet của bạn hiện đang ở trạng thái **"Hạn chế" (Restricted)**.
-            > 2. **Vì sao đã thêm Email Service Account mà vẫn lỗi 401?**  
-            >    Khi bạn tải dữ liệu bằng link URL CSV (`/export?format=csv`), trình duyệt hoặc server sẽ gửi yêu cầu ẩn danh. Việc cấp quyền cho Email Service Account chỉ hoạt động khi ứng dụng đính kèm **OAuth Access Token** trong Header yêu cầu. Nếu không có Token xác thực, Google Security sẽ chặn lại và báo lỗi **401 Unauthorized**.
-            >
-            > ---
-            > 💡 **CÁCH KHẮC PHỤC (Chọn 1 trong 2 cách):**
-            >
-            > - **Cách 1 (Đơn giản & Nhanh nhất - Khuyên dùng)**:  
-            >   1. Mở trang Google Sheet của bạn.  
-            >   2. Bấm nút **Chia sẻ (Share)** ở góc trên bên phải.  
-            >   3. Tại mục *Quyền truy cập chung (General Access)*, chuyển từ **Hạn chế** sang **"Bất kỳ ai có liên kết đều có thể xem" (Anyone with the link can view)**.  
-            >   4. Bấm **Xong** và quay lại đây bấm nút **🔄 Tải Lại Dữ Liệu Gốc**.
-            >
-            > - **Cách 2 (Sử dụng Service Account Secrets)**:  
-            >   Copy cấu hình TOML của Service Account dán vào phần **App Secrets** trên Streamlit Cloud. Ứng dụng đã được tích hợp tự động gửi OAuth Bearer Token để mở khóa trang tính riêng tư của bạn!
+**Nguyên nhân gốc rễ:** CSV Export URL **không hỗ trợ Bearer Token**. Dù đã thêm email Service Account vào Sheet, Google vẫn từ chối vì request gửi ẩn danh (không có OAuth token đính kèm).
+
+**Cách khắc phục — Chọn 1 trong 2:**
+
+**✅ Cách 1 (Nhanh nhất — 10 giây):**
+> Sheet → Chia sẻ → *Quyền truy cập chung* → đổi sang **"Bất kỳ ai có liên kết đều xem được"** → Bấm 🔄 Tải Lại.
+
+**🔐 Cách 2 (Service Account — cần kiểm tra):**
+> Kiểm tra lại App Secrets trên Streamlit Cloud: phải có header `[gcp_service_account]` và email `d1-273@demob5.iam.gserviceaccount.com` đã được Share vào Sheet với quyền Viewer.
             """)
             return pd.DataFrame()
-        
+
         resp.raise_for_status()
-        
-        # Đọc dữ liệu CSV vào Pandas DataFrame
         df = pd.read_csv(io.StringIO(resp.text), dtype={'sdt': str})
         if 'sdt' in df.columns:
             df['sdt'] = df['sdt'].astype(str)
         return df
-        
+
     except Exception as e:
         st.error(f"Lỗi tải dữ liệu từ Google Sheets: {e}")
         return pd.DataFrame()
@@ -393,9 +438,9 @@ def main():
         st.markdown("<hr style='border-color: rgba(249, 115, 22, 0.2);'>", unsafe_allow_html=True)
         st.subheader("📡 Nguồn Dữ Liệu Live")
         sheet_url_input = st.text_input(
-            "Google Sheets CSV URL:",
+            "Google Sheets URL:",
             value=DEFAULT_SHEET_URL,
-            help="Đường dẫn CSV Export từ Google Sheets"
+            help="Dán link Google Sheet bình thường (cả link /edit hay /export đều được — ứng dụng tự xử lý)"
         )
         
         if st.button("🔄 Tải Lại Dữ Liệu Gốc", use_container_width=True):
@@ -654,36 +699,39 @@ def main():
                 filtered_df["nhu_cau_mo_ta"].str.lower().str.contains(q, na=False)
             ]
 
-        edited_df = st.data_editor(
-            filtered_df,
-            key="data_editor_leads_main",
-            use_container_width=True,
-            num_rows="dynamic",
-            column_config={
-                "id": st.column_config.NumberColumn("ID", disabled=True, width="small"),
-                "ten_khach": st.column_config.TextColumn("Tên Khách", width="medium"),
-                "sdt": st.column_config.TextColumn("SĐT", width="medium"),
-                "nhu_cau_mo_ta": st.column_config.TextColumn("Nhu Cầu Mô Tả", width="large"),
-                "Diem_So": st.column_config.NumberColumn("Điểm AI", help="Điểm số đánh giá", width="small"),
-                "Phan_Loai": st.column_config.SelectboxColumn(
-                    "Phân Loại (Tier)",
-                    options=["🌟 VIP", "🟢 Tiềm năng", "🟡 Trung bình", "🔴 Khách rác/Spam", "Chưa chấm"],
-                    width="medium"
-                ),
-                "Ly_Do_Cham_Diem": st.column_config.TextColumn("Lý Do Chấm Điểm (AI)", width="large"),
-                "Trang_Thai_Duyet": st.column_config.SelectboxColumn(
-                    "Trạng Thái Duyệt",
-                    options=["Chưa duyệt", "Đã duyệt", "Cần liên hệ lại", "Bỏ qua"],
-                    width="medium"
-                ),
-                "Ghi_Chu_Sale": st.column_config.TextColumn("Ghi Chú của Sales", width="medium")
-            },
-            hide_index=True
-        )
+        if filtered_df.empty:
+            st.info("📥 Không có dữ liệu nào phù hợp với bộ lọc hiện tại. Hãy kiểm tra kết nối Google Sheets hoặc thử tải lại dữ liệu ở sidebar.")
+        else:
+            edited_df = st.data_editor(
+                filtered_df,
+                key="data_editor_leads_main",
+                use_container_width=True,
+                num_rows="dynamic",
+                column_config={
+                    "id": st.column_config.NumberColumn("ID", disabled=True, width="small"),
+                    "ten_khach": st.column_config.TextColumn("Tên Khách", width="medium"),
+                    "sdt": st.column_config.TextColumn("SĐT", width="medium"),
+                    "nhu_cau_mo_ta": st.column_config.TextColumn("Nhu Cầu Mô Tả", width="large"),
+                    "Diem_So": st.column_config.NumberColumn("Điểm AI", help="Điểm số đánh giá", width="small"),
+                    "Phan_Loai": st.column_config.SelectboxColumn(
+                        "Phân Loại (Tier)",
+                        options=["🌟 VIP", "🟢 Tiềm năng", "🟡 Trung bình", "🔴 Khách rác/Spam", "Chưa chấm"],
+                        width="medium"
+                    ),
+                    "Ly_Do_Cham_Diem": st.column_config.TextColumn("Lý Do Chấm Điểm (AI)", width="large"),
+                    "Trang_Thai_Duyet": st.column_config.SelectboxColumn(
+                        "Trạng Thái Duyệt",
+                        options=["Chưa duyệt", "Đã duyệt", "Cần liên hệ lại", "Bỏ qua"],
+                        width="medium"
+                    ),
+                    "Ghi_Chu_Sale": st.column_config.TextColumn("Ghi Chú của Sales", width="medium")
+                },
+                hide_index=True
+            )
 
-        if not edited_df.equals(filtered_df):
-            for idx in edited_df.index:
-                st.session_state.df_leads.loc[idx] = edited_df.loc[idx]
+            if not edited_df.equals(filtered_df):
+                for idx in edited_df.index:
+                    st.session_state.df_leads.loc[idx] = edited_df.loc[idx]
 
     # TAB 3: KNOWLEDGE BASE RULES VIEWER
     with tab3:
